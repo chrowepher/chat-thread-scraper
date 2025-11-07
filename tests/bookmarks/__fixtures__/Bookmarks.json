@@ -1,0 +1,65 @@
+{
+  "roots": {
+    "bookmark_bar": {
+      "name": "Bookmarks Bar",
+      "type": "folder",
+      "children": [
+        {
+          "name": "Digital Nomad",
+          "type": "folder",
+          "children": [
+            {
+              "type": "url",
+              "name": "Nomad Primary",
+              "url": "https://chatgpt.com/c/primary"
+            },
+            {
+              "type": "folder",
+              "name": "Subfolder",
+              "children": [
+                {
+                  "type": "url",
+                  "name": "Nomad Secondary",
+                  "url": "https://chatgpt.com/c/secondary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Misc",
+          "type": "folder",
+          "children": [
+            {
+              "type": "url",
+              "name": "Random",
+              "url": "https://example.com"
+            }
+          ]
+        }
+      ]
+    },
+    "other": {
+      "name": "Other",
+      "type": "folder",
+      "children": [
+        {
+          "name": "Digital Nomad",
+          "type": "folder",
+          "children": [
+            {
+              "type": "url",
+              "name": "Nomad Duplicate",
+              "url": "https://chatgpt.com/c/secondary"
+            }
+          ]
+        }
+      ]
+    },
+    "synced": {
+      "name": "Synced",
+      "type": "folder",
+      "children": []
+    }
+  }
+}
