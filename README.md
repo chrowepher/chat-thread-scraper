@@ -9,11 +9,13 @@ Collect the content of multiple ChatGPT browser tabs and synthesize them into a 
 
 ### Quick start
 
-1. Launch Chrome with the remote debugging port enabled (required for reading tab content):
+1. Ensure Chrome is running with the remote debugging port enabled (required for reading tab content). The CLI now checks the port automatically, launches Chrome with the right flags, and (if necessary) restarts Chrome to apply them unless you pass `--no-auto-chrome`. Prefer to handle it yourself? Run the helper via `npm run launch-chrome` (append `-- --port 9333` etc. to tweak flags) or launch Chrome manually:
 
 ```bash
 "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222
 ```
+
+If no ChatGPT tabs are detected, the CLI auto-opens `https://chatgpt.com/` for you (disable with `--no-auto-open-chatgpt-tab`). By default it reuses whichever Chrome profile you last used locally, so your Google/ChatGPT account stays signed in without extra flags. Log in inside the Chrome window it opens only if your profile doesn’t already have ChatGPT authenticated, then load the threads you want merged.
 
 2. Install dependencies and build:
 
@@ -36,11 +38,22 @@ npm start -- --verbose --save-snapshot snapshots/latest.json
 
 The CLI prints a summary, the recombined path, the merge decisions, and optional follow-up ideas.
 
+> **Pilot note:** For the current integration pass the merger only processes the first two harvested threads (regardless of how many tabs, bookmarks, or snapshot branches are available). Reorder tabs/bookmarks to control which pair gets merged.
+
 ### CLI flags
 
 | Flag | Description |
 | --- | --- |
 | `--host`, `--port` | Chrome DevTools host/port (`127.0.0.1:9222` by default). |
+| `--no-auto-chrome` | Skip the built-in Chrome manager (handle remote debugging manually). |
+| `--chrome-path <path>` | Explicit Chrome executable for the auto-launcher. |
+| `--chrome-user-data-dir <path>` | Chrome user data directory to reuse when auto-launching. |
+| `--chrome-profile-directory <name>` | Profile directory name to reuse (defaults to Chrome’s last-used profile). |
+| `--chrome-timeout <seconds>` | Seconds to wait for the DevTools endpoint to respond (default 10). |
+| `--chrome-flag <flag>` | Extra Chrome flag(s) to pass when auto-launching (repeatable). |
+| `--no-chrome-force-restart` | Prevent the CLI from closing/restarting Chrome if DevTools isn’t available. |
+| `--no-auto-open-chatgpt-tab` | Skip auto-opening a ChatGPT tab when none are detected. |
+| `--chatgpt-bootstrap-url <url>` | URL to use when auto-opening the ChatGPT tab (`https://chatgpt.com/`). |
 | `--include <regex>` | Limit collection to URLs matching the regex (repeatable). |
 | `--from-file <path>` | Skip Chrome; load a saved JSON snapshot instead. |
 | `--save-snapshot <path>` | Persist the harvested tabs for later re-runs (pairs well with `--dry-run`). |
@@ -61,6 +74,7 @@ The CLI prints a summary, the recombined path, the merge decisions, and optional
 | `--auto-chatgpt` | After a merge completes, paste/send the merged narrative into an open ChatGPT window automatically. |
 | `--chatgpt-mode <auto|confirm>` | Choose whether the helper sends immediately (`auto`) or waits for you to press Enter before sending (`confirm`). |
 | `--chatgpt-python <path>`, `--chatgpt-script <path>` | Override the Python executable or helper script (`scripts/post_to_chatgpt.py`) that drives ChatGPT automation. |
+| `--chatgpt-payload-path <path>` | Persist the automation payload JSON so you can run `scripts/post_to_chatgpt.py --payload ...` later. |
 | `--bookmark-folder <name>` | Load bookmarked ChatGPT thread URLs from the named Chrome folder (repeatable). |
 | `--bookmark-profile <name>` | Chrome profile directory that contains the `Bookmarks` file (`Default`). |
 | `--bookmark-path <path>` | Explicit path to a `Bookmarks` JSON file (overrides `--bookmark-profile`). |
@@ -70,7 +84,9 @@ The CLI prints a summary, the recombined path, the merge decisions, and optional
 
 ### Workflow tips
 
-- **Chrome setup**: Remote debugging must stay enabled for the duration of the capture. If the command above conflicts with an existing Chrome session, close instances before relaunching with the flag.
+- **Chrome setup**: Remote debugging must stay enabled for the duration of the capture. The CLI auto-checks the DevTools endpoint and will launch (or, if necessary, close + relaunch) Chrome unless you pass `--no-auto-chrome`. Prefer manual control? Run `npm run launch-chrome` or start Chrome yourself with `--remote-debugging-port=9222`.
+- **Self-healing launcher**: If Chrome refuses to expose the DevTools port, the CLI retries with clean shutdowns and falls back to a temporary profile automatically (you’ll see a warning telling you where that profile lives so you can log into ChatGPT inside it). Only disable this behavior if you truly need to manage Chrome manually.
+- **Bootstrap tabs**: When no ChatGPT tabs are present, the CLI opens one for you inside the same remote-debug session. Leave it enabled so newly created temp profiles still navigate to ChatGPT without manual steps.
 - **Snapshots**: Use `--save-snapshot` to archive the raw conversations from a session, then iterate on prompts or models later via `--from-file`.
 - **Branch focusing**: Adjust `--max-branch-highlights` to keep the merge lightweight (e.g., 6) or exhaustive (0/negative for all turns).
 - **Model control**: The project defaults to an OpenAI model, but the code is structured so you can drop in alternative API calls or local model integrations inside `src/openaiMerge.ts`.
@@ -100,6 +116,10 @@ npm start -- --auto-chatgpt --chatgpt-mode confirm
 
 `--auto-chatgpt` enables the helper script (`scripts/post_to_chatgpt.py`). It attaches to the same Chrome instance via DevTools, opens a new chat, pastes the merged narrative, and either sends it immediately (`--chatgpt-mode auto`) or waits for you to press Enter in the terminal (`--chatgpt-mode confirm`). Keep usage aligned with ChatGPT’s terms of service—automation only touches your own logged-in browser profile and never transmits credentials.
 
+Need to run the helper later (or compare runs manually)? Tell the CLI to write the payload with `--chatgpt-payload-path snapshots/latest-automation.json`, then execute `python scripts/post_to_chatgpt.py --payload snapshots/latest-automation.json --mode confirm`.
+
+The Python helper now accepts `--payload <file>` so you don't have to pipe JSON through stdin when experimenting outside the CLI; omitting it keeps the original stdin flow for backwards compatibility.
+
 ### Bookmark folders (optional)
 
 If you keep canonical ChatGPT threads in a Chrome bookmarks folder (e.g., “Digital Nomad”), point the CLI at it instead of manually opening tabs:
@@ -117,6 +137,8 @@ What happens:
 
 Matching is case-insensitive by default; add `--bookmark-case-sensitive` if you need strict folder-name matches.
 
+> **Bookmark tip:** During the pilot only the first two bookmark URLs are merged. Move the most relevant conversations to the top of the folder to control the pair that gets stitched together.
+
 
 ### Testing
 
@@ -131,3 +153,6 @@ npm test
 - Add automated tests around the DOM extraction script using fixture HTML.
 - Support authentication/cookies for future services beyond ChatGPT.
 - Pipe outputs into a note-taking app (e.g., Obsidian, Notion) for archival.
+- **TODO:** Build a framework for experimenting with multiple merge/composition patterns (compare prompts, weights, conflict rules).
+- **TODO:** Capture evaluation metrics per run (automatic critiques, qualitative scores, etc.) so we can benchmark pattern effectiveness.
+- **TODO:** After automation posts back into ChatGPT, trigger a second-pass analysis from ChatGPT itself to summarize strengths/gaps of each merge.

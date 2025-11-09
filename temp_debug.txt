@@ -1,0 +1,71 @@
+        `Launching ChatGPT automation helper (${pythonPath} ${scriptPath})...`,
+      );
+    }
+    const args = [
+      scriptPath,
+      '--mode',
+      mode,
+      '--cdp-host',
+      host,
+      '--cdp-port',
+      String(port),
+    ];
+    const child = spawn(pythonPath, args, {
+      stdio: ['pipe', 'inherit', 'inherit'],
+    });
+    child.on('error', (error) => {
+      reject(error);
+    });
+    child.on('exit', (code) => {
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(
+          new Error(
+            `ChatGPT automation helper exited with status ${code ?? 'unknown'}.`,
+          ),
+        );
+      }
+    });
+    child.stdin?.write(JSON.stringify(payload));
+    child.stdin?.end();
+  });
+
+program.parseAsync().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
+};
+
+program
+  .name('chat-thread-merger')
+  .description(
+    'Collect open ChatGPT conversations from Chrome and merge them into one stream.',
+  )
+  .option('--host <host>', 'Chrome remote debugging host', '127.0.0.1')
+  .option('--port <port>', 'Chrome remote debugging port', (value) =>
+    parseInteger(value, 9222),
+  )
+  .option(
+    '--include <pattern>',
+    'Include only tabs whose URL matches this regex (repeatable).',
+    (value: string, previous: string[] = []) => [...previous, value],
+    [] as string[],
+  )
+  .option(
+    '--from-file <path>',
+    'Load previously saved conversation data instead of talking to Chrome.',
+  )
+  .option(
+    '--save-snapshot <path>',
+    'Write the collected conversation data to a JSON file for reuse.',
+  )
+  .option('--model <model>', 'OpenAI model to use', 'gpt-4.1-mini')
+  .option(
+    '--max-branch-highlights <count>',
+    'Limit the number of messages pulled from each branch.',
+    (value) => parseInteger(value, 12),
+    12,
+  )
+  .option('--dry-run', 'Collect threads but skip the OpenAI merge call', false)
+  .option('--verbose', 'Enable verbose logging', false)

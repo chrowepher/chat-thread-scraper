@@ -32,6 +32,60 @@ const sanitizeFunctionSource = (fn: (...args: any[]) => unknown): string =>
 const EXTRACT_SCRIPT = `(${sanitizeFunctionSource(extractChatGPTThread)})()`;
 
 type TargetDescriptor = Awaited<ReturnType<typeof CDP.List>>[number];
+type ChromeClient = Awaited<ReturnType<typeof CDP>>;
+type ChromeRuntime = ChromeClient['Runtime'];
+
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+interface WaitForConversationOptions {
+  Runtime: ChromeRuntime;
+  url?: string;
+  verbose?: boolean;
+  timeoutMs?: number;
+}
+
+const waitForConversationDom = async ({
+  Runtime,
+  url,
+  verbose,
+  timeoutMs = 12000,
+}: WaitForConversationOptions): Promise<void> => {
+  const start = Date.now();
+  while (Date.now() - start < timeoutMs) {
+    try {
+      const evaluation = await Runtime.evaluate({
+        expression: `(function () {
+          const turns = document.querySelectorAll('[data-testid^="conversation-turn"]').length;
+          const ready = document.readyState === 'complete' || document.readyState === 'interactive';
+          const composer = document.querySelector('[data-testid="composer-bar"]') !== null;
+          return { turns, ready, composer };
+        })();`,
+        returnByValue: true,
+      });
+      const payload = evaluation.result?.value as
+        | { turns?: number; ready?: boolean; composer?: boolean }
+        | undefined;
+      if ((payload?.turns ?? 0) > 0) {
+        return;
+      }
+    } catch (error) {
+      if (verbose) {
+        console.warn(
+          `Waiting for conversation DOM (${url ?? 'tab'}): ${String(error)}`,
+        );
+      }
+    }
+    await delay(300);
+  }
+  if (verbose) {
+    console.warn(
+      `Timed out waiting for conversation DOM to load for ${url ?? 'tab'}. Continuing anyway.`,
+    );
+  }
+};
 
 interface CollectorRuntimeOptions {
   host: string;
@@ -59,7 +113,30 @@ const collectFromTargets = async (
     try {
       client = await CDP({ host, port, target });
       const { Runtime, Page } = client;
+      if (!Runtime || !Page) {
+        continue;
+      }
       await Promise.all([Runtime.enable(), Page.enable()]);
+
+      try {
+        await Page.bringToFront();
+      } catch (error) {
+        if (verbose) {
+          console.warn(
+            `Unable to bring tab "${target.title ?? target.url ?? 'Unknown'}" to front:`,
+            error,
+          );
+        }
+      }
+
+      const waitOptions: WaitForConversationOptions = {
+        Runtime,
+        url: target.url,
+      };
+      if (typeof verbose === 'boolean') {
+        waitOptions.verbose = verbose;
+      }
+      await waitForConversationDom(waitOptions);
 
       const evaluation = await Runtime.evaluate({
         expression: EXTRACT_SCRIPT,
@@ -195,6 +272,7 @@ export async function collectConversationsForUrls(
         console.log(`Opening bookmarked URL ${url}`);
       }
       const target = await CDP.New({ host, port, url });
+      await delay(250);
       createdTargets.push(target);
     } catch (error) {
       console.error(`Failed to open bookmark URL ${url}:`, error);

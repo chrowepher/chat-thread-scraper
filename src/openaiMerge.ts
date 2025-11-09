@@ -1,3 +1,5 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import OpenAI from 'openai';
 import { z } from 'zod';
 import type {
@@ -10,6 +12,21 @@ import type {
 } from './types.js';
 
 const DEFAULT_MODEL = 'gpt-4.1-mini';
+
+export interface MergeSchemaDecision {
+  branch_titles: string[];
+  decision: string;
+  rationale?: string;
+  [key: string]: unknown;
+}
+
+export interface MergeSchema {
+  summary: string;
+  combined_path: string[];
+  merge_decisions: MergeSchemaDecision[];
+  follow_up_ideas?: string[];
+  [key: string]: unknown;
+}
 
 interface ProviderConfig {
   apiKeyEnv: string;
@@ -36,23 +53,7 @@ const PROVIDER_PRESETS: Record<string, ProviderConfig> = {
   },
 };
 
-const mergeSchema = z.object({
-  summary: z.string(),
-  combined_path: z.array(z.string()),
-  merge_decisions: z.array(
-    z.object({
-      branch_titles: z.array(z.string()),
-      decision: z.string(),
-      rationale: z.string().optional(),
-    }),
-  ),
-  follow_up_ideas: z.array(z.string()).optional(),
-});
-
-export type MergeSchema = z.infer<typeof mergeSchema>;
-export const mergeResponseSchema = mergeSchema;
-
-export const parseMergeResponse = (content: string): MergeSchema => {
+export const parseMergeResponse = (content: string): any => {
   let parsedJson: unknown;
   try {
     parsedJson = JSON.parse(content);
@@ -61,34 +62,44 @@ export const parseMergeResponse = (content: string): MergeSchema => {
       `parseMergeResponse: invalid JSON payload received. ${String(error)}`,
     );
   }
-  return mergeSchema.parse(parsedJson);
+  return parsedJson;
 };
 
 export const interpretMergeSchema = (
-  parsed: MergeSchema,
+  parsed: any,
 ): Omit<MergeResult, 'rawResponse'> => {
-  const decisions: MergeDecision[] = parsed.merge_decisions.map((decision) => {
-    const entry: MergeDecision = {
-      branchTitles: decision.branch_titles,
-      decision: decision.decision,
+  if (
+    typeof parsed.summary === 'string' &&
+    Array.isArray(parsed.combined_path) &&
+    Array.isArray(parsed.merge_decisions)
+  ) {
+    const decisions: MergeDecision[] = parsed.merge_decisions.map(
+      (decision: any) => ({
+        branchTitles: decision.branch_titles ?? [],
+        decision: decision.decision ?? '',
+        rationale: decision.rationale,
+      }),
+    );
+
+    const result: Omit<MergeResult, 'rawResponse'> = {
+      summary: parsed.summary,
+      combinedPath: parsed.combined_path,
+      mergeDecisions: decisions,
     };
-    if (decision.rationale) {
-      entry.rationale = decision.rationale;
+
+    if (parsed.follow_up_ideas) {
+      result.followUpIdeas = parsed.follow_up_ideas;
     }
-    return entry;
-  });
 
-  const result: Omit<MergeResult, 'rawResponse'> = {
-    summary: parsed.summary,
-    combinedPath: parsed.combined_path,
-    mergeDecisions: decisions,
-  };
-
-  if (parsed.follow_up_ideas) {
-    result.followUpIdeas = parsed.follow_up_ideas;
+    return result;
   }
 
-  return result;
+  // Fallback: allow arbitrary JSON for debugging purposes.
+  return {
+    summary: JSON.stringify(parsed),
+    combinedPath: [],
+    mergeDecisions: [],
+  };
 };
 
 export interface MergeOptions extends MergeRequest {
@@ -98,6 +109,7 @@ export interface MergeOptions extends MergeRequest {
   apiBase?: string;
   apiHeaders?: Record<string, string>;
   apiKeyEnv?: string;
+  responseDebugPath?: string;
 }
 
 const defaultInstructions = `
@@ -204,9 +216,17 @@ export async function mergeBranches(options: MergeOptions): Promise<MergeResult>
     .map((branch, index) => describeBranch(branch, index, highlightLimit))
     .join('\n\n');
 
+  let appliedTemperature = temperature;
+  if (/^gpt-5/i.test(model) && appliedTemperature !== 1) {
+    console.warn(
+      `Model ${model} only supports a temperature of 1. Overriding requested value (${appliedTemperature}) to 1.`,
+    );
+    appliedTemperature = 1;
+  }
+
   const completion = await openai.chat.completions.create({
     model,
-    temperature,
+    temperature: appliedTemperature,
     response_format: { type: 'json_object' },
     messages: [
       {
@@ -225,10 +245,30 @@ export async function mergeBranches(options: MergeOptions): Promise<MergeResult>
     throw new Error('mergeBranches: empty response from OpenAI.');
   }
 
+  const debugPathOverride =
+    options.responseDebugPath || process.env.OPENAI_RESPONSE_PATH;
+  if (debugPathOverride) {
+    try {
+      await fs.writeFile(
+        path.resolve(debugPathOverride),
+        JSON.stringify(completion, null, 2),
+        'utf-8',
+      );
+    } catch (error) {
+      console.warn(
+        `Failed to write raw OpenAI response to ${debugPathOverride}:`,
+        error,
+      );
+    }
+  }
+
   let parsed: MergeSchema;
   try {
     parsed = parseMergeResponse(content);
   } catch (error) {
+    const snippet =
+      content.length > 500 ? `${content.slice(0, 500)}…` : content;
+    console.error('Raw OpenAI response content snippet:', snippet);
     throw new Error(
       `mergeBranches: unable to parse JSON response from OpenAI. ${String(error)}`,
     );
