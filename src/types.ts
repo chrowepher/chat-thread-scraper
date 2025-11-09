@@ -16,25 +16,20 @@ export interface BrowserConversation {
   messages: ConversationMessage[];
 }
 
-export interface MergeRequest {
-  branches: BrowserConversation[];
-  prompt?: string;
-  model?: string;
-  maxBranchHighlights?: number;
+export interface ThreadSnapshot {
+  scrapedAt: string;
+  source: {
+    host: string;
+    port: number;
+    urls: string[];
+    bookmarks?: {
+      path: string;
+      folders: Array<{
+        folderName: string;
+        folderPath: string;
+        entryCount: number;
+      }>;
+    };
+  };
+  conversations: BrowserConversation[];
 }
-
-export interface MergeDecision {
-  branchTitles: string[];
-  decision: string;
-  rationale?: string;
-}
-
-export interface MergeResult {
-  summary: string;
-  combinedPath: string[];
-  mergeDecisions: MergeDecision[];
-  followUpIdeas?: string[];
-  rawResponse?: unknown;
-}
-
-export type ProviderPreset = 'openai' | 'openrouter' | 'custom' | string;

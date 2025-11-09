@@ -1,7 +1,7 @@
 {
-  "name": "chat-thread-merger",
+  "name": "chat-thread-scraper",
   "version": "1.0.0",
-  "description": "",
+  "description": "Scrape ChatGPT conversation threads from bookmarked URLs.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -19,9 +19,7 @@
   "type": "module",
   "dependencies": {
     "chrome-remote-interface": "^0.33.3",
-    "commander": "^14.0.2",
-    "openai": "^6.8.1",
-    "zod": "^4.1.12"
+    "commander": "^14.0.2"
   },
   "devDependencies": {
     "@types/jsdom": "^27.0.0",

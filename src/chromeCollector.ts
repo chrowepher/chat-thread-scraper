@@ -5,6 +5,10 @@ import type {
   ConversationMessage,
 } from './types.js';
 
+type ChromeClient = Awaited<ReturnType<typeof CDP>>;
+type PageDomain = ChromeClient['Page'];
+type RuntimeDomain = ChromeClient['Runtime'];
+
 export interface ChromeCollectorOptions {
   host?: string;
   port?: number;
@@ -40,11 +44,62 @@ interface CollectorRuntimeOptions {
   verbose?: boolean;
 }
 
+const delay = (ms: number): Promise<void> =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 const matchesPattern = (url: string, pattern: string | RegExp): boolean => {
   if (pattern instanceof RegExp) {
     return pattern.test(url);
   }
   return url.includes(pattern);
+};
+
+const waitForPageReady = async (
+  page: PageDomain,
+  runtime: RuntimeDomain,
+  verbose?: boolean,
+  timeoutMs = 8000,
+): Promise<void> => {
+  if (!page || !runtime) {
+    return;
+  }
+
+  try {
+    const readiness = await runtime.evaluate({
+      expression: 'document.readyState',
+      returnByValue: true,
+    });
+    const state = readiness.result?.value;
+    if (state === 'interactive' || state === 'complete') {
+      return;
+    }
+  } catch {
+    // Ignore errors and fall back to waiting for load events.
+  }
+
+  await new Promise<void>((resolve) => {
+    let resolved = false;
+    const settle = (): void => {
+      if (resolved) {
+        return;
+      }
+      resolved = true;
+      clearTimeout(fallback);
+      resolve();
+    };
+
+    const fallback = setTimeout(() => {
+      if (verbose) {
+        console.warn('Timed out waiting for the ChatGPT tab to finish loading.');
+      }
+      settle();
+    }, timeoutMs);
+
+    page.domContentEventFired?.(settle);
+    page.loadEventFired(settle);
+  });
+
+  await delay(400);
 };
 
 const collectFromTargets = async (
@@ -59,7 +114,11 @@ const collectFromTargets = async (
     try {
       client = await CDP({ host, port, target });
       const { Runtime, Page } = client;
+      if (!Runtime || !Page) {
+        throw new Error('Chrome protocol did not expose the Runtime/Page domains.');
+      }
       await Promise.all([Runtime.enable(), Page.enable()]);
+      await waitForPageReady(Page, Runtime, verbose);
 
       const evaluation = await Runtime.evaluate({
         expression: EXTRACT_SCRIPT,
