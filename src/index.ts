@@ -27,26 +27,10 @@ import type {
   MergeResult,
   ProviderPreset,
 } from './types.js';
-import { ensureChromeWithRemoteDebugging } from './chromeLauncher.js';
-import type { ChromeManagementOptions } from './chromeLauncher.js';
-import { ensureChatGPTTab } from './chatgptBootstrap.js';
-
-// Temporary integration limit: focus merges on the first two branches while
-// we validate the combined workflow across CLI and automation helper.
-const PILOT_BRANCH_LIMIT = 2;
 
 interface CliOptions {
   host?: string;
   port?: number;
-  autoChrome?: boolean;
-  autoOpenChatgptTab?: boolean;
-  chromePath?: string;
-  chromeUserDataDir?: string;
-  chromeProfileDirectory?: string;
-  chromeTimeout?: number;
-  chromeForceRestart?: boolean;
-  chromeFlag?: string[];
-  chatgptBootstrapUrl?: string;
   include?: string[];
   fromFile?: string;
   saveSnapshot?: string;
@@ -81,8 +65,6 @@ interface CliOptions {
   bookmarkCachePath?: string;
   bookmarkCaseSensitive?: boolean;
   bookmarkKeepTabs?: boolean;
-  openaiResponsePath?: string;
-  chatgptPayloadPath?: string;
 }
 
 const program = new Command();
@@ -288,6 +270,11 @@ const runChatGPTAutomation = async ({
     child.stdin?.write(JSON.stringify(payload));
     child.stdin?.end();
   });
+
+program.parseAsync().catch((error) => {
+  console.error(error);
+  process.exit(1);
+});
 };
 
 program
@@ -298,44 +285,6 @@ program
   .option('--host <host>', 'Chrome remote debugging host', '127.0.0.1')
   .option('--port <port>', 'Chrome remote debugging port', (value) =>
     parseInteger(value, 9222),
-  )
-  .option(
-    '--no-auto-chrome',
-    'Disable automatic Chrome management (manual mode).',
-  )
-  .option('--chrome-path <path>', 'Chrome executable to auto-launch if needed.')
-  .option(
-    '--chrome-user-data-dir <path>',
-    'Chrome user data directory to reuse when auto-launching.',
-  )
-  .option(
-    '--chrome-profile-directory <name>',
-    'Chrome profile directory to reuse when auto-launching.',
-  )
-  .option(
-    '--chrome-timeout <seconds>',
-    'Seconds to wait for Chrome DevTools readiness.',
-    (value) => parseFloatOption(value, 10),
-    10,
-  )
-  .option(
-    '--no-chrome-force-restart',
-    'Prevent the CLI from closing Chrome automatically when DevTools is unavailable.',
-  )
-  .option(
-    '--chrome-flag <flag>',
-    'Additional Chrome flag to pass through when auto-launching (repeatable).',
-    (value: string, previous: string[] = []) => [...previous, value],
-    [] as string[],
-  )
-  .option(
-    '--no-auto-open-chatgpt-tab',
-    'Skip automatically opening a ChatGPT tab when none are detected.',
-  )
-  .option(
-    '--chatgpt-bootstrap-url <url>',
-    'URL to open when bootstrapping a ChatGPT tab automatically.',
-    'https://chatgpt.com/',
   )
   .option(
     '--include <pattern>',
@@ -480,28 +429,11 @@ program
     'Path to the ChatGPT automation helper script.',
     'scripts/post_to_chatgpt.py',
   )
-  .option(
-    '--chatgpt-payload-path <path>',
-    'Write the ChatGPT automation payload to this JSON file for manual helper runs.',
-  )
-  .option(
-    '--openai-response-path <path>',
-    'Write raw OpenAI responses to this file for debugging schema issues.',
-  )
   .action(async (cliOptions) => {
     const options = cliOptions as CliOptions;
     const {
       host = '127.0.0.1',
       port = 9222,
-      autoChrome = true,
-      autoOpenChatgptTab = true,
-      chromePath,
-      chromeUserDataDir,
-      chromeProfileDirectory = 'Default',
-      chromeTimeout = 10,
-      chromeForceRestart = true,
-      chromeFlag = [],
-      chatgptBootstrapUrl = 'https://chatgpt.com/',
       model = 'gpt-4.1-mini',
       maxBranchHighlights,
       dryRun,
@@ -532,26 +464,16 @@ program
       bookmarkCachePath,
       bookmarkCaseSensitive = false,
       bookmarkKeepTabs = false,
-      openaiResponsePath,
-      chatgptPayloadPath,
     } = options;
 
     const includePatterns = ensureArray(options.include);
-    const includeRegexes = includePatterns.length
-      ? includePatterns.map((pattern) => new RegExp(pattern, 'i'))
-      : undefined;
     const bookmarkFolders = ensureArray(bookmarkFolder);
-    const branchLimit = PILOT_BRANCH_LIMIT;
     const highlightPreferenceRaw =
       typeof maxBranchHighlights === 'number' && Number.isFinite(maxBranchHighlights)
         ? Math.trunc(maxBranchHighlights)
         : 12;
     const highlightLimitForCollector =
       highlightPreferenceRaw > 0 ? highlightPreferenceRaw : undefined;
-    const normalizedChromeTimeoutSeconds =
-      typeof chromeTimeout === 'number' && Number.isFinite(chromeTimeout) && chromeTimeout > 0
-        ? chromeTimeout
-        : 10;
 
     let branches: BrowserConversation[] = [];
     let bookmarkEntries: BookmarkEntry[] = [];
@@ -592,71 +514,8 @@ program
             console.log(`Wrote bookmark cache to ${resolvedCache}`);
           }
         }
-        if (branchLimit > 0 && bookmarkEntries.length > branchLimit) {
-          console.log(
-            `Limiting bookmark-driven merges to ${branchLimit} threads (loaded ${bookmarkEntries.length}).`,
-          );
-          bookmarkEntries = bookmarkEntries.slice(0, branchLimit);
-        }
       } catch (error) {
         throw new Error(`Unable to load bookmarks: ${String(error)}`);
-      }
-    }
-
-    const shouldManageChrome = !options.fromFile && autoChrome !== false;
-    if (shouldManageChrome) {
-      const chromeOptions: ChromeManagementOptions = {
-        host,
-        port,
-        timeoutMs: normalizedChromeTimeoutSeconds * 1000,
-        allowForceRestart: chromeForceRestart,
-      };
-      if (chromePath) {
-        chromeOptions.chromePath = chromePath;
-      }
-      if (chromeUserDataDir) {
-        chromeOptions.userDataDir = chromeUserDataDir;
-      }
-      if (chromeProfileDirectory) {
-        chromeOptions.profileDirectory = chromeProfileDirectory;
-      }
-      if (chromeFlag.length) {
-        chromeOptions.additionalFlags = chromeFlag;
-      }
-      if (typeof verbose === 'boolean') {
-        chromeOptions.verbose = verbose;
-      }
-      await ensureChromeWithRemoteDebugging(chromeOptions);
-    }
-
-    const shouldBootstrapChatGPTTab =
-      !options.fromFile && autoOpenChatgptTab !== false;
-    if (shouldBootstrapChatGPTTab) {
-      try {
-        const bootstrapOptions: Parameters<typeof ensureChatGPTTab>[0] = {
-          host,
-          port,
-          bootstrapUrl: chatgptBootstrapUrl,
-        };
-        if (includeRegexes) {
-          bootstrapOptions.includePatterns = includeRegexes;
-        }
-        if (typeof verbose === 'boolean') {
-          bootstrapOptions.verbose = verbose;
-        }
-        const openedTab = await ensureChatGPTTab(bootstrapOptions);
-        if (openedTab && verbose) {
-          console.log(
-            'Opened a ChatGPT tab automatically. Sign in (if required) and load the threads you want merged.',
-          );
-        }
-      } catch (error) {
-        if (verbose) {
-          console.warn(
-            'Failed to bootstrap a ChatGPT tab automatically:',
-            error,
-          );
-        }
       }
     }
 
@@ -695,6 +554,9 @@ program
           `Connecting to Chrome DevTools protocol at ${host}:${port}...`,
         );
       }
+      const patterns = includePatterns.length
+        ? includePatterns.map((pattern) => new RegExp(pattern, 'i'))
+        : undefined;
       const collectorOptions: ChromeCollectorOptions = {
         host,
         port,
@@ -705,17 +567,10 @@ program
       if (typeof highlightLimitForCollector === 'number') {
         collectorOptions.maxMessagesPerConversation = highlightLimitForCollector;
       }
-      if (includeRegexes) {
-        collectorOptions.includeUrlPatterns = includeRegexes;
+      if (patterns) {
+        collectorOptions.includeUrlPatterns = patterns;
       }
       branches = await collectChatGPTConversations(collectorOptions);
-    }
-
-    if (branchLimit > 0 && branches.length > branchLimit) {
-      console.log(
-        `Temporarily merging only the first ${branchLimit} threads (collected ${branches.length}).`,
-      );
-      branches = branches.slice(0, branchLimit);
     }
 
     if (!branches.length) {
@@ -742,8 +597,6 @@ program
       console.log(
         `Collected ${branches.length} branches. Skipping merge because --dry-run was provided.`,
       );
-      // TODO: Plug in experimental merge/combination pattern simulations even in dry-run mode
-      // (e.g., run multiple strategy prompts without committing to a final summary) so we can compare approaches.
       return;
     }
 
@@ -767,12 +620,8 @@ program
       if (typeof options.temperature === 'number') {
         mergeOptions.temperature = options.temperature;
       }
-      if (openaiResponsePath) {
-        mergeOptions.responseDebugPath = path.resolve(openaiResponsePath);
-      }
 
       const result = await mergeBranches(mergeOptions);
-      // TODO: Capture metadata about which merge/combine "pattern" was used so downstream analysis can compare outcomes.
 
       console.log('=== Summary ===');
       console.log(result.summary);
@@ -798,36 +647,6 @@ program
           console.log(`${index + 1}. ${idea}`);
         });
       }
-
-      let automationPayload: ChatGPTAutomationPayload | undefined;
-      if (autoChatGPT || chatgptPayloadPath) {
-        automationPayload = buildChatGPTAutomationPayload({
-          result,
-          branches,
-        });
-      }
-
-      if (chatgptPayloadPath && automationPayload) {
-        const resolvedPayloadPath = path.resolve(chatgptPayloadPath);
-        try {
-          await fs.writeFile(
-            resolvedPayloadPath,
-            JSON.stringify(automationPayload, null, 2),
-            'utf-8',
-          );
-          console.log(
-            `Saved ChatGPT automation payload to ${resolvedPayloadPath} (${automationPayload.branches.length} branches).`,
-          );
-        } catch (error) {
-          console.error(
-            `Failed to write ChatGPT automation payload to ${resolvedPayloadPath}:`,
-            error,
-          );
-        }
-      }
-
-      // TODO: Add automated evaluation hooks here (e.g., run ChatGPT or a rubric against `result`)
-      // to score different merge patterns and track which combination strategy performed best.
 
       if (notePath) {
         try {
@@ -954,16 +773,14 @@ program
       }
 
       const resolvedScriptPath = path.resolve(chatgptScript);
-      const payloadForAutomation =
-        automationPayload ??
-        buildChatGPTAutomationPayload({
-          result,
-          branches,
-        });
+      const automationPayload = buildChatGPTAutomationPayload({
+        result,
+        branches,
+      });
 
       try {
         const automationOptions: RunChatGPTAutomationOptions = {
-          payload: payloadForAutomation,
+          payload: automationPayload,
           pythonPath: chatgptPython,
           scriptPath: resolvedScriptPath,
           mode: resolvedMode,
@@ -974,8 +791,6 @@ program
           automationOptions.verbose = verbose;
         }
         await runChatGPTAutomation(automationOptions);
-        // TODO: After sending the merged content back into ChatGPT, request an automatic critique/score
-        // so we can compare how different integration patterns perform in practice.
       } catch (automationError) {
         console.error(
           'ChatGPT automation helper failed. Review the logs above for details.',
@@ -987,11 +802,5 @@ program
     console.error('Failed to merge branches via OpenAI:', error);
     process.exitCode = 1;
   }
-});
-
-
-program.parseAsync().catch((error) => {
-  console.error(error);
-  process.exit(1);
 });
 

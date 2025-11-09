@@ -15,7 +15,6 @@ import json
 import sys
 from dataclasses import dataclass
 from typing import Any, Dict, List
-from pathlib import Path
 
 try:
   from playwright.async_api import (  # type: ignore import-not-found
@@ -87,25 +86,15 @@ def parse_args() -> argparse.Namespace:
       default=9222,
       help="Chrome DevTools port.",
   )
-  parser.add_argument(
-      "--payload",
-      help="Path to a JSON payload file (falls back to stdin when omitted).",
-  )
   return parser.parse_args()
 
 
-def read_payload(path: str | None) -> Payload:
-  if path:
-    try:
-      raw = Path(path).read_text(encoding="utf-8").strip()
-    except OSError as exc:
-      raise AutomationError(f"Unable to read payload file {path}: {exc}") from exc
-  else:
-    if sys.stdin.isatty():
-      raise AutomationError("Expected JSON payload on stdin or provide --payload.")
-    raw = sys.stdin.read().strip()
+def read_payload() -> Payload:
+  if sys.stdin.isatty():
+    raise AutomationError("Expected JSON payload on stdin.")
+  raw = sys.stdin.read().strip()
   if not raw:
-    raise AutomationError("No payload data supplied for ChatGPT automation.")
+    raise AutomationError("No payload received on stdin.")
   data = json.loads(raw)
   if "message" not in data or not isinstance(data["message"], str):
     raise AutomationError("Payload missing required 'message' field.")
@@ -122,7 +111,7 @@ def read_payload(path: str | None) -> Payload:
 
 async def main() -> None:
   args = parse_args()
-  payload = read_payload(args.payload)
+  payload = read_payload()
   await run_automation(args, payload)
 
 
@@ -191,30 +180,39 @@ async def begin_new_chat(page: Page) -> None:
 
 
 async def inject_message(page: Page, text: str) -> None:
-  selectors = TEXTAREA_SELECTORS + CONTENTEDITABLE_SELECTORS
-  last_error: PlaywrightError | None = None
-  for selector in selectors:
-    locator = page.locator(selector).first
-    try:
-      if not await locator.count():
-        continue
-      await locator.scroll_into_view_if_needed()
-      await locator.click(timeout=1500)
-      await locator.fill(text)
-      # Verify that the input actually contains content. Contenteditables do not
-      # support input_value(), so read textContent when needed.
-      has_value = await locator.evaluate(
-          "(el) => ('value' in el ? el.value : (el.textContent || '')).trim().length > 0",
-      )
-      if has_value:
-        return
-    except PlaywrightError as exc:
-      last_error = exc
-      continue
-  raise AutomationError(
-      "Unable to locate or fill the ChatGPT message box."
-      + (f" Last error: {last_error}" if last_error else ""),
-  )
+  script = """
+  (text) => {
+    const fireEvents = (el) => {
+      el.dispatchEvent(new InputEvent('input', { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+    const selectors = %s;
+    for (const selector of selectors) {
+      const el = document.querySelector(selector);
+      if (el && 'value' in el) {
+        el.value = text;
+        fireEvents(el);
+        return true;
+      }
+    }
+    const editableSelectors = %s;
+    for (const selector of editableSelectors) {
+      const el = document.querySelector(selector);
+      if (el && el.isContentEditable) {
+        el.textContent = text;
+        fireEvents(el);
+        return true;
+      }
+    }
+    return false;
+  }
+  """ % (json.dumps(TEXTAREA_SELECTORS), json.dumps(CONTENTEDITABLE_SELECTORS))
+
+  success = await page.evaluate(script, text)
+  if not success:
+    raise AutomationError(
+        "Unable to locate the ChatGPT message box. Please ensure the UI is loaded.",
+    )
 
 
 async def send_message(page: Page) -> None:
