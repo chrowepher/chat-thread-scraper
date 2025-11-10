@@ -11,6 +11,7 @@
     "build": "tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
+    "merge": "tsx src/mergeSnapshot.ts",
     "test": "vitest run"
   },
   "keywords": [],
@@ -19,7 +20,9 @@
   "type": "module",
   "dependencies": {
     "chrome-remote-interface": "^0.33.3",
-    "commander": "^14.0.2"
+    "commander": "^14.0.2",
+    "openai": "^4.74.1",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/jsdom": "^27.0.0",
