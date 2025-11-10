@@ -6,6 +6,9 @@ import { loadBookmarkFolderEntries } from '../../src/bookmarks.js';
 const fixturePath = fileURLToPath(
   new URL('./__fixtures__/Bookmarks.json', import.meta.url),
 );
+const bomFixturePath = fileURLToPath(
+  new URL('./__fixtures__/BookmarksWithBom.json', import.meta.url),
+);
 
 describe('bookmark folder loader', () => {
   it('extracts URLs from the requested folder name', async () => {
@@ -31,5 +34,17 @@ describe('bookmark folder loader', () => {
         caseSensitive: true,
       }),
     ).rejects.toThrow(/No bookmarks found/);
+  });
+
+  it('parses bookmark files that include a UTF-8 BOM', async () => {
+    const result = await loadBookmarkFolderEntries({
+      folderNames: ['Digital Nomad'],
+      bookmarksPath: bomFixturePath,
+    });
+    expect(result.entries).toHaveLength(1);
+    expect(result.entries[0]).toMatchObject({
+      url: 'https://chatgpt.com/c/primary',
+      name: 'Primary Thread',
+    });
   });
 });

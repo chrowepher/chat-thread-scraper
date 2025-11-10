@@ -1,0 +1,23 @@
+﻿{
+  "checksum":  "69a709a66baa96a295e9c330d2c6257d",
+  "roots":  {
+    "bookmark_bar":  {
+      "children":  [
+        {
+          "name":  "Digital Nomad",
+          "type":  "folder",
+          "children":  [
+            {
+              "name":  "Primary Thread",
+              "type":  "url",
+              "url":  "https://chatgpt.com/c/primary"
+            }
+          ]
+        }
+      ],
+      "name":  "Bookmarks bar",
+      "type":  "folder"
+    }
+  },
+  "version":  1
+}
