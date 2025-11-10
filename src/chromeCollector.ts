@@ -102,6 +102,94 @@ const waitForPageReady = async (
   await delay(400);
 };
 
+const waitForConversationContent = async (
+  runtime: RuntimeDomain,
+  verbose?: boolean,
+  timeoutMs = 15000,
+): Promise<number | undefined> => {
+  if (!runtime) {
+    return undefined;
+  }
+
+  const expression = `(function(selector, timeout) {
+    return new Promise(function(resolve) {
+      var doc = document;
+      if (!doc) {
+        resolve(0);
+        return;
+      }
+      var observer;
+      var timer;
+      var getCount = function() {
+        try {
+          var nodes = doc.querySelectorAll(selector);
+          return nodes ? nodes.length : 0;
+        } catch (_) {
+          return 0;
+        }
+      };
+      var finish = function(value) {
+        if (observer) {
+          observer.disconnect();
+        }
+        if (timer) {
+          clearTimeout(timer);
+        }
+        resolve(value);
+      };
+      var existing = getCount();
+      if (existing > 0) {
+        finish(existing);
+        return;
+      }
+      observer = new MutationObserver(function() {
+        var count = getCount();
+        if (count > 0) {
+          finish(count);
+        }
+      });
+      var root = doc.body || doc.documentElement;
+      if (!root) {
+        finish(0);
+        return;
+      }
+      observer.observe(root, { childList: true, subtree: true });
+      timer = setTimeout(function() {
+        finish(0);
+      }, timeout);
+    });
+  })('[data-testid^="conversation-turn"]', ${timeoutMs});`;
+
+  try {
+    const evaluation = await runtime.evaluate({
+      expression,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    const count = Number(evaluation.result?.value) || 0;
+    if (verbose) {
+      if (count > 0) {
+        console.log(
+          `Detected ${count} conversation turn${count === 1 ? '' : 's'} before scraping.`,
+        );
+      } else {
+        console.warn(
+          'Timed out waiting for ChatGPT conversation content; attempting extraction anyway.',
+        );
+      }
+    }
+    return count;
+  } catch (error) {
+    if (verbose) {
+      console.warn(
+        'Encountered an error while waiting for ChatGPT content to load; continuing anyway.',
+        error,
+      );
+    }
+    return undefined;
+  }
+};
+
 const collectFromTargets = async (
   targets: TargetDescriptor[],
   runtimeOptions: CollectorRuntimeOptions,
@@ -119,6 +207,7 @@ const collectFromTargets = async (
       }
       await Promise.all([Runtime.enable(), Page.enable()]);
       await waitForPageReady(Page, Runtime, verbose);
+      await waitForConversationContent(Runtime, verbose);
 
       const evaluation = await Runtime.evaluate({
         expression: EXTRACT_SCRIPT,
