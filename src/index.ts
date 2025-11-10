@@ -115,12 +115,20 @@ async function resolveBookmarkUrls(
     );
   }
 
-  const meta = await loadBookmarkFolderEntries({
+  const loaderOptions: Parameters<typeof loadBookmarkFolderEntries>[0] = {
     folderNames: folders,
-    bookmarksPath: options.path,
-    profile: options.profile,
-    caseSensitive: options.caseSensitive,
-  });
+  };
+  if (typeof options.path === 'string') {
+    loaderOptions.bookmarksPath = options.path;
+  }
+  if (typeof options.profile === 'string') {
+    loaderOptions.profile = options.profile;
+  }
+  if (typeof options.caseSensitive === 'boolean') {
+    loaderOptions.caseSensitive = options.caseSensitive;
+  }
+
+  const meta = await loadBookmarkFolderEntries(loaderOptions);
 
   for (const entry of meta.entries) {
     if (entry.url) {
@@ -169,13 +177,20 @@ async function main(options: CliOptions): Promise<void> {
     pretty,
   } = options;
 
+  const bookmarkOptions: { path?: string; profile?: string; caseSensitive?: boolean } = {};
+  if (typeof bookmarkPath === 'string') {
+    bookmarkOptions.path = bookmarkPath;
+  }
+  if (typeof bookmarkProfile === 'string') {
+    bookmarkOptions.profile = bookmarkProfile;
+  }
+  if (typeof bookmarkCaseSensitive === 'boolean') {
+    bookmarkOptions.caseSensitive = bookmarkCaseSensitive;
+  }
+
   const bookmarkResult = await resolveBookmarkUrls(
     bookmarkFolder,
-    {
-      path: bookmarkPath,
-      profile: bookmarkProfile,
-      caseSensitive: bookmarkCaseSensitive,
-    },
+    bookmarkOptions,
     verbose,
   );
 
@@ -200,8 +215,10 @@ async function main(options: CliOptions): Promise<void> {
     host,
     port,
     urls: Array.from(requestedUrls),
-    keepOpen: keepTabs,
   };
+  if (typeof keepTabs === 'boolean') {
+    scrapeOptions.keepOpen = keepTabs;
+  }
   if (typeof maxMessages === 'number') {
     scrapeOptions.maxMessagesPerConversation = maxMessages;
   }
