@@ -20,6 +20,7 @@ interface CliOptions {
   bookmarkCaseSensitive?: boolean;
   maxMessages?: number;
   keepTabs?: boolean;
+  maxConcurrentTabs?: number;
   verbose?: boolean;
   output: string;
   pretty?: boolean;
@@ -82,6 +83,12 @@ program
     '--keep-tabs',
     'Keep the temporary tabs opened from bookmarks alive after scraping.',
     false,
+  )
+  .option(
+    '--max-concurrent-tabs <number>',
+    'Maximum number of ChatGPT tabs to open simultaneously when scraping bookmarks.',
+    parseInteger('max-concurrent-tabs'),
+    3,
   )
   .option(
     '--output <path>',
@@ -173,6 +180,7 @@ async function main(options: CliOptions): Promise<void> {
     verbose,
     maxMessages,
     keepTabs,
+    maxConcurrentTabs,
     output,
     pretty,
   } = options;
@@ -218,6 +226,9 @@ async function main(options: CliOptions): Promise<void> {
   };
   if (typeof keepTabs === 'boolean') {
     scrapeOptions.keepOpen = keepTabs;
+  }
+  if (typeof maxConcurrentTabs === 'number') {
+    scrapeOptions.maxConcurrentTabs = maxConcurrentTabs;
   }
   if (typeof maxMessages === 'number') {
     scrapeOptions.maxMessagesPerConversation = maxMessages;

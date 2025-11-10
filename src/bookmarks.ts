@@ -92,6 +92,7 @@ export const loadBookmarkFolderEntries = async (
     bookmarksPath || resolveDefaultBookmarksPath(profile),
   );
   const raw = await fs.readFile(resolvedPath, 'utf-8');
+  const sanitized = raw.replace(/^\uFEFF/, '');
   let parsed: {
     roots?: {
       bookmark_bar?: BookmarkNode;
@@ -100,7 +101,7 @@ export const loadBookmarkFolderEntries = async (
     };
   };
   try {
-    parsed = JSON.parse(raw);
+    parsed = JSON.parse(sanitized);
   } catch (error) {
     throw new Error(
       `Failed to parse Chrome bookmarks file at ${resolvedPath}: ${String(error)}`,
