@@ -80,9 +80,16 @@ const ensureScenarioForKey = (key: string, url?: string): TargetScenario => {
     }
     return existing;
   }
+  if (url) {
+    const existingForUrl = mockState.scenarios.get(url);
+    if (existingForUrl) {
+      mockState.scenarios.set(key, existingForUrl);
+      return existingForUrl;
+    }
+  }
   const scenario = createScenario(url ?? key);
   mockState.scenarios.set(key, scenario);
-  if (url && url !== key) {
+  if (url && url !== key && !mockState.scenarios.has(url)) {
     mockState.scenarios.set(url, scenario);
   }
   return scenario;
