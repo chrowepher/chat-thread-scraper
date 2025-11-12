@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M3",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\threads\\thread-005-move-to-south-africa-branch-branch-mapping-your-do.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\threads\\thread-006-move-to-south-africa-audit-findings-summary.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 2
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Strategic Move to South Africa: Role Selection and Audit Insights\",\"overview\":\"This synthesis merges insights from two key branches: a practical framework for evaluating job opportunities based on compensation and friction, and an audit validating candidate profiles and friction factors relevant to a potential move to South Africa. Together, these provide a comprehensive approach to making a high-reward, low-friction career decision aligned with personal values and operational realities.\",\"key_insights\":[{\"topic\":\"Dollars-to-BS Ratio Framework\",\"details\":\"A quantitative method to evaluate roles or projects by balancing total compensation against the 'friction' or energy drain caused by governance, politics, and unclear work conditions. The formula is:\\n\\nDTB Score = Adjusted Compensation / Friction Hours\\n\\n- Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2, reflecting how energizing or conflicting the work is with personal values)\\n- Friction Hours = Weekly time lost to governance and related drains, annualized\\n\\nHigher DTB scores indicate better opportunities. This metric can be applied per role, project, or client to prioritize options that maximize reward while minimizing energy waste.\"},{\"topic\":\"Practical Application Worksheet\",\"details\":\"A simple worksheet to input:\\n- Annual Compensation\\n- Joy Factor\\n- Friction Hours\\n\\nThis enables quick, side-by-side comparison of multiple roles or projects, helping to identify those with the best balance of compensation and low friction.\"},{\"topic\":\"Audit Findings on Candidate and Friction Profiles\",\"details\":\"An independent audit confirmed the accuracy of the candidate profile, which includes domain expertise (banking, federal energy), methods (RAID, PMO governance), and tools (ServiceNow, SharePoint, Power Automate). Strengths include ambiguity reduction and stakeholder facilitation.\\n\\nThe audit also validated the personal friction profile, confirming that high-friction sources align with the candidate's stated preferences and negotiation points (e.g., single approver, decision SLAs). A recommendation was made to explicitly add friction sources to improve clarity.\"},{\"topic\":\"Integration of Framework and Audit for South Africa Move\",\"details\":\"Combining the Dollars-to-BS Ratio framework with the audit findings provides a robust decision-making tool:\\n- Use the audit-validated friction sources to accurately estimate friction hours.\\n- Apply the joy factor based on how well the role aligns with personal values and energizes the candidate.\\n- Calculate DTB scores for potential roles or projects in South Africa to identify the best fit.\\n\\nThis approach ensures that the move is not only financially sound but also sustainable and aligned with personal and professional goals.\"}],\"recommendations\":[\"Refine the friction profile by explicitly listing all known friction sources to improve accuracy in DTB calculations.\",\"Use the DTB worksheet to evaluate all South Africa job offers or projects systematically.\",\"Consider qualitative factors alongside DTB scores, such as cultural fit and long-term career impact.\",\"Plan a follow-up audit after initial role selection to reassess friction and compensation alignment post-move.\"],\"potential_follow_up_explorations\":[\"Develop a digital tool or app to automate DTB score calculations and friction tracking over time.\",\"Explore cultural and logistical factors specific to South Africa that might affect friction beyond governance (e.g., local work culture, legal environment).\",\"Conduct scenario analyses comparing remote vs. on-site roles using the DTB framework.\",\"Investigate negotiation strategies to reduce friction elements identified in the audit.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb8fsL2cMIFoQsfUGncKwl8CM7ybC",
+      "object": "chat.completion",
+      "created": 1762967516,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Strategic Move to South Africa: Role Selection and Audit Insights\",\n    \"overview\": \"This synthesis merges insights from two key branches: a practical framework for evaluating job opportunities based on compensation and friction, and an audit validating candidate profiles and friction factors relevant to a potential move to South Africa. Together, these provide a comprehensive approach to making a high-reward, low-friction career decision aligned with personal values and operational realities.\",\n    \"key_insights\": [\n      {\n        \"topic\": \"Dollars-to-BS Ratio Framework\",\n        \"details\": \"A quantitative method to evaluate roles or projects by balancing total compensation against the 'friction' or energy drain caused by governance, politics, and unclear work conditions. The formula is:\\n\\nDTB Score = Adjusted Compensation / Friction Hours\\n\\n- Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2, reflecting how energizing or conflicting the work is with personal values)\\n- Friction Hours = Weekly time lost to governance and related drains, annualized\\n\\nHigher DTB scores indicate better opportunities. This metric can be applied per role, project, or client to prioritize options that maximize reward while minimizing energy waste.\"\n      },\n      {\n        \"topic\": \"Practical Application Worksheet\",\n        \"details\": \"A simple worksheet to input:\\n- Annual Compensation\\n- Joy Factor\\n- Friction Hours\\n\\nThis enables quick, side-by-side comparison of multiple roles or projects, helping to identify those with the best balance of compensation and low friction.\"\n      },\n      {\n        \"topic\": \"Audit Findings on Candidate and Friction Profiles\",\n        \"details\": \"An independent audit confirmed the accuracy of the candidate profile, which includes domain expertise (banking, federal energy), methods (RAID, PMO governance), and tools (ServiceNow, SharePoint, Power Automate). Strengths include ambiguity reduction and stakeholder facilitation.\\n\\nThe audit also validated the personal friction profile, confirming that high-friction sources align with the candidate's stated preferences and negotiation points (e.g., single approver, decision SLAs). A recommendation was made to explicitly add friction sources to improve clarity.\"\n      },\n      {\n        \"topic\": \"Integration of Framework and Audit for South Africa Move\",\n        \"details\": \"Combining the Dollars-to-BS Ratio framework with the audit findings provides a robust decision-making tool:\\n- Use the audit-validated friction sources to accurately estimate friction hours.\\n- Apply the joy factor based on how well the role aligns with personal values and energizes the candidate.\\n- Calculate DTB scores for potential roles or projects in South Africa to identify the best fit.\\n\\nThis approach ensures that the move is not only financially sound but also sustainable and aligned with personal and professional goals.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Refine the friction profile by explicitly listing all known friction sources to improve accuracy in DTB calculations.\",\n      \"Use the DTB worksheet to evaluate all South Africa job offers or projects systematically.\",\n      \"Consider qualitative factors alongside DTB scores, such as cultural fit and long-term career impact.\",\n      \"Plan a follow-up audit after initial role selection to reassess friction and compensation alignment post-move.\"\n    ],\n    \"potential_follow_up_explorations\": [\n      \"Develop a digital tool or app to automate DTB score calculations and friction tracking over time.\",\n      \"Explore cultural and logistical factors specific to South Africa that might affect friction beyond governance (e.g., local work culture, legal environment).\",\n      \"Conduct scenario analyses comparing remote vs. on-site roles using the DTB framework.\",\n      \"Investigate negotiation strategies to reduce friction elements identified in the audit.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 922,
+        "completion_tokens": 774,
+        "total_tokens": 1696,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

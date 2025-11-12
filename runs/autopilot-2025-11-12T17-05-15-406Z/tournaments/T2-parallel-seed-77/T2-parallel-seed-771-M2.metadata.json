@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M2",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\threads\\thread-003-move-to-south-africa-branch-mapping-your-dollars-t.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\threads\\thread-004-move-to-south-africa-branch-branch-mapping-your-do.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 1
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Designing Your Personal Dollars-to-BS Ratio for Evaluating Roles and Projects\",\"summary\":\"This synthesis merges two closely aligned ChatGPT branches that present a practical framework to evaluate job roles or projects based on compensation and friction factors. The core concept is the 'Dollars-to-BS Ratio' (DTB Score), a metric designed to help identify high-reward, low-friction opportunities, especially when navigating governance-heavy or politically complex work environments.\",\"key_insights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"description\":\"A personal metric that balances the compensation you receive against the friction or energy drain caused by workplace politics, unclear expectations, and governance overhead.\"},{\"components\":{\"Compensation ($)\":\"Total compensation that matters to you, including base salary, bonuses, and valued benefits.\",\"Friction (BS)\":\"The energy drain from fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, and other governance grind factors.\"}},{\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"details\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a 'joy factor' ranging from 0.5 to 1.2, reflecting how energizing or draining the work is relative to your values.\",\"Joy Factor\":\"1.2 if the work energizes you; 0.5 if it conflicts with your values; values in between for neutral or mixed feelings.\",\"Friction Hours\":\"Estimated weekly hours lost to governance or friction multiplied by 52 (weeks per year).\"}},{\"application\":\"Use this metric to evaluate roles, projects, or clients by quantifying both tangible and intangible factors, enabling clearer decision-making about where to invest your time and energy.\"},{\"practical_tool\":\"A worksheet or spreadsheet where you input annual compensation, joy factor, and friction hours for each option to calculate and compare DTB Scores.\"}],\"resolved_conflicts\":\"Both branches presented the same framework and approach without conflicting ideas. The merged narrative consolidates the repeated insights into a single, coherent explanation.\",\"recommended_next_steps\":[\"Develop a customizable spreadsheet template for users to input their data and automatically calculate DTB Scores.\",\"Explore case studies applying the DTB Ratio to real-world job or project decisions, including moving to different countries like South Africa.\",\"Investigate how to quantify 'joy factor' more precisely, possibly through self-assessment surveys or mood tracking.\",\"Expand the model to include other factors such as career growth potential, work-life balance, and long-term impact.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb8flCz1dl3LJJFXfEEgs3RjLKd4Y",
+      "object": "chat.completion",
+      "created": 1762967509,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Designing Your Personal Dollars-to-BS Ratio for Evaluating Roles and Projects\",\n    \"summary\": \"This synthesis merges two closely aligned ChatGPT branches that present a practical framework to evaluate job roles or projects based on compensation and friction factors. The core concept is the 'Dollars-to-BS Ratio' (DTB Score), a metric designed to help identify high-reward, low-friction opportunities, especially when navigating governance-heavy or politically complex work environments.\",\n    \"key_insights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"description\": \"A personal metric that balances the compensation you receive against the friction or energy drain caused by workplace politics, unclear expectations, and governance overhead.\"\n      },\n      {\n        \"components\": {\n          \"Compensation ($)\": \"Total compensation that matters to you, including base salary, bonuses, and valued benefits.\",\n          \"Friction (BS)\": \"The energy drain from fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, and other governance grind factors.\"\n        }\n      },\n      {\n        \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n        \"details\": {\n          \"Adjusted Compensation\": \"Annual compensation multiplied by a 'joy factor' ranging from 0.5 to 1.2, reflecting how energizing or draining the work is relative to your values.\",\n          \"Joy Factor\": \"1.2 if the work energizes you; 0.5 if it conflicts with your values; values in between for neutral or mixed feelings.\",\n          \"Friction Hours\": \"Estimated weekly hours lost to governance or friction multiplied by 52 (weeks per year).\"\n        }\n      },\n      {\n        \"application\": \"Use this metric to evaluate roles, projects, or clients by quantifying both tangible and intangible factors, enabling clearer decision-making about where to invest your time and energy.\"\n      },\n      {\n        \"practical_tool\": \"A worksheet or spreadsheet where you input annual compensation, joy factor, and friction hours for each option to calculate and compare DTB Scores.\"\n      }\n    ],\n    \"resolved_conflicts\": \"Both branches presented the same framework and approach without conflicting ideas. The merged narrative consolidates the repeated insights into a single, coherent explanation.\",\n    \"recommended_next_steps\": [\n      \"Develop a customizable spreadsheet template for users to input their data and automatically calculate DTB Scores.\",\n      \"Explore case studies applying the DTB Ratio to real-world job or project decisions, including moving to different countries like South Africa.\",\n      \"Investigate how to quantify 'joy factor' more precisely, possibly through self-assessment surveys or mood tracking.\",\n      \"Expand the model to include other factors such as career growth potential, work-life balance, and long-term impact.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 979,
+        "completion_tokens": 586,
+        "total_tokens": 1565,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

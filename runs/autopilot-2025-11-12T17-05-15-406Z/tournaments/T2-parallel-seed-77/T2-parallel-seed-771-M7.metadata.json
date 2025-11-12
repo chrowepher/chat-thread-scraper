@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M7",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\threads\\thread-013-move-to-south-africa-branch-branch-digital-nomad-p.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\threads\\thread-014-move-to-south-africa-branch-branch-digital-nomad-p.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 6
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user requested a current list of countries offering digital nomad or remote work visas for U.S. citizens, sorted by the exchange rate leverage of the U.S. dollar to local currency. The goal is to identify the best countries where the U.S. dollar has the strongest purchasing power, while also considering visa requirements and cost of living factors.\",\"key_insights\":[{\"insight\":\"A comprehensive, up-to-date lineup of countries with bona fide digital nomad or remote work visa programs for U.S. citizens was compiled, using exchange rates as of November 2, 2025.\"},{\"insight\":\"The countries were sorted by the exchange rate leverage metric, defined as how many units of local currency one U.S. dollar can buy. A higher number indicates stronger USD leverage.\"},{\"insight\":\"It was emphasized that exchange rate leverage alone does not guarantee affordability. Cost of living, visa income thresholds, tax implications, and local purchasing power parity must also be considered.\"},{\"insight\":\"Sources for exchange rates included X-Rates, XE.com, Revolut, and other currency data providers, ensuring accuracy and currency freshness.\"},{\"insight\":\"South Africa was specifically highlighted as a country of interest, with its digital nomad visa program details included in the lineup.\"}],\"recommendations\":[{\"recommendation\":\"Use the compiled list as a starting point to identify countries where the U.S. dollar has strong exchange rate leverage for digital nomads.\"},{\"recommendation\":\"Conduct further research on each country’s cost of living, visa requirements, income thresholds, and tax rules to make an informed decision.\"},{\"recommendation\":\"Consider South Africa as a viable option given its digital nomad visa program and favorable exchange rate leverage.\"}],\"next_steps\":[{\"step\":\"Develop a detailed cost of living comparison for the top-ranked countries by exchange rate leverage.\"},{\"step\":\"Analyze visa application processes, duration, and eligibility criteria for each country.\"},{\"step\":\"Evaluate tax implications for U.S. citizens working remotely in these countries.\"},{\"step\":\"Gather anecdotal or community feedback from digital nomads currently residing in these countries.\"}]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb8gZuyJlmUvK0XRSj7390mzVNKra",
+      "object": "chat.completion",
+      "created": 1762967559,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user requested a current list of countries offering digital nomad or remote work visas for U.S. citizens, sorted by the exchange rate leverage of the U.S. dollar to local currency. The goal is to identify the best countries where the U.S. dollar has the strongest purchasing power, while also considering visa requirements and cost of living factors.\",\n    \"key_insights\": [\n      {\n        \"insight\": \"A comprehensive, up-to-date lineup of countries with bona fide digital nomad or remote work visa programs for U.S. citizens was compiled, using exchange rates as of November 2, 2025.\"\n      },\n      {\n        \"insight\": \"The countries were sorted by the exchange rate leverage metric, defined as how many units of local currency one U.S. dollar can buy. A higher number indicates stronger USD leverage.\"\n      },\n      {\n        \"insight\": \"It was emphasized that exchange rate leverage alone does not guarantee affordability. Cost of living, visa income thresholds, tax implications, and local purchasing power parity must also be considered.\"\n      },\n      {\n        \"insight\": \"Sources for exchange rates included X-Rates, XE.com, Revolut, and other currency data providers, ensuring accuracy and currency freshness.\"\n      },\n      {\n        \"insight\": \"South Africa was specifically highlighted as a country of interest, with its digital nomad visa program details included in the lineup.\"\n      }\n    ],\n    \"recommendations\": [\n      {\n        \"recommendation\": \"Use the compiled list as a starting point to identify countries where the U.S. dollar has strong exchange rate leverage for digital nomads.\"\n      },\n      {\n        \"recommendation\": \"Conduct further research on each country’s cost of living, visa requirements, income thresholds, and tax rules to make an informed decision.\"\n      },\n      {\n        \"recommendation\": \"Consider South Africa as a viable option given its digital nomad visa program and favorable exchange rate leverage.\"\n      }\n    ],\n    \"next_steps\": [\n      {\n        \"step\": \"Develop a detailed cost of living comparison for the top-ranked countries by exchange rate leverage.\"\n      },\n      {\n        \"step\": \"Analyze visa application processes, duration, and eligibility criteria for each country.\"\n      },\n      {\n        \"step\": \"Evaluate tax implications for U.S. citizens working remotely in these countries.\"\n      },\n      {\n        \"step\": \"Gather anecdotal or community feedback from digital nomads currently residing in these countries.\"\n      }\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 946,
+        "completion_tokens": 520,
+        "total_tokens": 1466,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

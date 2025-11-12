@@ -1,0 +1,124 @@
+{
+  "model": "gpt-4.1-mini",
+  "temperature": 0.0,
+  "replicate_count": 1,
+  "aggregate": {
+    "Coverage": {
+      "left": {
+        "mean": 0.7,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 1.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 0.30000000000000004,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Accuracy": {
+      "left": {
+        "mean": 0.8,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 0.95,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 0.1499999999999999,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Clarity": {
+      "left": {
+        "mean": 0.9,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 0.9,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 0.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    }
+  },
+  "replicates": [
+    {
+      "index": 1,
+      "winner": "right",
+      "criteria": [
+        {
+          "name": "Coverage",
+          "left": 0.7,
+          "right": 1.0,
+          "rationale": "RIGHT covers all LEFT content plus tax/legal issues, lifestyle/infrastructure, and conflict resolution, providing a fuller picture."
+        },
+        {
+          "name": "Accuracy",
+          "left": 0.8,
+          "right": 0.95,
+          "rationale": "RIGHT includes nuanced details on tax and legal complexities and acknowledges variability in personal circumstances, improving accuracy."
+        },
+        {
+          "name": "Clarity",
+          "left": 0.9,
+          "right": 0.9,
+          "rationale": "Both candidates present information clearly and logically; RIGHT is slightly denser but remains accessible."
+        }
+      ],
+      "summary_markdown": "The RIGHT candidate provides a more comprehensive and nuanced synthesis by including additional important factors such as tax and legal considerations, lifestyle and infrastructure, and explicit conflict resolution regarding cost of living versus visa accessibility and tax complexity. It maintains clarity while expanding coverage beyond the LEFT candidate's focus on the DTB Score and rental affordability. The RIGHT candidate also offers more detailed next steps that address practical implementation and deeper analysis, enhancing accuracy and utility for the target audience. The LEFT candidate is clear and focused but less comprehensive, lacking discussion of tax, legal, and lifestyle factors that are critical for international remote work decisions.",
+      "raw": {
+        "winner": "right",
+        "summary_markdown": "The RIGHT candidate provides a more comprehensive and nuanced synthesis by including additional important factors such as tax and legal considerations, lifestyle and infrastructure, and explicit conflict resolution regarding cost of living versus visa accessibility and tax complexity. It maintains clarity while expanding coverage beyond the LEFT candidate's focus on the DTB Score and rental affordability. The RIGHT candidate also offers more detailed next steps that address practical implementation and deeper analysis, enhancing accuracy and utility for the target audience. The LEFT candidate is clear and focused but less comprehensive, lacking discussion of tax, legal, and lifestyle factors that are critical for international remote work decisions.",
+        "criteria": [
+          {
+            "name": "Coverage",
+            "left": 0.7,
+            "right": 1.0,
+            "rationale": "RIGHT covers all LEFT content plus tax/legal issues, lifestyle/infrastructure, and conflict resolution, providing a fuller picture."
+          },
+          {
+            "name": "Accuracy",
+            "left": 0.8,
+            "right": 0.95,
+            "rationale": "RIGHT includes nuanced details on tax and legal complexities and acknowledges variability in personal circumstances, improving accuracy."
+          },
+          {
+            "name": "Clarity",
+            "left": 0.9,
+            "right": 0.9,
+            "rationale": "Both candidates present information clearly and logically; RIGHT is slightly denser but remains accessible."
+          }
+        ]
+      },
+      "token_usage": {
+        "completion_tokens": 306,
+        "prompt_tokens": 1658,
+        "total_tokens": 1964,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        }
+      }
+    }
+  ]
+}
