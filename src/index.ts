@@ -19,6 +19,7 @@ import { CoverageAnalyzer } from './experiments/coverageAnalyzer.js';
 import { MergeExecutor } from './experiments/mergeExecutor.js';
 import { PythonCritiqueRunner } from './experiments/critiqueRunner.js';
 import { FileStatsCritiqueRunner } from './experiments/critiqueRunner.js';
+import { materializeExperimentThreads } from './experiments/threadMaterializer.js';
 import { runMergeWorkflow, type MergeCliOptions } from './mergeSnapshot.js';
 import type { ThreadSnapshot } from './types.js';
 
@@ -98,6 +99,9 @@ interface AutopilotCliOptions {
   plan?: string;
   runId?: string;
   experimentDescription?: string;
+  experimentThreadsDir?: string;
+  experimentMaxMessages?: number;
+  experimentMaxChars?: number;
 }
 
 const collectValues = (value: string, previous: string[] = []): string[] => {
@@ -229,6 +233,20 @@ function createAutopilotCommand(): Command {
       '--threads <path>',
       'Override experiment thread inputs (repeatable).',
       collectValues,
+    )
+    .option(
+      '--experiment-threads-dir <path>',
+      'Directory for experiment thread artifacts (default: runs/<runId>/threads).',
+    )
+    .option(
+      '--experiment-max-messages <number>',
+      'Maximum messages captured per branch for experiments.',
+      parseInteger('experiment-max-messages'),
+    )
+    .option(
+      '--experiment-max-chars <number>',
+      'Maximum characters retained per message snippet for experiments.',
+      parseInteger('experiment-max-chars'),
     )
     .option('--plan <plan>', 'Experiment plan id (planA|planB|planC).', 'planB')
     .option('--run-id <id>', 'Experiment run identifier (auto-generated if blank).')
@@ -668,12 +686,26 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
 
   if (!options.skipExperiments) {
     logStep(`Step 3/3: Running experiment plan ${planId}...`);
-    const threadInputs =
-      options.threads?.filter(Boolean).length
-        ? (options.threads ?? []).filter(Boolean)
-        : [snapshotTarget];
+    let experimentThreads: string[];
+    if (options.threads?.filter(Boolean).length) {
+      experimentThreads = (options.threads ?? []).filter(Boolean);
+    } else {
+      const materialized = await materializeExperimentThreads({
+        snapshotPath: snapshotTarget,
+        runId,
+        outputDir: options.experimentThreadsDir
+          ? path.resolve(options.experimentThreadsDir)
+          : undefined,
+        maxMessagesPerThread: options.experimentMaxMessages,
+        maxCharsPerMessage: options.experimentMaxChars,
+      });
+      experimentThreads = materialized.threadPaths;
+      logStep(
+        `Prepared ${materialized.conversationCount} experiment thread${materialized.conversationCount === 1 ? '' : 's'} at ${path.relative(process.cwd(), materialized.outputDir)}.`,
+      );
+    }
     const experimentResult = await runExperiment({
-      threads: threadInputs,
+      threads: experimentThreads,
       plan: planId,
       calcMetrics: true,
       runId,

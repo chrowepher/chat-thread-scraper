@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups1-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-001-can-do-mapping-your-dollars-to-bs-ratio.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-002-move-to-south-africa-branch-mapping-your-dollars-t.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 1,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"title\":\"Mapping Your Dollars-to-BS Ratio for Career Decision-Making\",\"overview\":\"This synthesis combines insights from two branches focused on quantifying and optimizing your personal compensation relative to the friction or 'BS' encountered in your work environment. The core concept is the 'Dollars-to-BS Ratio,' a practical metric designed to help you identify roles or projects that maximize reward while minimizing energy-draining governance and politics.\",\"key_insights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"details\":\"A metric defined as Adjusted Compensation divided by Friction Hours, where Adjusted Compensation accounts for both your total compensation and your personal joy or alignment with the work, and Friction Hours represent the weekly time lost to governance, politics, and other low-agency activities.\"},{\"components\":{\"Adjusted Compensation\":\"Annual total compensation (base salary, bonuses, benefits valued by you) multiplied by a Joy Factor ranging from 0.5 to 1.2. The Joy Factor reflects how energizing or conflicting the work is to your values (1.2 if highly energizing, 0.5 if conflicting).\",\"Friction Hours\":\"Estimated weekly hours lost to governance grind, politics, unclear acceptance criteria, endless meetings, and other forms of 'BS' multiplied by 52 to annualize.\"}},{\"usage\":\"Calculate the DTB Score for each role, project, or client to compare opportunities quantitatively. Higher DTB Scores indicate better reward-to-friction balance.\"},{\"practical_tool\":\"A worksheet or spreadsheet can be used to input compensation, joy factor, and friction hours for each option, facilitating side-by-side comparison.\"},{\"application\":\"Especially useful when evaluating governance-heavy roles or considering moves to different geographic or organizational contexts, such as relocating to South Africa or shifting to roles with varying governance burdens.\"}],\"recommendations\":[\"Regularly update your Dollars-to-BS Ratio as your job conditions and personal values evolve.\",\"Use the metric not only for full-time roles but also for projects and clients to optimize your portfolio of work.\",\"Consider qualitative factors alongside the metric to capture nuances not fully reflected in numbers.\",\"Explore geographic or organizational moves (e.g., moving to South Africa) through the lens of this ratio to assess potential improvements in work-life balance and compensation quality.\"],\"next_steps_for_exploration\":[\"Develop a user-friendly digital tool or app that automates the DTB Score calculation and tracks changes over time.\",\"Expand the model to incorporate additional dimensions such as career growth potential, skill development, and long-term impact.\",\"Conduct case studies or gather user data to validate and refine the Joy Factor scale and friction hour estimates.\",\"Investigate cultural and economic factors affecting the Dollars-to-BS Ratio in different countries or industries.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7eIiSd14Nar0mYc1pfNwmcHFfPK",
+      "object": "chat.completion",
+      "created": 1762963574,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"title\": \"Mapping Your Dollars-to-BS Ratio for Career Decision-Making\",\n    \"overview\": \"This synthesis combines insights from two branches focused on quantifying and optimizing your personal compensation relative to the friction or 'BS' encountered in your work environment. The core concept is the 'Dollars-to-BS Ratio,' a practical metric designed to help you identify roles or projects that maximize reward while minimizing energy-draining governance and politics.\",\n    \"key_insights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"details\": \"A metric defined as Adjusted Compensation divided by Friction Hours, where Adjusted Compensation accounts for both your total compensation and your personal joy or alignment with the work, and Friction Hours represent the weekly time lost to governance, politics, and other low-agency activities.\"\n      },\n      {\n        \"components\": {\n          \"Adjusted Compensation\": \"Annual total compensation (base salary, bonuses, benefits valued by you) multiplied by a Joy Factor ranging from 0.5 to 1.2. The Joy Factor reflects how energizing or conflicting the work is to your values (1.2 if highly energizing, 0.5 if conflicting).\",\n          \"Friction Hours\": \"Estimated weekly hours lost to governance grind, politics, unclear acceptance criteria, endless meetings, and other forms of 'BS' multiplied by 52 to annualize.\"\n        }\n      },\n      {\n        \"usage\": \"Calculate the DTB Score for each role, project, or client to compare opportunities quantitatively. Higher DTB Scores indicate better reward-to-friction balance.\"\n      },\n      {\n        \"practical_tool\": \"A worksheet or spreadsheet can be used to input compensation, joy factor, and friction hours for each option, facilitating side-by-side comparison.\"\n      },\n      {\n        \"application\": \"Especially useful when evaluating governance-heavy roles or considering moves to different geographic or organizational contexts, such as relocating to South Africa or shifting to roles with varying governance burdens.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Regularly update your Dollars-to-BS Ratio as your job conditions and personal values evolve.\",\n      \"Use the metric not only for full-time roles but also for projects and clients to optimize your portfolio of work.\",\n      \"Consider qualitative factors alongside the metric to capture nuances not fully reflected in numbers.\",\n      \"Explore geographic or organizational moves (e.g., moving to South Africa) through the lens of this ratio to assess potential improvements in work-life balance and compensation quality.\"\n    ],\n    \"next_steps_for_exploration\": [\n      \"Develop a user-friendly digital tool or app that automates the DTB Score calculation and tracks changes over time.\",\n      \"Expand the model to incorporate additional dimensions such as career growth potential, skill development, and long-term impact.\",\n      \"Conduct case studies or gather user data to validate and refine the Joy Factor scale and friction hour estimates.\",\n      \"Investigate cultural and economic factors affecting the Dollars-to-BS Ratio in different countries or industries.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 717,
+        "completion_tokens": 630,
+        "total_tokens": 1347,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

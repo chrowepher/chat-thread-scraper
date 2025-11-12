@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals1-M4",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-007-move-to-south-africa-audit-findings-summary.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-008-move-to-south-africa-branch-branch-mapping-your-do.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 3
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"title\":\"Move to South Africa - Comprehensive Audit and Strategic Role Evaluation\",\"overview\":\"This merged narrative synthesizes audit findings on candidate profile validation and personal friction mapping with a practical framework for evaluating roles based on compensation versus friction. The goal is to provide a clear, actionable plan for assessing opportunities related to moving to South Africa, ensuring alignment with personal values, strengths, and minimizing governance-related friction.\",\"audit_findings_summary\":{\"candidate_profile_validation\":{\"status\":\"Accurate\",\"details\":{\"domains\":[\"Banking (BoA, MRA)\",\"Federal energy (BPA, FISMA)\"],\"methods\":[\"RAID\",\"PMO governance\",\"audit documentation\",\"executive reporting\"],\"tools\":[\"ServiceNow (ITAM only)\",\"SharePoint\",\"Power Automate\",\"Excel dashboards\"],\"strengths\":[\"Ambiguity reduction\",\"Stakeholder facilitation\",\"Risk surfacing\"],\"notes\":\"No inconsistencies detected.\"}},\"personal_friction_profile_validation\":{\"status\":\"Accurate\",\"details\":{\"high_friction_sources\":\"Aligned with ChatGPT conversation history\",\"anti_friction_traits\":\"Aligned with negotiation preferences (single approver, DoD, decision SLAs)\",\"recommendation\":\"Add explicit friction metrics for ongoing monitoring.\"}}},\"dollars_to_bs_ratio_framework\":{\"purpose\":\"Evaluate roles/projects by balancing compensation against governance and friction costs to identify high-reward, low-friction opportunities.\",\"key_components\":{\"compensation\":\"Total compensation including base, bonus, and valued benefits.\",\"friction\":\"Energy drain from fuzziness, politics, low agency, meetings, unclear acceptance criteria, etc.\",\"joy_factor\":\"Multiplier (0.5–1.2) reflecting how energizing or conflicting the work is with personal values.\",\"friction_hours\":\"Weekly time lost to governance grind, annualized.\",\"formula\":\"DTB Score = Adjusted Comp / Friction Hours, where Adjusted Comp = Compensation × Joy Factor.\"},\"usage\":\"Calculate DTB Score per role/project to prioritize options that maximize compensation and joy while minimizing friction.\",\"tools\":\"Worksheet template for inputting compensation, joy factor, and friction hours.\"},\"integrated_recommendations\":[\"Use audit findings to confirm role alignment with strengths and governance capabilities.\",\"Apply the Dollars-to-BS Ratio framework to objectively compare South Africa move options or other roles.\",\"Incorporate explicit friction metrics into ongoing personal and project evaluations to maintain clarity.\",\"Prioritize roles/projects with high DTB Scores to optimize career satisfaction and effectiveness.\",\"Leverage strengths in ambiguity reduction and stakeholder facilitation to mitigate friction in governance-heavy environments.\"],\"next_steps_and_follow_up\":[\"Develop a detailed friction metric tracking system based on audit recommendations.\",\"Customize the Dollars-to-BS Ratio worksheet for specific South Africa move scenarios.\",\"Conduct scenario planning using DTB Scores to simulate different role/project outcomes.\",\"Explore negotiation strategies aligned with anti-friction traits to streamline decision-making processes.\",\"Schedule periodic audits to reassess alignment and friction as roles evolve.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7hyinMlTMFQX9YrDUVRqMFLYoQK",
+      "object": "chat.completion",
+      "created": 1762963802,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"title\": \"Move to South Africa - Comprehensive Audit and Strategic Role Evaluation\",\n    \"overview\": \"This merged narrative synthesizes audit findings on candidate profile validation and personal friction mapping with a practical framework for evaluating roles based on compensation versus friction. The goal is to provide a clear, actionable plan for assessing opportunities related to moving to South Africa, ensuring alignment with personal values, strengths, and minimizing governance-related friction.\",\n    \"audit_findings_summary\": {\n      \"candidate_profile_validation\": {\n        \"status\": \"Accurate\",\n        \"details\": {\n          \"domains\": [\"Banking (BoA, MRA)\", \"Federal energy (BPA, FISMA)\"],\n          \"methods\": [\"RAID\", \"PMO governance\", \"audit documentation\", \"executive reporting\"],\n          \"tools\": [\"ServiceNow (ITAM only)\", \"SharePoint\", \"Power Automate\", \"Excel dashboards\"],\n          \"strengths\": [\"Ambiguity reduction\", \"Stakeholder facilitation\", \"Risk surfacing\"],\n          \"notes\": \"No inconsistencies detected.\"\n        }\n      },\n      \"personal_friction_profile_validation\": {\n        \"status\": \"Accurate\",\n        \"details\": {\n          \"high_friction_sources\": \"Aligned with ChatGPT conversation history\",\n          \"anti_friction_traits\": \"Aligned with negotiation preferences (single approver, DoD, decision SLAs)\",\n          \"recommendation\": \"Add explicit friction metrics for ongoing monitoring.\"\n        }\n      }\n    },\n    \"dollars_to_bs_ratio_framework\": {\n      \"purpose\": \"Evaluate roles/projects by balancing compensation against governance and friction costs to identify high-reward, low-friction opportunities.\",\n      \"key_components\": {\n        \"compensation\": \"Total compensation including base, bonus, and valued benefits.\",\n        \"friction\": \"Energy drain from fuzziness, politics, low agency, meetings, unclear acceptance criteria, etc.\",\n        \"joy_factor\": \"Multiplier (0.5–1.2) reflecting how energizing or conflicting the work is with personal values.\",\n        \"friction_hours\": \"Weekly time lost to governance grind, annualized.\",\n        \"formula\": \"DTB Score = Adjusted Comp / Friction Hours, where Adjusted Comp = Compensation × Joy Factor.\"\n      },\n      \"usage\": \"Calculate DTB Score per role/project to prioritize options that maximize compensation and joy while minimizing friction.\",\n      \"tools\": \"Worksheet template for inputting compensation, joy factor, and friction hours.\"\n    },\n    \"integrated_recommendations\": [\n      \"Use audit findings to confirm role alignment with strengths and governance capabilities.\",\n      \"Apply the Dollars-to-BS Ratio framework to objectively compare South Africa move options or other roles.\",\n      \"Incorporate explicit friction metrics into ongoing personal and project evaluations to maintain clarity.\",\n      \"Prioritize roles/projects with high DTB Scores to optimize career satisfaction and effectiveness.\",\n      \"Leverage strengths in ambiguity reduction and stakeholder facilitation to mitigate friction in governance-heavy environments.\"\n    ],\n    \"next_steps_and_follow_up\": [\n      \"Develop a detailed friction metric tracking system based on audit recommendations.\",\n      \"Customize the Dollars-to-BS Ratio worksheet for specific South Africa move scenarios.\",\n      \"Conduct scenario planning using DTB Scores to simulate different role/project outcomes.\",\n      \"Explore negotiation strategies aligned with anti-friction traits to streamline decision-making processes.\",\n      \"Schedule periodic audits to reassess alignment and friction as roles evolve.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 930,
+        "completion_tokens": 710,
+        "total_tokens": 1640,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

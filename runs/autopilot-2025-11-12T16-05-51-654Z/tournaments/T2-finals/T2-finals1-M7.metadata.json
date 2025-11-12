@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals1-M7",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-013-move-to-south-africa-branch-branch-digital-nomad-p.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-014-move-to-south-africa-branch-branch-digital-nomad-p.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 6
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"topic\":\"Digital Nomad Programs for U.S. Citizens Sorted by USD Exchange Rate Leverage\",\"overview\":\"The user requested a current list of countries offering bona fide digital nomad or remote work visas for U.S. citizens, ranked by the exchange rate leverage of the U.S. dollar. This means sorting countries by how many units of local currency one U.S. dollar can buy, as of November 2, 2025. The goal is to identify destinations where the USD has the strongest purchasing power, potentially maximizing affordability for digital nomads.\",\"key_insights\":[{\"insight\":\"Exchange Rate Leverage vs. Cost of Living\",\"details\":\"A higher exchange rate (more local currency per USD) indicates stronger USD leverage but does not necessarily mean the destination is cheaper overall. Cost of living, visa income requirements, and local taxes must also be considered to assess true affordability.\"},{\"insight\":\"Current Data and Sources\",\"details\":\"The rankings use spot FX rates from November 2, 2025, sourced from X-Rates, xe.com, Revolut, and other currency data providers. Official digital nomad program sources were also referenced to confirm visa eligibility and requirements for U.S. citizens.\"},{\"insight\":\"Comprehensive Country List\",\"details\":\"Both branches provided a detailed lineup of countries with active digital nomad or remote work visas for U.S. citizens. Countries were sorted by USD exchange rate leverage, enabling users to quickly identify top candidates for relocation based on currency strength.\"},{\"insight\":\"South Africa Context\",\"details\":\"Given the conversation branches' focus on South Africa, it is noted that South Africa offers digital nomad-friendly options but may not have the highest USD leverage compared to other countries. Users should weigh South Africa’s unique cultural, economic, and lifestyle factors alongside financial considerations.\"}],\"recommendations\":[\"Use the exchange rate leverage list as a starting point but conduct deeper research on cost of living, visa conditions, and tax implications before deciding.\",\"Consider South Africa if cultural fit, lifestyle, and other qualitative factors align, even if the USD leverage is moderate.\",\"Monitor currency fluctuations and visa policy updates regularly, as these can impact the attractiveness of destinations over time.\"],\"next_steps_for_user\":[\"Request a detailed ranked list of countries with their current exchange rates, cost of living indexes, visa income thresholds, and tax implications.\",\"Explore specific digital nomad visa requirements and application processes for South Africa and other top-ranked countries.\",\"Investigate lifestyle factors such as safety, healthcare, internet connectivity, and community support for digital nomads in shortlisted countries.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7iaeFAI3AE8Vohv98i3Wy2gMbI7",
+      "object": "chat.completion",
+      "created": 1762963840,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"topic\": \"Digital Nomad Programs for U.S. Citizens Sorted by USD Exchange Rate Leverage\",\n    \"overview\": \"The user requested a current list of countries offering bona fide digital nomad or remote work visas for U.S. citizens, ranked by the exchange rate leverage of the U.S. dollar. This means sorting countries by how many units of local currency one U.S. dollar can buy, as of November 2, 2025. The goal is to identify destinations where the USD has the strongest purchasing power, potentially maximizing affordability for digital nomads.\",\n    \"key_insights\": [\n      {\n        \"insight\": \"Exchange Rate Leverage vs. Cost of Living\",\n        \"details\": \"A higher exchange rate (more local currency per USD) indicates stronger USD leverage but does not necessarily mean the destination is cheaper overall. Cost of living, visa income requirements, and local taxes must also be considered to assess true affordability.\"\n      },\n      {\n        \"insight\": \"Current Data and Sources\",\n        \"details\": \"The rankings use spot FX rates from November 2, 2025, sourced from X-Rates, xe.com, Revolut, and other currency data providers. Official digital nomad program sources were also referenced to confirm visa eligibility and requirements for U.S. citizens.\"\n      },\n      {\n        \"insight\": \"Comprehensive Country List\",\n        \"details\": \"Both branches provided a detailed lineup of countries with active digital nomad or remote work visas for U.S. citizens. Countries were sorted by USD exchange rate leverage, enabling users to quickly identify top candidates for relocation based on currency strength.\"\n      },\n      {\n        \"insight\": \"South Africa Context\",\n        \"details\": \"Given the conversation branches' focus on South Africa, it is noted that South Africa offers digital nomad-friendly options but may not have the highest USD leverage compared to other countries. Users should weigh South Africa’s unique cultural, economic, and lifestyle factors alongside financial considerations.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Use the exchange rate leverage list as a starting point but conduct deeper research on cost of living, visa conditions, and tax implications before deciding.\",\n      \"Consider South Africa if cultural fit, lifestyle, and other qualitative factors align, even if the USD leverage is moderate.\",\n      \"Monitor currency fluctuations and visa policy updates regularly, as these can impact the attractiveness of destinations over time.\"\n    ],\n    \"next_steps_for_user\": [\n      \"Request a detailed ranked list of countries with their current exchange rates, cost of living indexes, visa income thresholds, and tax implications.\",\n      \"Explore specific digital nomad visa requirements and application processes for South Africa and other top-ranked countries.\",\n      \"Investigate lifestyle factors such as safety, healthcare, internet connectivity, and community support for digital nomads in shortlisted countries.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 946,
+        "completion_tokens": 588,
+        "total_tokens": 1534,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

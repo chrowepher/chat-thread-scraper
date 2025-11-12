@@ -1,0 +1,13 @@
+{
+  "runId": "exp-demo",
+  "createdAt": "2025-11-11T11:37:31.297Z",
+  "updatedAt": "2025-11-11T11:37:31.297Z",
+  "permutations": [],
+  "oss": [],
+  "tournaments": [],
+  "gig": [],
+  "cai": [],
+  "emb": [],
+  "mers": null,
+  "notes": "Metrics pending. Populate via merge executions and post-processing pipeline."
+}

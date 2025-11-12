@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups1-M3",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-005-move-to-south-africa-branch-branch-mapping-your-do.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-006-move-to-south-africa-audit-findings-summary.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 1,
+    "matchIndex": 2
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Strategic Move to South Africa: Role Selection and Audit Insights\",\"summary\":\"This synthesis merges insights from a practical framework for evaluating job opportunities with a detailed audit of candidate and friction profiles, aimed at optimizing your move to South Africa and role selection.\",\"highlights\":[{\"topic\":\"Dollars-to-BS Ratio Framework\",\"details\":\"A quantitative method to evaluate job roles or projects by balancing compensation against workplace friction. The formula is DTB Score = Adjusted Compensation / Friction Hours, where Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2). Joy Factor reflects how energizing or value-aligned the work is, and Friction Hours represent weekly time lost to governance, politics, or unclear processes multiplied by 52 weeks. Higher DTB scores indicate better roles with high reward and low friction.\"},{\"topic\":\"Practical Application\",\"details\":\"Use a worksheet to input compensation, joy factor, and friction hours for each role or project. This helps identify high-reward, low-friction opportunities, especially useful when considering governance-heavy roles or complex environments like relocating to South Africa.\"},{\"topic\":\"Audit Findings Summary\",\"details\":\"An independent audit validated the candidate profile and personal friction profile with no inconsistencies. Key strengths include ambiguity reduction, stakeholder facilitation, and risk surfacing. The friction profile aligns with your preferences, highlighting high-friction sources and anti-friction traits such as single approver workflows and decision SLAs.\"},{\"topic\":\"Enhancements and Recommendations\",\"details\":\"The audit suggested adding explicit friction sources for better clarity and refining the friction profile to improve negotiation leverage. This complements the Dollars-to-BS framework by providing a more granular understanding of friction points.\"},{\"topic\":\"Integration of Insights\",\"details\":\"Combining the Dollars-to-BS ratio with the audit findings enables a data-driven approach to selecting roles or projects in South Africa. By quantifying both compensation and friction, and validating personal preferences and strengths, you can make informed decisions that maximize satisfaction and minimize governance overhead.\"}],\"next_steps\":[\"Develop a detailed friction source catalog tailored to South African work environments to refine the friction hours estimate.\",\"Apply the Dollars-to-BS worksheet to specific job offers or projects you are considering in South Africa.\",\"Explore negotiation strategies leveraging the audit’s friction profile insights to reduce governance friction in potential roles.\",\"Consider cultural and regulatory factors unique to South Africa that might impact friction and joy factors.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7eb4lH1xaK43peDiPxnW4zseAN3",
+      "object": "chat.completion",
+      "created": 1762963593,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Strategic Move to South Africa: Role Selection and Audit Insights\",\n    \"summary\": \"This synthesis merges insights from a practical framework for evaluating job opportunities with a detailed audit of candidate and friction profiles, aimed at optimizing your move to South Africa and role selection.\",\n    \"highlights\": [\n      {\n        \"topic\": \"Dollars-to-BS Ratio Framework\",\n        \"details\": \"A quantitative method to evaluate job roles or projects by balancing compensation against workplace friction. The formula is DTB Score = Adjusted Compensation / Friction Hours, where Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2). Joy Factor reflects how energizing or value-aligned the work is, and Friction Hours represent weekly time lost to governance, politics, or unclear processes multiplied by 52 weeks. Higher DTB scores indicate better roles with high reward and low friction.\"\n      },\n      {\n        \"topic\": \"Practical Application\",\n        \"details\": \"Use a worksheet to input compensation, joy factor, and friction hours for each role or project. This helps identify high-reward, low-friction opportunities, especially useful when considering governance-heavy roles or complex environments like relocating to South Africa.\"\n      },\n      {\n        \"topic\": \"Audit Findings Summary\",\n        \"details\": \"An independent audit validated the candidate profile and personal friction profile with no inconsistencies. Key strengths include ambiguity reduction, stakeholder facilitation, and risk surfacing. The friction profile aligns with your preferences, highlighting high-friction sources and anti-friction traits such as single approver workflows and decision SLAs.\"\n      },\n      {\n        \"topic\": \"Enhancements and Recommendations\",\n        \"details\": \"The audit suggested adding explicit friction sources for better clarity and refining the friction profile to improve negotiation leverage. This complements the Dollars-to-BS framework by providing a more granular understanding of friction points.\"\n      },\n      {\n        \"topic\": \"Integration of Insights\",\n        \"details\": \"Combining the Dollars-to-BS ratio with the audit findings enables a data-driven approach to selecting roles or projects in South Africa. By quantifying both compensation and friction, and validating personal preferences and strengths, you can make informed decisions that maximize satisfaction and minimize governance overhead.\"\n      }\n    ],\n    \"next_steps\": [\n      \"Develop a detailed friction source catalog tailored to South African work environments to refine the friction hours estimate.\",\n      \"Apply the Dollars-to-BS worksheet to specific job offers or projects you are considering in South Africa.\",\n      \"Explore negotiation strategies leveraging the audit’s friction profile insights to reduce governance friction in potential roles.\",\n      \"Consider cultural and regulatory factors unique to South Africa that might impact friction and joy factors.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 922,
+        "completion_tokens": 562,
+        "total_tokens": 1484,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

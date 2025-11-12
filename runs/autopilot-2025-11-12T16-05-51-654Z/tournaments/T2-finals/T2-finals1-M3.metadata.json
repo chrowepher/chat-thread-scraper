@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals1-M3",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-005-move-to-south-africa-branch-branch-mapping-your-do.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-006-move-to-south-africa-audit-findings-summary.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 2
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is considering a move to South Africa and evaluating job opportunities using a personalized metric to balance compensation against work-related friction. An audit was conducted to validate the candidate profile and friction factors, ensuring alignment with the user's preferences and values.\",\"key_insights\":[{\"Dollars_to_BS_Ratio\":{\"description\":\"A practical metric designed to evaluate roles or projects by balancing compensation against work friction.\",\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"components\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a joy factor (0.5 to 1.2) reflecting how energizing or conflicting the work is with the user's values.\",\"Friction Hours\":\"Weekly time lost to governance, politics, unclear criteria, and other energy drains, multiplied by 52 weeks.\"},\"interpretation\":\"Higher DTB scores indicate higher reward with lower friction, helping to identify high-reward, low-friction roles.\"}},{\"Audit_Findings\":{\"candidate_profile_validation\":\"Confirmed accurate extraction of domains (Banking, Federal energy), methods (RAID, PMO governance), tools (ServiceNow, SharePoint), and strengths (ambiguity reduction, stakeholder facilitation). No inconsistencies found.\",\"personal_friction_profile_validation\":\"Accurately maps user's stated preferences and friction sources, such as governance-heavy work and negotiation preferences (single approver, DoD, decision SLAs).\",\"recommendations\":\"Add explicit friction sources for better clarity and consider refining joy factor inputs based on ongoing feedback.\"}}],\"synthesis\":\"The Dollars-to-BS Ratio provides a quantitative framework to evaluate job opportunities in South Africa by factoring in both compensation and personal friction. The audit confirms that the candidate profile and friction mapping are accurate and aligned with the user's values and preferences. Together, these tools enable a data-driven approach to selecting roles that maximize personal satisfaction and minimize governance-related energy drains.\",\"next_steps\":[\"Apply the Dollars-to-BS Ratio worksheet to specific job offers or projects in South Africa to compare options quantitatively.\",\"Refine the friction sources list by adding explicit examples from recent experiences to improve accuracy.\",\"Periodically reassess the joy factor to reflect evolving feelings about roles or projects.\",\"Explore negotiation strategies that reduce friction, such as advocating for single approver processes or clear decision SLAs.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7hojLvDxeaEjWppomL5nuyjdEtv",
+      "object": "chat.completion",
+      "created": 1762963792,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is considering a move to South Africa and evaluating job opportunities using a personalized metric to balance compensation against work-related friction. An audit was conducted to validate the candidate profile and friction factors, ensuring alignment with the user's preferences and values.\",\n    \"key_insights\": [\n      {\n        \"Dollars_to_BS_Ratio\": {\n          \"description\": \"A practical metric designed to evaluate roles or projects by balancing compensation against work friction.\",\n          \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n          \"components\": {\n            \"Adjusted Compensation\": \"Annual compensation multiplied by a joy factor (0.5 to 1.2) reflecting how energizing or conflicting the work is with the user's values.\",\n            \"Friction Hours\": \"Weekly time lost to governance, politics, unclear criteria, and other energy drains, multiplied by 52 weeks.\"\n          },\n          \"interpretation\": \"Higher DTB scores indicate higher reward with lower friction, helping to identify high-reward, low-friction roles.\"\n        }\n      },\n      {\n        \"Audit_Findings\": {\n          \"candidate_profile_validation\": \"Confirmed accurate extraction of domains (Banking, Federal energy), methods (RAID, PMO governance), tools (ServiceNow, SharePoint), and strengths (ambiguity reduction, stakeholder facilitation). No inconsistencies found.\",\n          \"personal_friction_profile_validation\": \"Accurately maps user's stated preferences and friction sources, such as governance-heavy work and negotiation preferences (single approver, DoD, decision SLAs).\",\n          \"recommendations\": \"Add explicit friction sources for better clarity and consider refining joy factor inputs based on ongoing feedback.\"\n        }\n      }\n    ],\n    \"synthesis\": \"The Dollars-to-BS Ratio provides a quantitative framework to evaluate job opportunities in South Africa by factoring in both compensation and personal friction. The audit confirms that the candidate profile and friction mapping are accurate and aligned with the user's values and preferences. Together, these tools enable a data-driven approach to selecting roles that maximize personal satisfaction and minimize governance-related energy drains.\",\n    \"next_steps\": [\n      \"Apply the Dollars-to-BS Ratio worksheet to specific job offers or projects in South Africa to compare options quantitatively.\",\n      \"Refine the friction sources list by adding explicit examples from recent experiences to improve accuracy.\",\n      \"Periodically reassess the joy factor to reflect evolving feelings about roles or projects.\",\n      \"Explore negotiation strategies that reduce friction, such as advocating for single approver processes or clear decision SLAs.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 922,
+        "completion_tokens": 527,
+        "total_tokens": 1449,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "model": "gpt-4.1-mini",
+  "temperature": 0.0,
+  "replicate_count": 1,
+  "aggregate": {
+    "Coverage": {
+      "left": {
+        "mean": 0.9,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 0.7,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": -0.20000000000000007,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Accuracy": {
+      "left": {
+        "mean": 0.9,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 0.85,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": -0.050000000000000044,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Clarity": {
+      "left": {
+        "mean": 0.9,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 0.8,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": -0.09999999999999998,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    }
+  },
+  "replicates": [
+    {
+      "index": 1,
+      "winner": "left",
+      "criteria": [
+        {
+          "name": "Coverage",
+          "left": 0.9,
+          "right": 0.7,
+          "rationale": "Left covers a wider range of countries and visa programs globally, includes more detailed components of the DTB Score, and addresses multiple factors influencing relocation decisions. Right focuses more narrowly on South Africa and fewer countries."
+        },
+        {
+          "name": "Accuracy",
+          "left": 0.9,
+          "right": 0.85,
+          "rationale": "Both candidates accurately define the DTB Score and its components, but Left provides more precise definitions and includes bureaucratic friction in Friction Hours, enhancing accuracy."
+        },
+        {
+          "name": "Clarity",
+          "left": 0.9,
+          "right": 0.8,
+          "rationale": "Left candidate clearly explains concepts like Joy Factor and Friction Hours with examples and rationale, and organizes insights and recommendations well. Right is clear but less detailed and slightly more abstract."
+        }
+      ],
+      "summary_markdown": "Both candidates present a comprehensive integration of career evaluation using the Dollars-to-BS (DTB) Ratio and digital nomad visa program analysis for U.S. citizens considering relocation in 2025. The **Left candidate** offers a more detailed and structured narrative, with clearer definitions and explanations of key concepts such as Joy Factor and Friction Hours, and a broader global coverage of visa programs. It also emphasizes strategic decision-making by combining DTB scores with visa rankings and cost of living, and provides extensive recommendations and potential follow-up explorations. The **Right candidate** is concise and well-organized, with a strong focus on South Africa as a case study and practical relocation considerations, but it covers fewer countries and provides less depth on the subjective and bureaucratic friction components. Overall, the Left candidate better preserves coverage, accuracy, and clarity by delivering a richer, more actionable framework and a wider scope of information.",
+      "raw": {
+        "winner": "left",
+        "summary_markdown": "Both candidates present a comprehensive integration of career evaluation using the Dollars-to-BS (DTB) Ratio and digital nomad visa program analysis for U.S. citizens considering relocation in 2025. The **Left candidate** offers a more detailed and structured narrative, with clearer definitions and explanations of key concepts such as Joy Factor and Friction Hours, and a broader global coverage of visa programs. It also emphasizes strategic decision-making by combining DTB scores with visa rankings and cost of living, and provides extensive recommendations and potential follow-up explorations. The **Right candidate** is concise and well-organized, with a strong focus on South Africa as a case study and practical relocation considerations, but it covers fewer countries and provides less depth on the subjective and bureaucratic friction components. Overall, the Left candidate better preserves coverage, accuracy, and clarity by delivering a richer, more actionable framework and a wider scope of information.",
+        "criteria": [
+          {
+            "name": "Coverage",
+            "left": 0.9,
+            "right": 0.7,
+            "rationale": "Left covers a wider range of countries and visa programs globally, includes more detailed components of the DTB Score, and addresses multiple factors influencing relocation decisions. Right focuses more narrowly on South Africa and fewer countries."
+          },
+          {
+            "name": "Accuracy",
+            "left": 0.9,
+            "right": 0.85,
+            "rationale": "Both candidates accurately define the DTB Score and its components, but Left provides more precise definitions and includes bureaucratic friction in Friction Hours, enhancing accuracy."
+          },
+          {
+            "name": "Clarity",
+            "left": 0.9,
+            "right": 0.8,
+            "rationale": "Left candidate clearly explains concepts like Joy Factor and Friction Hours with examples and rationale, and organizes insights and recommendations well. Right is clear but less detailed and slightly more abstract."
+          }
+        ]
+      },
+      "token_usage": {
+        "completion_tokens": 418,
+        "prompt_tokens": 1744,
+        "total_tokens": 2162,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    }
+  ]
+}

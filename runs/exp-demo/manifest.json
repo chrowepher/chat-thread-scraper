@@ -1,0 +1,34 @@
+{
+  "runId": "exp-demo",
+  "createdAt": "2025-11-11T11:37:31.291Z",
+  "inputs": {
+    "threads": [
+      "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\digital-nomad.json",
+      "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\nomad.json",
+      "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\nomad-mini.json",
+      "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\custom.json"
+    ]
+  },
+  "parameters": {
+    "branchCount": "T2",
+    "samplePolicy": "bracket",
+    "sampleK": 3,
+    "treeShapes": [
+      "balanced",
+      "left-skew",
+      "right-skew"
+    ],
+    "seed": null,
+    "plan": "planB",
+    "freshnessWeight": null,
+    "noveltyWeight": null,
+    "evalReplicates": null,
+    "priorities": [],
+    "tieBreak": null,
+    "stabilityThreshold": 0.92,
+    "calcMetrics": true,
+    "writeTree": null,
+    "writeOutput": null,
+    "writeMetadata": null
+  }
+}

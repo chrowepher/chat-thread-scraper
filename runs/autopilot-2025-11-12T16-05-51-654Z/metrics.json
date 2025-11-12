@@ -1,0 +1,103 @@
+{
+  "runId": "autopilot-2025-11-12T16-05-51-654Z",
+  "createdAt": "2025-11-12T16:06:13.715Z",
+  "updatedAt": "2025-11-12T16:15:48.608Z",
+  "permutations": [],
+  "oss": [],
+  "tournaments": [],
+  "gig": [
+    {
+      "triple": [
+        "T3-groups",
+        "T2-parallel-seed-77"
+      ],
+      "t3Score": 0,
+      "bestPair": 0,
+      "gig": 0,
+      "notes": "Compare T3 champion vs T2 champion; compute Group Interaction Gain."
+    }
+  ],
+  "cai": [
+    {
+      "label": "T3-groups-champion",
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Four triples (A-L) merged to capture triadic synergies before finals."
+    },
+    {
+      "label": "T2-finals-champion",
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Winners from T3 groups battle via T2 rounds to crown champion."
+    },
+    {
+      "label": "T2-parallel-seed-77-champion",
+      "mean": 0,
+      "median": 0,
+      "min": 0,
+      "values": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "notes": "Full T2 tournament with alternate seeding for comparison."
+    }
+  ],
+  "emb": [],
+  "mers": null,
+  "notes": "Metrics pending. Populate via merge executions and post-processing pipeline."
+}

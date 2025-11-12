@@ -1,0 +1,82 @@
+{
+  "runId": "exp-demo",
+  "plan": "planB",
+  "branchCount": "T2",
+  "samplePolicy": "bracket",
+  "sampleK": 3,
+  "treeShapes": [
+    "balanced",
+    "left-skew",
+    "right-skew"
+  ],
+  "calcMetrics": true,
+  "threadCount": 4,
+  "priorities": [],
+  "stabilityThreshold": 0.92,
+  "planDetails": {
+    "id": "planB",
+    "description": "Stage 1 uses grouped T3 merges, followed by T2 finals and a parallel T2 baseline.",
+    "mergesEstimate": 18,
+    "tournaments": [
+      {
+        "label": "T3-groups",
+        "branchCount": "T3",
+        "route": "T3",
+        "description": "Four triples (A-L) merged to capture triadic synergies before finals."
+      },
+      {
+        "label": "T2-finals",
+        "branchCount": "T2",
+        "route": "T2",
+        "description": "Winners from T3 groups battle via T2 rounds to crown champion."
+      },
+      {
+        "label": "T2-parallel-seed-77",
+        "branchCount": "T2",
+        "route": "T2",
+        "seed": 77,
+        "description": "Full T2 tournament with alternate seeding for comparison."
+      }
+    ],
+    "comparisonRequests": [
+      {
+        "label": "T2-vs-T3",
+        "description": "Compare T3 champion vs T2 champion; compute Group Interaction Gain.",
+        "notes": "Requires rubric deltas and rpTag lineage.",
+        "leftTournament": "T3-groups",
+        "rightTournament": "T2-parallel-seed-77"
+      }
+    ]
+  },
+  "permutationRequests": [],
+  "tournamentRequests": [
+    {
+      "label": "T3-groups",
+      "branchCount": "T3",
+      "route": "T3",
+      "description": "Four triples (A-L) merged to capture triadic synergies before finals."
+    },
+    {
+      "label": "T2-finals",
+      "branchCount": "T2",
+      "route": "T2",
+      "description": "Winners from T3 groups battle via T2 rounds to crown champion."
+    },
+    {
+      "label": "T2-parallel-seed-77",
+      "branchCount": "T2",
+      "route": "T2",
+      "seed": 77,
+      "description": "Full T2 tournament with alternate seeding for comparison."
+    }
+  ],
+  "comparisonRequests": [
+    {
+      "label": "T2-vs-T3",
+      "description": "Compare T3 champion vs T2 champion; compute Group Interaction Gain.",
+      "notes": "Requires rubric deltas and rpTag lineage.",
+      "leftTournament": "T3-groups",
+      "rightTournament": "T2-parallel-seed-77"
+    }
+  ]
+}

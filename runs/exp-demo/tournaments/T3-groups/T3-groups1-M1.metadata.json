@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups1-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\digital-nomad.json",
+    "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\nomad.json"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 1,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"mergedNarrative\":{\"summary\":\"The combined insights from the two branches focus on the digital nomad lifestyle, highlighting key considerations for individuals seeking to adopt this way of living. The digital-nomad.json branch provides detailed guidance on practical aspects such as choosing destinations, managing work-life balance, securing reliable internet, and understanding visa requirements. It also emphasizes the importance of community and cultural immersion. The nomad.json branch, while less detailed, aligns with these themes and reinforces the value of planning and adaptability. Together, they form a comprehensive overview of how to successfully transition to and thrive as a digital nomad.\",\"keyInsights\":[{\"topic\":\"Choosing Destinations\",\"details\":\"Prioritize locations with strong internet infrastructure, affordable cost of living, and welcoming visa policies for remote workers. Popular destinations include Bali, Lisbon, and Chiang Mai.\"},{\"topic\":\"Work-Life Balance\",\"details\":\"Establish a routine that separates work hours from leisure to maintain productivity and mental health. Use co-working spaces to foster focus and networking.\"},{\"topic\":\"Visa and Legal Considerations\",\"details\":\"Research visa options such as digital nomad visas or tourist visas that allow extended stays. Ensure compliance with local laws to avoid legal issues.\"},{\"topic\":\"Community and Networking\",\"details\":\"Engage with local and online digital nomad communities to build support networks, share resources, and enhance cultural experiences.\"},{\"topic\":\"Technology and Connectivity\",\"details\":\"Invest in reliable tech gear and backup internet solutions like portable hotspots. Regularly test connectivity to avoid disruptions.\"}],\"conflictsResolved\":\"No significant conflicts were found between the branches. The nomad.json branch supports and complements the more detailed digital-nomad.json insights.\",\"nextSteps\":[\"Explore specific visa programs and their application processes for top digital nomad destinations.\",\"Develop a checklist for digital nomads to prepare before relocation, including tech setup, health insurance, and financial planning.\",\"Investigate community platforms and events that facilitate networking among digital nomads.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CagSxC05ERWKYiRIHrATa1f3ztQbQ",
+      "object": "chat.completion",
+      "created": 1762859083,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"mergedNarrative\": {\n    \"summary\": \"The combined insights from the two branches focus on the digital nomad lifestyle, highlighting key considerations for individuals seeking to adopt this way of living. The digital-nomad.json branch provides detailed guidance on practical aspects such as choosing destinations, managing work-life balance, securing reliable internet, and understanding visa requirements. It also emphasizes the importance of community and cultural immersion. The nomad.json branch, while less detailed, aligns with these themes and reinforces the value of planning and adaptability. Together, they form a comprehensive overview of how to successfully transition to and thrive as a digital nomad.\",\n    \"keyInsights\": [\n      {\n        \"topic\": \"Choosing Destinations\",\n        \"details\": \"Prioritize locations with strong internet infrastructure, affordable cost of living, and welcoming visa policies for remote workers. Popular destinations include Bali, Lisbon, and Chiang Mai.\"\n      },\n      {\n        \"topic\": \"Work-Life Balance\",\n        \"details\": \"Establish a routine that separates work hours from leisure to maintain productivity and mental health. Use co-working spaces to foster focus and networking.\"\n      },\n      {\n        \"topic\": \"Visa and Legal Considerations\",\n        \"details\": \"Research visa options such as digital nomad visas or tourist visas that allow extended stays. Ensure compliance with local laws to avoid legal issues.\"\n      },\n      {\n        \"topic\": \"Community and Networking\",\n        \"details\": \"Engage with local and online digital nomad communities to build support networks, share resources, and enhance cultural experiences.\"\n      },\n      {\n        \"topic\": \"Technology and Connectivity\",\n        \"details\": \"Invest in reliable tech gear and backup internet solutions like portable hotspots. Regularly test connectivity to avoid disruptions.\"\n      }\n    ],\n    \"conflictsResolved\": \"No significant conflicts were found between the branches. The nomad.json branch supports and complements the more detailed digital-nomad.json insights.\",\n    \"nextSteps\": [\n      \"Explore specific visa programs and their application processes for top digital nomad destinations.\",\n      \"Develop a checklist for digital nomads to prepare before relocation, including tech setup, health insurance, and financial planning.\",\n      \"Investigate community platforms and events that facilitate networking among digital nomads.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 957,
+        "completion_tokens": 461,
+        "total_tokens": 1418,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

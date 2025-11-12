@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals2-M2",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\tournaments\\T2-finals\\T2-finals1-M3.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\tournaments\\T2-finals\\T2-finals1-M4.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 2,
+    "matchIndex": 1
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is evaluating a potential move to South Africa by assessing job opportunities through a personalized, quantitative framework that balances compensation against work-related friction. An in-depth audit validated the candidate's professional profile and personal friction factors, ensuring the evaluation aligns with the user's values, strengths, and preferences.\",\"key_insights\":[{\"Dollars_to_BS_Ratio\":{\"description\":\"A practical, personalized metric designed to evaluate roles or projects by balancing compensation against work friction to identify high-reward, low-friction opportunities.\",\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"components\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a joy factor (ranging from 0.5 to 1.2) that reflects how energizing or conflicting the work is with the user's values.\",\"Friction Hours\":\"Weekly hours lost to governance, politics, unclear criteria, and other energy drains, multiplied by 52 weeks.\"},\"interpretation\":\"Higher DTB scores indicate roles with better compensation relative to friction, guiding the user to prioritize opportunities that maximize reward while minimizing energy-draining factors.\"}},{\"Audit_Findings\":{\"candidate_profile_validation\":{\"status\":\"Accurate\",\"details\":{\"domains\":[\"Banking (Bank of America, MRA)\",\"Federal energy (Bonneville Power Administration, FISMA compliance)\"],\"methods\":[\"RAID (Risks, Assumptions, Issues, Dependencies)\",\"PMO governance\",\"Audit documentation\",\"Executive reporting\"],\"tools\":[\"ServiceNow (focused on IT Asset Management)\",\"SharePoint\",\"Power Automate\",\"Excel dashboards\"],\"strengths\":[\"Ambiguity reduction\",\"Stakeholder facilitation\",\"Risk surfacing\"],\"notes\":\"No inconsistencies detected in the candidate profile extraction.\"}},\"personal_friction_profile_validation\":{\"status\":\"Accurate\",\"details\":{\"high_friction_sources\":\"Governance overhead, unclear decision criteria, excessive meetings, political dynamics.\",\"anti_friction_traits\":\"Preference for single approver decision-making, Department of Defense (DoD)-style clear delegation, and decisive leadership.\",\"alignment\":\"Friction factors and preferences align well with the user's negotiation style and prior conversation history.\"}}}},{\"Strategic_Recommendations\":{\"role_evaluation\":\"Use the Dollars to BS Ratio metric to quantitatively compare job offers or projects, focusing on maximizing adjusted compensation while minimizing friction hours.\",\"personal_alignment\":\"Prioritize roles that align with the validated candidate profile strengths and minimize high-friction sources identified in the audit.\",\"decision_framework\":\"Incorporate the joy factor to reflect subjective satisfaction and values alignment, ensuring the chosen role supports long-term engagement and energy.\",\"next_steps\":\"Gather detailed friction estimates and compensation data for each opportunity in South Africa, then calculate DTB scores to rank options objectively.\"}}],\"follow_up_explorations\":[\"Develop a friction tracking tool or template to systematically capture and update friction hours for ongoing and future roles.\",\"Explore how cultural and regional factors in South Africa might influence friction components and joy factors in the DTB metric.\",\"Investigate negotiation strategies tailored to South African corporate governance styles to reduce friction and improve role fit.\",\"Validate the joy factor scale with real-world feedback from current or past roles to refine its weighting in the DTB calculation.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7j22O5cxcMV48z3V6CYBntghiYt",
+      "object": "chat.completion",
+      "created": 1762963868,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is evaluating a potential move to South Africa by assessing job opportunities through a personalized, quantitative framework that balances compensation against work-related friction. An in-depth audit validated the candidate's professional profile and personal friction factors, ensuring the evaluation aligns with the user's values, strengths, and preferences.\",\n    \"key_insights\": [\n      {\n        \"Dollars_to_BS_Ratio\": {\n          \"description\": \"A practical, personalized metric designed to evaluate roles or projects by balancing compensation against work friction to identify high-reward, low-friction opportunities.\",\n          \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n          \"components\": {\n            \"Adjusted Compensation\": \"Annual compensation multiplied by a joy factor (ranging from 0.5 to 1.2) that reflects how energizing or conflicting the work is with the user's values.\",\n            \"Friction Hours\": \"Weekly hours lost to governance, politics, unclear criteria, and other energy drains, multiplied by 52 weeks.\"\n          },\n          \"interpretation\": \"Higher DTB scores indicate roles with better compensation relative to friction, guiding the user to prioritize opportunities that maximize reward while minimizing energy-draining factors.\"\n        }\n      },\n      {\n        \"Audit_Findings\": {\n          \"candidate_profile_validation\": {\n            \"status\": \"Accurate\",\n            \"details\": {\n              \"domains\": [\n                \"Banking (Bank of America, MRA)\",\n                \"Federal energy (Bonneville Power Administration, FISMA compliance)\"\n              ],\n              \"methods\": [\n                \"RAID (Risks, Assumptions, Issues, Dependencies)\",\n                \"PMO governance\",\n                \"Audit documentation\",\n                \"Executive reporting\"\n              ],\n              \"tools\": [\n                \"ServiceNow (focused on IT Asset Management)\",\n                \"SharePoint\",\n                \"Power Automate\",\n                \"Excel dashboards\"\n              ],\n              \"strengths\": [\n                \"Ambiguity reduction\",\n                \"Stakeholder facilitation\",\n                \"Risk surfacing\"\n              ],\n              \"notes\": \"No inconsistencies detected in the candidate profile extraction.\"\n            }\n          },\n          \"personal_friction_profile_validation\": {\n            \"status\": \"Accurate\",\n            \"details\": {\n              \"high_friction_sources\": \"Governance overhead, unclear decision criteria, excessive meetings, political dynamics.\",\n              \"anti_friction_traits\": \"Preference for single approver decision-making, Department of Defense (DoD)-style clear delegation, and decisive leadership.\",\n              \"alignment\": \"Friction factors and preferences align well with the user's negotiation style and prior conversation history.\"\n            }\n          }\n        }\n      },\n      {\n        \"Strategic_Recommendations\": {\n          \"role_evaluation\": \"Use the Dollars to BS Ratio metric to quantitatively compare job offers or projects, focusing on maximizing adjusted compensation while minimizing friction hours.\",\n          \"personal_alignment\": \"Prioritize roles that align with the validated candidate profile strengths and minimize high-friction sources identified in the audit.\",\n          \"decision_framework\": \"Incorporate the joy factor to reflect subjective satisfaction and values alignment, ensuring the chosen role supports long-term engagement and energy.\",\n          \"next_steps\": \"Gather detailed friction estimates and compensation data for each opportunity in South Africa, then calculate DTB scores to rank options objectively.\"\n        }\n      }\n    ],\n    \"follow_up_explorations\": [\n      \"Develop a friction tracking tool or template to systematically capture and update friction hours for ongoing and future roles.\",\n      \"Explore how cultural and regional factors in South Africa might influence friction components and joy factors in the DTB metric.\",\n      \"Investigate negotiation strategies tailored to South African corporate governance styles to reduce friction and improve role fit.\",\n      \"Validate the joy factor scale with real-world feedback from current or past roles to refine its weighting in the DTB calculation.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 718,
+        "completion_tokens": 790,
+        "total_tokens": 1508,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

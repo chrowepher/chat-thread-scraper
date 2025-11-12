@@ -1,0 +1,32 @@
+{
+  "runId": "autopilot-2025-11-12T11-50-37-083Z",
+  "createdAt": "2025-11-12T11:55:18.645Z",
+  "description": "Autopilot planB baseline from autopilot-latest.json",
+  "inputs": {
+    "threads": [
+      "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json"
+    ]
+  },
+  "parameters": {
+    "branchCount": "T2",
+    "samplePolicy": "bracket",
+    "sampleK": 3,
+    "treeShapes": [
+      "balanced",
+      "left-skew",
+      "right-skew"
+    ],
+    "seed": null,
+    "plan": "planB",
+    "freshnessWeight": null,
+    "noveltyWeight": null,
+    "evalReplicates": null,
+    "priorities": [],
+    "tieBreak": null,
+    "stabilityThreshold": 0.92,
+    "calcMetrics": true,
+    "writeTree": null,
+    "writeOutput": null,
+    "writeMetadata": null
+  }
+}

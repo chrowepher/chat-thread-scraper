@@ -1,0 +1,38 @@
+{
+  "runId": "autopilot-2025-11-12T11-50-37-083Z",
+  "branchCount": "T2",
+  "entries": [
+    {
+      "label": "T3-groups-champion",
+      "kind": "tournament",
+      "newick": "autopilot-latest.json",
+      "treeShape": "T3",
+      "orderSpec": "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json",
+      "outputPath": "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json",
+      "notes": "Four triples (A-L) merged to capture triadic synergies before finals.",
+      "rpTag": "RP/T2-autopilot-2025-11-12T11-50-37-083Z/C__Users_chrow_chat-thread-merger_snapshots_autopilot-latest_json/f2eabc"
+    },
+    {
+      "label": "T2-finals-champion",
+      "kind": "tournament",
+      "newick": "autopilot-latest.json",
+      "treeShape": "T2",
+      "orderSpec": "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json",
+      "outputPath": "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json",
+      "notes": "Winners from T3 groups battle via T2 rounds to crown champion.",
+      "rpTag": "RP/T2-autopilot-2025-11-12T11-50-37-083Z/C__Users_chrow_chat-thread-merger_snapshots_autopilot-latest_json/f2eabc"
+    },
+    {
+      "label": "T2-parallel-seed-77-champion",
+      "kind": "tournament",
+      "newick": "autopilot-latest.json",
+      "treeShape": "T2",
+      "orderSpec": "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json",
+      "outputPath": "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\autopilot-latest.json",
+      "seed": 77,
+      "notes": "Full T2 tournament with alternate seeding for comparison.",
+      "rpTag": "RP/T2-autopilot-2025-11-12T11-50-37-083Z/C__Users_chrow_chat-thread-merger_snapshots_autopilot-latest_json/f2eabc"
+    }
+  ],
+  "updatedAt": "2025-11-12T11:58:25.821Z"
+}

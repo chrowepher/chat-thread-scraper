@@ -1,0 +1,124 @@
+{
+  "model": "gpt-4.1-mini",
+  "temperature": 0.0,
+  "replicate_count": 1,
+  "aggregate": {
+    "Coverage": {
+      "left": {
+        "mean": 7.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 9.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 2.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Accuracy": {
+      "left": {
+        "mean": 8.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 9.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 1.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Clarity": {
+      "left": {
+        "mean": 7.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 9.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 2.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    }
+  },
+  "replicates": [
+    {
+      "index": 1,
+      "winner": "right",
+      "criteria": [
+        {
+          "name": "Coverage",
+          "left": 7.0,
+          "right": 9.0,
+          "rationale": "RIGHT covers a wider range of topics including healthcare, accommodation, time zone management, and relocation logistics, in addition to visa and financial considerations. LEFT focuses more narrowly on visa, currency, and community aspects."
+        },
+        {
+          "name": "Accuracy",
+          "left": 8.0,
+          "right": 9.0,
+          "rationale": "Both candidates are accurate, but RIGHT explicitly notes the need to consult official sources and nuances like exchange rates not guaranteeing lower costs, reflecting a more precise understanding."
+        },
+        {
+          "name": "Clarity",
+          "left": 7.0,
+          "right": 9.0,
+          "rationale": "RIGHT uses clearer thematic divisions and bullet points, making the information easier to digest. LEFT is well-written but more narrative and less segmented, which can reduce quick comprehension."
+        }
+      ],
+      "summary_markdown": "The RIGHT candidate provides a more structured and detailed synthesis that better preserves coverage, accuracy, and clarity. It explicitly defines the digital nomad lifestyle, covers a broader range of practical considerations (including healthcare, accommodation, and time zone management), and offers concrete examples of countries with digital nomad visas. The LEFT candidate, while comprehensive and focused on key themes like visa considerations and currency leverage, is somewhat less detailed in practical aspects and examples. RIGHT also presents a clearer, more granular breakdown of insights and actionable next steps, enhancing clarity and usability.",
+      "raw": {
+        "winner": "right",
+        "summary_markdown": "The RIGHT candidate provides a more structured and detailed synthesis that better preserves coverage, accuracy, and clarity. It explicitly defines the digital nomad lifestyle, covers a broader range of practical considerations (including healthcare, accommodation, and time zone management), and offers concrete examples of countries with digital nomad visas. The LEFT candidate, while comprehensive and focused on key themes like visa considerations and currency leverage, is somewhat less detailed in practical aspects and examples. RIGHT also presents a clearer, more granular breakdown of insights and actionable next steps, enhancing clarity and usability.",
+        "criteria": [
+          {
+            "name": "Coverage",
+            "left": 7,
+            "right": 9,
+            "rationale": "RIGHT covers a wider range of topics including healthcare, accommodation, time zone management, and relocation logistics, in addition to visa and financial considerations. LEFT focuses more narrowly on visa, currency, and community aspects."
+          },
+          {
+            "name": "Accuracy",
+            "left": 8,
+            "right": 9,
+            "rationale": "Both candidates are accurate, but RIGHT explicitly notes the need to consult official sources and nuances like exchange rates not guaranteeing lower costs, reflecting a more precise understanding."
+          },
+          {
+            "name": "Clarity",
+            "left": 7,
+            "right": 9,
+            "rationale": "RIGHT uses clearer thematic divisions and bullet points, making the information easier to digest. LEFT is well-written but more narrative and less segmented, which can reduce quick comprehension."
+          }
+        ]
+      },
+      "token_usage": {
+        "completion_tokens": 330,
+        "prompt_tokens": 1404,
+        "total_tokens": 1734,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "runId": "autopilot-2025-11-12T17-05-15-406Z",
+  "createdAt": "2025-11-12T17:05:36.339Z",
+  "updatedAt": "2025-11-12T17:05:36.339Z",
+  "permutations": [],
+  "oss": [],
+  "tournaments": [],
+  "gig": [],
+  "cai": [],
+  "emb": [],
+  "mers": null,
+  "notes": "Metrics pending. Populate via merge executions and post-processing pipeline."
+}

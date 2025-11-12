@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups2-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\tournaments\\T3-groups\\T3-groups1-M1.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T17-05-15-406Z\\tournaments\\T3-groups\\T3-groups1-M2.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 2,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Mapping Your Dollars-to-BS Ratio: A Practical Framework for Evaluating Job and Project Value\",\"summary\":\"This synthesis merges insights from two branches focused on designing and applying a personal 'Dollars-to-BS Ratio' (DTB Score) metric. The DTB Score helps individuals identify high-reward, low-friction roles or projects by quantifying compensation adjusted for personal satisfaction against the energy drain caused by workplace friction such as politics, unclear goals, and excessive governance. By personalizing inputs like the 'joy factor' and friction hours, users can make informed decisions about career moves, project prioritization, or role acceptance in complex organizational environments.\",\"highlights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"details\":\"The DTB Score is defined as Adjusted Compensation divided by Friction Hours. Adjusted Compensation is the annual compensation multiplied by a personal 'joy factor' that ranges from 0.5 to 1.2, reflecting how energizing or conflicting the work is with your values. Friction Hours represent the weekly time lost to governance, politics, unclear acceptance criteria, and other energy-draining factors, annualized by multiplying by 52 weeks.\"},{\"application\":\"Personalized Metric for Role and Project Evaluation\",\"details\":\"Users apply this metric to evaluate different job roles, projects, or work environments by quantifying both tangible compensation and intangible friction. This helps identify opportunities with high compensation and low friction, or roles that may pay well but have high energy drain, enabling better career and project prioritization decisions.\"},{\"components\":{\"Compensation\":\"Includes base salary, bonuses, and valued benefits that truly matter to the individual.\",\"Friction (BS)\":\"Time and energy lost weekly due to governance overhead, politics, unclear acceptance criteria, excessive meetings, and low agency.\"}},{\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"details\":\"Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2). Friction Hours = Weekly friction hours × 52 weeks.\"},{\"insight\":\"Joy Factor Personalization\",\"details\":\"The joy factor adjusts compensation to reflect how fulfilling or draining the work is relative to personal values and energy. A higher joy factor (>1) indicates energizing work, while a lower factor (<1) indicates draining or conflicting work.\"},{\"insight\":\"Friction as a Critical Metric\",\"details\":\"Measuring friction in hours per week helps quantify the often overlooked energy cost of politics, unclear goals, and governance. This quantification enables more objective comparisons between roles or projects.\"},{\"recommendation\":\"Use DTB Score for Career and Project Decisions\",\"details\":\"By calculating and comparing DTB Scores, individuals can prioritize roles or projects that maximize compensation and satisfaction while minimizing friction, leading to better work-life balance and career fulfillment.\"}],\"next_steps\":[\"Develop a simple tool or spreadsheet template to help users input their compensation, joy factor, and friction hours to calculate their DTB Score easily.\",\"Explore how to quantify and reduce friction in various organizational contexts to improve DTB Scores.\",\"Investigate correlations between DTB Scores and long-term job satisfaction or career success through empirical studies.\",\"Expand the metric to include other qualitative factors such as growth opportunities, team dynamics, and personal development.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb8bEeHF3mHijGs7MbVj15kx7hAlQ",
+      "object": "chat.completion",
+      "created": 1762967228,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Mapping Your Dollars-to-BS Ratio: A Practical Framework for Evaluating Job and Project Value\",\n    \"summary\": \"This synthesis merges insights from two branches focused on designing and applying a personal 'Dollars-to-BS Ratio' (DTB Score) metric. The DTB Score helps individuals identify high-reward, low-friction roles or projects by quantifying compensation adjusted for personal satisfaction against the energy drain caused by workplace friction such as politics, unclear goals, and excessive governance. By personalizing inputs like the 'joy factor' and friction hours, users can make informed decisions about career moves, project prioritization, or role acceptance in complex organizational environments.\",\n    \"highlights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"details\": \"The DTB Score is defined as Adjusted Compensation divided by Friction Hours. Adjusted Compensation is the annual compensation multiplied by a personal 'joy factor' that ranges from 0.5 to 1.2, reflecting how energizing or conflicting the work is with your values. Friction Hours represent the weekly time lost to governance, politics, unclear acceptance criteria, and other energy-draining factors, annualized by multiplying by 52 weeks.\"\n      },\n      {\n        \"application\": \"Personalized Metric for Role and Project Evaluation\",\n        \"details\": \"Users apply this metric to evaluate different job roles, projects, or work environments by quantifying both tangible compensation and intangible friction. This helps identify opportunities with high compensation and low friction, or roles that may pay well but have high energy drain, enabling better career and project prioritization decisions.\"\n      },\n      {\n        \"components\": {\n          \"Compensation\": \"Includes base salary, bonuses, and valued benefits that truly matter to the individual.\",\n          \"Friction (BS)\": \"Time and energy lost weekly due to governance overhead, politics, unclear acceptance criteria, excessive meetings, and low agency.\"\n        }\n      },\n      {\n        \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n        \"details\": \"Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2). Friction Hours = Weekly friction hours × 52 weeks.\"\n      },\n      {\n        \"insight\": \"Joy Factor Personalization\",\n        \"details\": \"The joy factor adjusts compensation to reflect how fulfilling or draining the work is relative to personal values and energy. A higher joy factor (>1) indicates energizing work, while a lower factor (<1) indicates draining or conflicting work.\"\n      },\n      {\n        \"insight\": \"Friction as a Critical Metric\",\n        \"details\": \"Measuring friction in hours per week helps quantify the often overlooked energy cost of politics, unclear goals, and governance. This quantification enables more objective comparisons between roles or projects.\"\n      },\n      {\n        \"recommendation\": \"Use DTB Score for Career and Project Decisions\",\n        \"details\": \"By calculating and comparing DTB Scores, individuals can prioritize roles or projects that maximize compensation and satisfaction while minimizing friction, leading to better work-life balance and career fulfillment.\"\n      }\n    ],\n    \"next_steps\": [\n      \"Develop a simple tool or spreadsheet template to help users input their compensation, joy factor, and friction hours to calculate their DTB Score easily.\",\n      \"Explore how to quantify and reduce friction in various organizational contexts to improve DTB Scores.\",\n      \"Investigate correlations between DTB Scores and long-term job satisfaction or career success through empirical studies.\",\n      \"Expand the metric to include other qualitative factors such as growth opportunities, team dynamics, and personal development.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 728,
+        "completion_tokens": 753,
+        "total_tokens": 1481,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

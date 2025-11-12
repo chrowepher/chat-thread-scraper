@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M7",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-013-move-to-south-africa-branch-branch-digital-nomad-p.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\threads\\thread-014-move-to-south-africa-branch-branch-digital-nomad-p.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 6
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"topic\":\"Digital Nomad Programs for U.S. Citizens with Focus on Exchange Rate Leverage and South Africa\",\"key_insights\":[{\"insight\":\"Comprehensive List of Digital Nomad Programs\",\"details\":\"Both branches provide an up-to-date, curated list of countries offering bona fide digital nomad or remote work visas/permits available to U.S. citizens as of November 2, 2025.\"},{\"insight\":\"Sorting by Exchange Rate Leverage\",\"details\":\"The countries are sorted by the exchange rate leverage, defined as how many units of local currency 1 USD can buy. This metric helps identify where the U.S. dollar has the strongest purchasing power.\"},{\"insight\":\"Exchange Rate vs. Cost of Living\",\"details\":\"A critical clarification is that a higher exchange rate leverage does not necessarily mean greater affordability. Cost of living, visa income thresholds, and tax implications must also be considered when choosing a destination.\"},{\"insight\":\"Data Sources and Currency Rates\",\"details\":\"Exchange rates were sourced primarily from X-Rates, xe.com, Revolut, and other currency platforms, with spot rates taken at a specific timestamp (Nov 2, 2025, 16:12 UTC) to ensure accuracy.\"},{\"insight\":\"South Africa as a Digital Nomad Destination\",\"details\":\"South Africa is included in the list with details about its digital nomad program eligibility for U.S. citizens. While the exchange rate leverage is moderate, South Africa offers unique cultural and lifestyle benefits that may appeal to digital nomads.\"}],\"resolved_conflicts\":[{\"conflict\":\"Both branches provide similar data sets with minor differences in presentation and detail depth.\",\"resolution\":\"The merged narrative synthesizes the most comprehensive and clear explanations from both branches, emphasizing the importance of exchange rate leverage alongside cost of living and visa requirements.\"}],\"next_steps\":[{\"exploration\":\"Detailed Cost of Living Comparison\",\"description\":\"Conduct a detailed cost of living analysis for the top-ranked countries by exchange rate leverage to provide a more holistic affordability assessment.\"},{\"exploration\":\"Visa Application Process and Requirements\",\"description\":\"Compile step-by-step guides and eligibility criteria for digital nomad visas, focusing on South Africa and other top countries.\"},{\"exploration\":\"Tax Implications for U.S. Digital Nomads Abroad\",\"description\":\"Investigate tax obligations and treaties affecting U.S. citizens working remotely in these countries.\"}]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7lUO7MXmevBc1PUZVW2ZnRzgGYw",
+      "object": "chat.completion",
+      "created": 1762964020,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"topic\": \"Digital Nomad Programs for U.S. Citizens with Focus on Exchange Rate Leverage and South Africa\",\n    \"key_insights\": [\n      {\n        \"insight\": \"Comprehensive List of Digital Nomad Programs\",\n        \"details\": \"Both branches provide an up-to-date, curated list of countries offering bona fide digital nomad or remote work visas/permits available to U.S. citizens as of November 2, 2025.\"\n      },\n      {\n        \"insight\": \"Sorting by Exchange Rate Leverage\",\n        \"details\": \"The countries are sorted by the exchange rate leverage, defined as how many units of local currency 1 USD can buy. This metric helps identify where the U.S. dollar has the strongest purchasing power.\"\n      },\n      {\n        \"insight\": \"Exchange Rate vs. Cost of Living\",\n        \"details\": \"A critical clarification is that a higher exchange rate leverage does not necessarily mean greater affordability. Cost of living, visa income thresholds, and tax implications must also be considered when choosing a destination.\"\n      },\n      {\n        \"insight\": \"Data Sources and Currency Rates\",\n        \"details\": \"Exchange rates were sourced primarily from X-Rates, xe.com, Revolut, and other currency platforms, with spot rates taken at a specific timestamp (Nov 2, 2025, 16:12 UTC) to ensure accuracy.\"\n      },\n      {\n        \"insight\": \"South Africa as a Digital Nomad Destination\",\n        \"details\": \"South Africa is included in the list with details about its digital nomad program eligibility for U.S. citizens. While the exchange rate leverage is moderate, South Africa offers unique cultural and lifestyle benefits that may appeal to digital nomads.\"\n      }\n    ],\n    \"resolved_conflicts\": [\n      {\n        \"conflict\": \"Both branches provide similar data sets with minor differences in presentation and detail depth.\",\n        \"resolution\": \"The merged narrative synthesizes the most comprehensive and clear explanations from both branches, emphasizing the importance of exchange rate leverage alongside cost of living and visa requirements.\"\n      }\n    ],\n    \"next_steps\": [\n      {\n        \"exploration\": \"Detailed Cost of Living Comparison\",\n        \"description\": \"Conduct a detailed cost of living analysis for the top-ranked countries by exchange rate leverage to provide a more holistic affordability assessment.\"\n      },\n      {\n        \"exploration\": \"Visa Application Process and Requirements\",\n        \"description\": \"Compile step-by-step guides and eligibility criteria for digital nomad visas, focusing on South Africa and other top countries.\"\n      },\n      {\n        \"exploration\": \"Tax Implications for U.S. Digital Nomads Abroad\",\n        \"description\": \"Investigate tax obligations and treaties affecting U.S. citizens working remotely in these countries.\"\n      }\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 946,
+        "completion_tokens": 580,
+        "total_tokens": 1526,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

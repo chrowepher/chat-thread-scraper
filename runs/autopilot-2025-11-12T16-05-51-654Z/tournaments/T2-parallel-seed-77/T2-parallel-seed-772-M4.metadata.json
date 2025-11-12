@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-772-M4",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\tournaments\\T2-parallel-seed-77\\T2-parallel-seed-771-M7.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T16-05-51-654Z\\tournaments\\T2-parallel-seed-77\\T2-parallel-seed-771-M8.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 2,
+    "matchIndex": 3
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"topic\":\"Digital Nomad Programs for U.S. Citizens with Focus on Exchange Rate Leverage and South Africa\",\"key_insights\":[{\"insight\":\"Comprehensive and Up-to-Date List of Digital Nomad Programs\",\"details\":\"Both branches provide a curated, current list of countries offering bona fide digital nomad or remote work visas/permits available to U.S. citizens as of November 2, 2025. This list includes South Africa and other global destinations.\"},{\"insight\":\"Ranking by Exchange Rate Leverage\",\"details\":\"Countries are ranked by the exchange rate leverage metric, defined as how many units of local currency one U.S. dollar can buy. This helps identify where the USD has the strongest nominal purchasing power.\"},{\"insight\":\"Exchange Rate Leverage Is Not Sole Affordability Indicator\",\"details\":\"A higher exchange rate leverage does not necessarily mean a destination is more affordable. Cost of living, visa income requirements, tax implications, and local economic conditions must also be considered when choosing a digital nomad destination.\"},{\"insight\":\"Reliable and Transparent Data Sources\",\"details\":\"Exchange rates were sourced from reputable platforms such as X-Rates, xe.com, Revolut, and others, with spot rates captured at a specific timestamp (Nov 2, 2025, 16:12 UTC) to ensure accuracy and consistency.\"},{\"insight\":\"South Africa as a Highlighted Destination\",\"details\":\"South Africa is included among the countries offering digital nomad visas, presenting a compelling option for U.S. citizens due to its favorable exchange rate leverage combined with unique cultural and geographic appeal.\"}],\"recommendations\":[\"When selecting a digital nomad destination, combine exchange rate leverage data with detailed cost of living research, visa requirements, and tax considerations to make an informed decision.\",\"Consider South Africa not only for its exchange rate advantage but also for its diverse environment and lifestyle offerings.\",\"Regularly update exchange rate data and visa program statuses as these can change frequently.\"],\"follow_up_explorations\":[\"Develop a detailed cost of living comparison tool that integrates exchange rate leverage with local expenses for top digital nomad destinations.\",\"Analyze tax implications and visa income thresholds for U.S. citizens in these countries to provide a holistic decision framework.\",\"Explore qualitative factors such as safety, internet infrastructure, and community support for digital nomads in highlighted countries like South Africa.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-Cb7mMwrEHQh1kUciJhw3fwjCSE8N8",
+      "object": "chat.completion",
+      "created": 1762964074,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"topic\": \"Digital Nomad Programs for U.S. Citizens with Focus on Exchange Rate Leverage and South Africa\",\n    \"key_insights\": [\n      {\n        \"insight\": \"Comprehensive and Up-to-Date List of Digital Nomad Programs\",\n        \"details\": \"Both branches provide a curated, current list of countries offering bona fide digital nomad or remote work visas/permits available to U.S. citizens as of November 2, 2025. This list includes South Africa and other global destinations.\"\n      },\n      {\n        \"insight\": \"Ranking by Exchange Rate Leverage\",\n        \"details\": \"Countries are ranked by the exchange rate leverage metric, defined as how many units of local currency one U.S. dollar can buy. This helps identify where the USD has the strongest nominal purchasing power.\"\n      },\n      {\n        \"insight\": \"Exchange Rate Leverage Is Not Sole Affordability Indicator\",\n        \"details\": \"A higher exchange rate leverage does not necessarily mean a destination is more affordable. Cost of living, visa income requirements, tax implications, and local economic conditions must also be considered when choosing a digital nomad destination.\"\n      },\n      {\n        \"insight\": \"Reliable and Transparent Data Sources\",\n        \"details\": \"Exchange rates were sourced from reputable platforms such as X-Rates, xe.com, Revolut, and others, with spot rates captured at a specific timestamp (Nov 2, 2025, 16:12 UTC) to ensure accuracy and consistency.\"\n      },\n      {\n        \"insight\": \"South Africa as a Highlighted Destination\",\n        \"details\": \"South Africa is included among the countries offering digital nomad visas, presenting a compelling option for U.S. citizens due to its favorable exchange rate leverage combined with unique cultural and geographic appeal.\"\n      }\n    ],\n    \"recommendations\": [\n      \"When selecting a digital nomad destination, combine exchange rate leverage data with detailed cost of living research, visa requirements, and tax considerations to make an informed decision.\",\n      \"Consider South Africa not only for its exchange rate advantage but also for its diverse environment and lifestyle offerings.\",\n      \"Regularly update exchange rate data and visa program statuses as these can change frequently.\"\n    ],\n    \"follow_up_explorations\": [\n      \"Develop a detailed cost of living comparison tool that integrates exchange rate leverage with local expenses for top digital nomad destinations.\",\n      \"Analyze tax implications and visa income thresholds for U.S. citizens in these countries to provide a holistic decision framework.\",\n      \"Explore qualitative factors such as safety, internet infrastructure, and community support for digital nomads in highlighted countries like South Africa.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 774,
+        "completion_tokens": 552,
+        "total_tokens": 1326,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

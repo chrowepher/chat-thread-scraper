@@ -1,7 +1,16 @@
 param(
     [int]$Port = 9222,
+    [string]$DevToolsHost = "127.0.0.1",
     [string]$ProfileName = "RemoteDebug",
     [switch]$SkipChrome,
+    [switch]$LegacyWorkflow,
+    [string[]]$AutopilotArgs = @(
+        '--bookmark-folder', 'Digital Nomad',
+        '--snapshot', 'snapshots/digital-nomad.json',
+        '--merge-note', 'notes/digital-nomad.md',
+        '--merge-tasks', 'snapshots/digital-nomad-tasks.json',
+        '--merge-branch-limit', '5'
+    ),
     [string[]]$ScraperArgs = @(
         '--verbose',
         '--bookmark-folder', 'Digital Nomad',
@@ -39,13 +48,14 @@ if (-not $SkipChrome) {
 
     $arguments = @(
         "--remote-debugging-port=$Port",
+        "--remote-debugging-address=$DevToolsHost",
         "--user-data-dir=`"$profileDir`""
     )
 
-    Write-Host "Launching Chrome from $chromePath with profile $profileDir (port $Port)..."
+    Write-Host "Launching Chrome from $chromePath with profile $profileDir (host $DevToolsHost, port $Port)..."
     Start-Process -FilePath $chromePath -ArgumentList $arguments
 
-    $versionUri = "http://127.0.0.1:$Port/json/version"
+    $versionUri = "http://${DevToolsHost}:$Port/json/version"
     $maxAttempts = 10
     $version = $null
     for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
@@ -69,7 +79,7 @@ if (-not $SkipChrome) {
     Write-Host "Skipping Chrome launch (per -SkipChrome)."
 }
 
-if (-not $SkipScraper) {
+function Resolve-NpmExecutable {
     $npmExecutable = Get-Command npm.cmd -ErrorAction SilentlyContinue
     if (-not $npmExecutable) {
         $npmExecutable = Get-Command npm -ErrorAction SilentlyContinue
@@ -77,7 +87,52 @@ if (-not $SkipScraper) {
     if (-not $npmExecutable) {
         throw 'npm was not found in PATH. Install Node.js (which provides npm) or specify the full path manually.'
     }
+    return $npmExecutable
+}
 
+if (-not $LegacyWorkflow) {
+    $npmExecutable = Resolve-NpmExecutable
+    $npmArguments = @('start', '--', 'autopilot')
+    $providedAutopilotArgs = @()
+    if ($AutopilotArgs) {
+        $providedAutopilotArgs = $AutopilotArgs
+    }
+    if (-not ($providedAutopilotArgs -contains '--host')) {
+        $npmArguments += @('--host', $DevToolsHost)
+    }
+    if (-not ($providedAutopilotArgs -contains '--port')) {
+        $npmArguments += @('--port', $Port.ToString())
+    }
+    if ($SkipScraper -and -not ($providedAutopilotArgs -contains '--skip-scrape')) {
+        $npmArguments += '--skip-scrape'
+    }
+    if ($providedAutopilotArgs.Count -gt 0) {
+        $npmArguments += $providedAutopilotArgs
+    }
+
+    Write-Host "Launching chat-thread-merger autopilot via npm $($npmArguments -join ' ')..."
+    & $npmExecutable.Path @npmArguments
+    $npmExit = $LASTEXITCODE
+    if ($npmExit -ne 0) {
+        throw "npm start autopilot exited with code $npmExit."
+    }
+    return
+}
+
+if ($LegacyWorkflow -and $SkipScraper) {
+    Write-Host "Skipping scraper run (per -SkipScraper)."
+}
+
+if ($LegacyWorkflow -and $SkipScraper -and -not $RunMerge) {
+    return
+}
+
+$legacyNpmExecutable = $null
+if (-not $SkipScraper -or $RunMerge) {
+    $legacyNpmExecutable = Resolve-NpmExecutable
+}
+
+if (-not $SkipScraper) {
     $npmArguments = @('start')
     if ($ScraperArgs -and $ScraperArgs.Count -gt 0) {
         $npmArguments += '--'
@@ -85,19 +140,10 @@ if (-not $SkipScraper) {
     }
 
     Write-Host "Launching chat-thread-scraper via npm $($npmArguments -join ' ')..."
-    & $npmExecutable.Path @npmArguments
+    & $legacyNpmExecutable.Path @npmArguments
     $npmExit = $LASTEXITCODE
     if ($npmExit -ne 0) {
         throw "npm start exited with code $npmExit."
-    }
-} else {
-    Write-Host "Skipping scraper run (per -SkipScraper)."
-    $npmExecutable = Get-Command npm.cmd -ErrorAction SilentlyContinue
-    if (-not $npmExecutable) {
-        $npmExecutable = Get-Command npm -ErrorAction SilentlyContinue
-    }
-    if (-not $npmExecutable) {
-        throw 'npm was not found in PATH. Install Node.js (which provides npm) or specify the full path manually.'
     }
 }
 
@@ -109,7 +155,7 @@ if ($RunMerge) {
     }
 
     Write-Host "Launching chat-thread-merger via npm $($mergeArguments -join ' ')..."
-    & $npmExecutable.Path @mergeArguments
+    & $legacyNpmExecutable.Path @mergeArguments
     $mergeExit = $LASTEXITCODE
     if ($mergeExit -ne 0) {
         throw "npm run merge exited with code $mergeExit."

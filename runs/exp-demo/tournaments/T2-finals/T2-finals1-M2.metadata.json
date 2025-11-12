@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals1-M2",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\nomad-mini.json",
+    "C:\\Users\\chrow\\chat-thread-merger\\snapshots\\custom.json"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 1
+  },
+  "mergeResult": {
+    "summary": "{\"mergedSummary\":{\"overview\":\"This synthesis consolidates insights from two branches focused on digital nomad programs available to U.S. citizens, emphasizing exchange rate leverage, visa requirements, cost of living, and practical relocation considerations.\",\"keyInsights\":[{\"topic\":\"Digital Nomad Programs and Exchange Rate Leverage\",\"details\":\"A ranked list of countries offering digital nomad or remote work visas to U.S. citizens was compiled, sorted by the strength of the U.S. dollar against local currencies as of November 2, 2025. Higher exchange rate leverage means the U.S. dollar buys more local currency, potentially increasing affordability. However, exchange rate alone does not guarantee lower living costs, so it must be considered alongside cost of living and visa income thresholds.\"},{\"topic\":\"Top Countries with Strong USD Leverage\",\"details\":\"Countries with the highest USD leverage include those with weaker local currencies relative to the dollar, offering better financial advantage. The exact countries were listed in the original data but generally include emerging markets and some developing countries with established digital nomad programs.\"},{\"topic\":\"Visa Requirements and Income Thresholds\",\"details\":\"Each digital nomad program has specific visa requirements, including minimum income thresholds, duration of stay, and tax obligations. Applicants must verify these details from official government sources to ensure compliance.\"},{\"topic\":\"Cost of Living and Practical Considerations\",\"details\":\"Cost of living varies widely even within countries with favorable exchange rates. Factors such as housing, healthcare, internet quality, safety, and local amenities should be evaluated. Additionally, practical relocation advice includes understanding local culture, language, and legal considerations.\"},{\"topic\":\"Additional Insights from Custom Data\",\"details\":\"The custom data branch provided supplementary context on moving to specific countries like South Africa, highlighting local nuances, lifestyle, and integration tips that complement the visa and financial data.\"}],\"recommendations\":[\"Use the ranked exchange rate data as a starting point to identify financially advantageous digital nomad destinations.\",\"Cross-reference visa requirements and income thresholds from official government websites before applying.\",\"Conduct detailed cost of living research for shortlisted countries, including housing, healthcare, and internet infrastructure.\",\"Consider cultural and legal factors to ensure a smooth transition and enjoyable stay.\",\"Explore country-specific relocation guides and community resources for practical advice.\"],\"nextSteps\":[\"Develop a dynamic tool or dashboard that updates digital nomad visa options, exchange rates, and cost of living metrics in real time.\",\"Gather qualitative data from current digital nomads about their experiences in top-ranked countries to enrich decision-making.\",\"Expand research to include tax implications for U.S. citizens working remotely abroad under these visas.\",\"Investigate long-term residency and citizenship pathways following digital nomad visa periods.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CagTWD7gsI7XTHoh2MXFSzVBGAcsU",
+      "object": "chat.completion",
+      "created": 1762859118,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"mergedSummary\": {\n    \"overview\": \"This synthesis consolidates insights from two branches focused on digital nomad programs available to U.S. citizens, emphasizing exchange rate leverage, visa requirements, cost of living, and practical relocation considerations.\",\n    \"keyInsights\": [\n      {\n        \"topic\": \"Digital Nomad Programs and Exchange Rate Leverage\",\n        \"details\": \"A ranked list of countries offering digital nomad or remote work visas to U.S. citizens was compiled, sorted by the strength of the U.S. dollar against local currencies as of November 2, 2025. Higher exchange rate leverage means the U.S. dollar buys more local currency, potentially increasing affordability. However, exchange rate alone does not guarantee lower living costs, so it must be considered alongside cost of living and visa income thresholds.\"\n      },\n      {\n        \"topic\": \"Top Countries with Strong USD Leverage\",\n        \"details\": \"Countries with the highest USD leverage include those with weaker local currencies relative to the dollar, offering better financial advantage. The exact countries were listed in the original data but generally include emerging markets and some developing countries with established digital nomad programs.\"\n      },\n      {\n        \"topic\": \"Visa Requirements and Income Thresholds\",\n        \"details\": \"Each digital nomad program has specific visa requirements, including minimum income thresholds, duration of stay, and tax obligations. Applicants must verify these details from official government sources to ensure compliance.\"\n      },\n      {\n        \"topic\": \"Cost of Living and Practical Considerations\",\n        \"details\": \"Cost of living varies widely even within countries with favorable exchange rates. Factors such as housing, healthcare, internet quality, safety, and local amenities should be evaluated. Additionally, practical relocation advice includes understanding local culture, language, and legal considerations.\"\n      },\n      {\n        \"topic\": \"Additional Insights from Custom Data\",\n        \"details\": \"The custom data branch provided supplementary context on moving to specific countries like South Africa, highlighting local nuances, lifestyle, and integration tips that complement the visa and financial data.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Use the ranked exchange rate data as a starting point to identify financially advantageous digital nomad destinations.\",\n      \"Cross-reference visa requirements and income thresholds from official government websites before applying.\",\n      \"Conduct detailed cost of living research for shortlisted countries, including housing, healthcare, and internet infrastructure.\",\n      \"Consider cultural and legal factors to ensure a smooth transition and enjoyable stay.\",\n      \"Explore country-specific relocation guides and community resources for practical advice.\"\n    ],\n    \"nextSteps\": [\n      \"Develop a dynamic tool or dashboard that updates digital nomad visa options, exchange rates, and cost of living metrics in real time.\",\n      \"Gather qualitative data from current digital nomads about their experiences in top-ranked countries to enrich decision-making.\",\n      \"Expand research to include tax implications for U.S. citizens working remotely abroad under these visas.\",\n      \"Investigate long-term residency and citizenship pathways following digital nomad visa periods.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 1119,
+        "completion_tokens": 614,
+        "total_tokens": 1733,
+        "prompt_tokens_details": {
+          "cached_tokens": 1024,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}
