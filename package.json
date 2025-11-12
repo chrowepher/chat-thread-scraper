@@ -5,13 +5,13 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "chat-thread-merger": "dist/index.js"
+    "chat-thread-merger": "bin/chat-thread-merger.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
-    "merge": "tsx src/mergeSnapshot.ts",
+    "merge": "tsx src/mergeSnapshotCli.ts",
     "test": "vitest run"
   },
   "keywords": [],

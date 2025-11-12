@@ -6,7 +6,7 @@ export interface ConversationMessage {
   /**
    * Optional timestamp pulled from the DOM, if available.
    */
-  timestamp?: string;
+  timestamp?: string | undefined;
 }
 
 export interface BrowserConversation {
