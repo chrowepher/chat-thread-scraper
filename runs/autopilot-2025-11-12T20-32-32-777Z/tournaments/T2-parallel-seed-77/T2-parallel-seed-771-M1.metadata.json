@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-001-can-do-mapping-your-dollars-to-bs-ratio.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-002-move-to-south-africa-branch-mapping-your-dollars-t.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Mapping Your Dollars-to-BS Ratio: A Practical Framework for Evaluating Roles and Projects\",\"summary\":\"This synthesis merges insights from two branches focused on designing and applying a personal 'Dollars-to-BS Ratio' metric to evaluate job roles or projects, especially when considering governance-heavy or high-friction work environments, including a scenario of moving to South Africa.\",\"highlights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"description\":\"A personal metric designed to quantify the tradeoff between compensation and work friction, enabling you to identify high-reward, low-friction roles or projects.\",\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"components\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a 'joy factor' (0.5 to 1.2) reflecting how energizing or draining the work is relative to your values and preferences.\",\"Friction Hours\":\"Weekly hours lost to governance, politics, unclear criteria, meetings, and other energy drains, multiplied by 52 to annualize.\"}},{\"practical_application\":\"Use this metric to compare roles, projects, or clients by filling out a worksheet with inputs for compensation, joy factor, and friction hours. Higher DTB scores indicate better alignment of reward to effort and friction.\"},{\"joy_factor_guidance\":\"Joy factor ranges from 0.5 (work conflicts with your values or is draining) to 1.2 (work energizes and aligns with your values). This subjective multiplier adjusts compensation to reflect qualitative satisfaction.\"},{\"friction_definition\":\"Friction includes all energy drains such as fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, and governance overhead.\"},{\"contextual_insight\":\"When considering a move to South Africa or any significant life change, this metric helps weigh the financial and qualitative tradeoffs, factoring in local compensation norms and potential changes in friction or joy.\"},{\"worksheet_template\":\"A simple worksheet can be created in notes or spreadsheets with columns for: Role/Project, Annual Compensation, Joy Factor, Adjusted Compensation, Weekly Friction Hours, Annual Friction Hours, and DTB Score.\"}],\"conflicts_resolved\":\"No direct conflicts were found between the branches; rather, Branch 2 expanded on Branch 1 by providing a detailed practical worksheet and contextualizing the metric for a geographic move scenario.\",\"next_steps\":[\"Develop an interactive tool or spreadsheet template that automates DTB score calculation for multiple roles/projects.\",\"Explore how to quantify or better estimate the 'joy factor' through reflective questions or a survey.\",\"Investigate cultural and economic factors affecting compensation and friction when relocating internationally, such as to South Africa.\",\"Consider integrating qualitative notes or narrative alongside the quantitative DTB score for richer decision-making.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBub68uu4M0OWMUsxV8iIkN4dOlF",
+      "object": "chat.completion",
+      "created": 1762979961,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Mapping Your Dollars-to-BS Ratio: A Practical Framework for Evaluating Roles and Projects\",\n    \"summary\": \"This synthesis merges insights from two branches focused on designing and applying a personal 'Dollars-to-BS Ratio' metric to evaluate job roles or projects, especially when considering governance-heavy or high-friction work environments, including a scenario of moving to South Africa.\",\n    \"highlights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"description\": \"A personal metric designed to quantify the tradeoff between compensation and work friction, enabling you to identify high-reward, low-friction roles or projects.\",\n        \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n        \"components\": {\n          \"Adjusted Compensation\": \"Annual compensation multiplied by a 'joy factor' (0.5 to 1.2) reflecting how energizing or draining the work is relative to your values and preferences.\",\n          \"Friction Hours\": \"Weekly hours lost to governance, politics, unclear criteria, meetings, and other energy drains, multiplied by 52 to annualize.\"\n        }\n      },\n      {\n        \"practical_application\": \"Use this metric to compare roles, projects, or clients by filling out a worksheet with inputs for compensation, joy factor, and friction hours. Higher DTB scores indicate better alignment of reward to effort and friction.\"\n      },\n      {\n        \"joy_factor_guidance\": \"Joy factor ranges from 0.5 (work conflicts with your values or is draining) to 1.2 (work energizes and aligns with your values). This subjective multiplier adjusts compensation to reflect qualitative satisfaction.\"\n      },\n      {\n        \"friction_definition\": \"Friction includes all energy drains such as fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, and governance overhead.\"\n      },\n      {\n        \"contextual_insight\": \"When considering a move to South Africa or any significant life change, this metric helps weigh the financial and qualitative tradeoffs, factoring in local compensation norms and potential changes in friction or joy.\"\n      },\n      {\n        \"worksheet_template\": \"A simple worksheet can be created in notes or spreadsheets with columns for: Role/Project, Annual Compensation, Joy Factor, Adjusted Compensation, Weekly Friction Hours, Annual Friction Hours, and DTB Score.\"\n      }\n    ],\n    \"conflicts_resolved\": \"No direct conflicts were found between the branches; rather, Branch 2 expanded on Branch 1 by providing a detailed practical worksheet and contextualizing the metric for a geographic move scenario.\",\n    \"next_steps\": [\n      \"Develop an interactive tool or spreadsheet template that automates DTB score calculation for multiple roles/projects.\",\n      \"Explore how to quantify or better estimate the 'joy factor' through reflective questions or a survey.\",\n      \"Investigate cultural and economic factors affecting compensation and friction when relocating internationally, such as to South Africa.\",\n      \"Consider integrating qualitative notes or narrative alongside the quantitative DTB score for richer decision-making.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 717,
+        "completion_tokens": 635,
+        "total_tokens": 1352,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

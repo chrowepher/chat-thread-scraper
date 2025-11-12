@@ -1,0 +1,28 @@
+{
+  "kind": "flag",
+  "version": 1,
+  "rows": [
+    {
+      "id": "flag-sro-housing-joburg",
+      "label": "SRO housing in Johannesburg",
+      "intentQuestion": "What are the funding bottlenecks and policy levers for SRO builds in Joburg?",
+      "scope": "Threads referencing South Africa, housing, or municipal policy.",
+      "signalsToPull": "Cost figures, municipal stakeholders, cited barriers, and enabling policies.",
+      "outputLens": "Risk vs opportunity table plus unanswered questions list.",
+      "priority": "high",
+      "status": "active",
+      "evidenceFloor": "Quote + source",
+      "perspectivePairing": "City officials ↔ Private developers",
+      "tags": [
+        "geo:ZA",
+        "topic:housing",
+        "lens:risk"
+      ],
+      "createdAt": "2025-11-12T18:20:00.000Z",
+      "updatedAt": "2025-11-12T20:10:54.461Z",
+      "deck": "flag",
+      "triggerSummary": "Pinned filter focused on Johannesburg relocation thread and housing policy levers."
+    }
+  ],
+  "updatedAt": "2025-11-12T20:10:54.461Z"
+}

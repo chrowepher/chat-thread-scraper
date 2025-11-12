@@ -1,0 +1,48 @@
+{
+  "runId": "autopilot-2025-11-12T20-32-32-777Z",
+  "createdAt": "2025-11-12T20:32:56.242Z",
+  "description": "Autopilot planB baseline from digital-nomad.json",
+  "inputs": {
+    "threads": [
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-001-can-do-mapping-your-dollars-to-bs-ratio.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-002-move-to-south-africa-branch-mapping-your-dollars-t.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-003-move-to-south-africa-branch-mapping-your-dollars-t.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-004-move-to-south-africa-branch-branch-mapping-your-do.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-005-move-to-south-africa-branch-branch-mapping-your-do.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-006-move-to-south-africa-audit-findings-summary.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-007-move-to-south-africa-audit-findings-summary.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-008-move-to-south-africa-branch-branch-mapping-your-do.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-009-move-to-south-africa-branch-branch-mapping-your-do.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-010-move-to-south-africa-project-management-synthesis.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-011-move-to-south-africa-digital-nomad-programs-compar.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-012-move-to-south-africa-audit-findings-summary.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-013-move-to-south-africa-branch-branch-digital-nomad-p.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-014-move-to-south-africa-branch-branch-digital-nomad-p.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-015-move-to-south-africa-branch-digital-nomad-programs.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-016-move-to-south-africa-digital-nomad-programs-ranked.md",
+      "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-017-move-to-south-africa-digital-nomad-programs-compar.md"
+    ]
+  },
+  "parameters": {
+    "branchCount": "T2",
+    "samplePolicy": "bracket",
+    "sampleK": 3,
+    "treeShapes": [
+      "balanced",
+      "left-skew",
+      "right-skew"
+    ],
+    "seed": null,
+    "plan": "planB",
+    "freshnessWeight": null,
+    "noveltyWeight": null,
+    "evalReplicates": null,
+    "priorities": [],
+    "tieBreak": null,
+    "stabilityThreshold": 0.92,
+    "calcMetrics": true,
+    "writeTree": null,
+    "writeOutput": null,
+    "writeMetadata": null
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups2-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T3-groups\\T3-groups1-M1.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T3-groups\\T3-groups1-M2.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 2,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"title\":\"Designing and Applying Your Personal Dollars-to-BS Ratio for Career and Project Decision-Making\",\"overview\":\"This synthesis integrates insights from two complementary branches that develop and refine a practical framework—the Dollars-to-BS Ratio (DTB Score)—to evaluate job roles and projects by balancing compensation against workplace friction. The DTB Score helps individuals identify opportunities that maximize reward while minimizing energy-draining governance, politics, and unclear work conditions. Both branches emphasize personalizing the metric by adjusting compensation for joy and weighting friction hours to reflect true energy loss, enabling more informed career and project decisions.\",\"key_insights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"description\":\"A personalized metric that quantifies the value of a role or project by dividing adjusted compensation by friction hours. A higher DTB Score indicates a better opportunity with more reward and less friction.\"},{\"components\":{\"Compensation ($)\":\"Total compensation that matters to you, including base salary, bonuses, and benefits weighted by your personal preferences and joy factor.\",\"Friction (BS)\":\"The weekly hours lost to governance-heavy work, politics, unclear acceptance criteria, endless meetings, and other low-agency, energy-draining factors.\"}},{\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"details\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a Joy Factor (e.g., 0.5 to 1.0) reflecting how much you enjoy or value the work, plus any additional weighting for benefits or perks.\",\"Friction Hours\":\"Estimated weekly hours spent on non-value-adding activities that drain energy and reduce productivity.\"}},{\"application\":\"Use the DTB Score to compare multiple roles or projects, prioritizing those with higher scores to maximize personal satisfaction and minimize burnout. This metric supports strategic decision-making by quantifying subjective factors into actionable data.\"}],\"recommendations_for_follow_up\":[\"Develop a standardized method or tool to help individuals accurately estimate friction hours and joy factors for different roles or projects.\",\"Explore how to incorporate long-term career growth potential and skill development into the DTB framework.\",\"Investigate organizational strategies to reduce friction factors and improve overall DTB Scores for employees.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBq1gIQAq0rVYSVlhPAPHVYOlWHa",
+      "object": "chat.completion",
+      "created": 1762979677,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"title\": \"Designing and Applying Your Personal Dollars-to-BS Ratio for Career and Project Decision-Making\",\n    \"overview\": \"This synthesis integrates insights from two complementary branches that develop and refine a practical framework—the Dollars-to-BS Ratio (DTB Score)—to evaluate job roles and projects by balancing compensation against workplace friction. The DTB Score helps individuals identify opportunities that maximize reward while minimizing energy-draining governance, politics, and unclear work conditions. Both branches emphasize personalizing the metric by adjusting compensation for joy and weighting friction hours to reflect true energy loss, enabling more informed career and project decisions.\",\n    \"key_insights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"description\": \"A personalized metric that quantifies the value of a role or project by dividing adjusted compensation by friction hours. A higher DTB Score indicates a better opportunity with more reward and less friction.\"\n      },\n      {\n        \"components\": {\n          \"Compensation ($)\": \"Total compensation that matters to you, including base salary, bonuses, and benefits weighted by your personal preferences and joy factor.\",\n          \"Friction (BS)\": \"The weekly hours lost to governance-heavy work, politics, unclear acceptance criteria, endless meetings, and other low-agency, energy-draining factors.\"\n        }\n      },\n      {\n        \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n        \"details\": {\n          \"Adjusted Compensation\": \"Annual compensation multiplied by a Joy Factor (e.g., 0.5 to 1.0) reflecting how much you enjoy or value the work, plus any additional weighting for benefits or perks.\",\n          \"Friction Hours\": \"Estimated weekly hours spent on non-value-adding activities that drain energy and reduce productivity.\"\n        }\n      },\n      {\n        \"application\": \"Use the DTB Score to compare multiple roles or projects, prioritizing those with higher scores to maximize personal satisfaction and minimize burnout. This metric supports strategic decision-making by quantifying subjective factors into actionable data.\"\n      }\n    ],\n    \"recommendations_for_follow_up\": [\n      \"Develop a standardized method or tool to help individuals accurately estimate friction hours and joy factors for different roles or projects.\",\n      \"Explore how to incorporate long-term career growth potential and skill development into the DTB framework.\",\n      \"Investigate organizational strategies to reduce friction factors and improve overall DTB Scores for employees.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 728,
+        "completion_tokens": 505,
+        "total_tokens": 1233,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups3-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T3-groups\\T3-groups2-M1.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T3-groups\\T3-groups2-M2.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 3,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"title\":\"Designing and Applying Your Personal Dollars-to-BS Ratio for Career and Project Decision-Making\",\"overview\":\"This synthesis integrates insights from two complementary branches that develop and refine a practical, personalized framework—the Dollars-to-BS Ratio (DTB Score)—to evaluate job roles and projects by balancing compensation against workplace friction. The DTB Score helps individuals identify opportunities that maximize reward while minimizing energy-draining governance, politics, and unclear work conditions. Both branches emphasize personalizing the metric by adjusting compensation for joy and weighting friction hours to reflect true energy loss, enabling more informed career and project decisions. The framework is validated through a detailed audit of professional profiles and friction factors, supporting decisions such as relocation or role changes.\",\"key_insights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"description\":\"A personalized metric that quantifies the value of a role or project by dividing adjusted compensation by friction hours. A higher DTB Score indicates a better opportunity with more reward and less friction.\"},{\"components\":{\"Compensation ($)\":\"Total compensation that matters to you, including base salary, bonuses, and benefits weighted by your personal preferences and joy factor (ranging approximately from 0.5 to 1.2) that adjusts for how energizing or draining the work is.\",\"Friction Hours\":\"Estimated weekly hours lost to governance, politics, unclear acceptance criteria, and other energy-draining factors, annualized by multiplying by 52. These hours represent the true cost of workplace friction.\"}},{\"calculation\":\"DTB Score = Adjusted Compensation (Annual Compensation × Joy Factor) ÷ Annual Friction Hours\",\"interpretation\":\"A higher DTB Score means more compensation per unit of friction, indicating a more desirable role or project.\"},{\"personalization\":\"The framework requires a thorough audit of your professional profile, preferences, and friction sources to accurately estimate friction hours and joy factors, making the DTB Score uniquely tailored to your situation.\"},{\"application\":\"Use the DTB Score to compare current and potential roles or projects, including decisions about relocation (e.g., moving to South Africa), by quantifying trade-offs between compensation and workplace friction.\"},{\"validation\":\"The DTB framework has been validated through detailed profiling and friction audits, ensuring it reflects real-world energy costs and rewards.\"}],\"recommendations\":[\"Conduct a detailed audit of your current and potential roles to estimate friction hours and assign joy factors accurately.\",\"Use the DTB Score as a decision-support tool to prioritize opportunities that maximize compensation while minimizing friction.\",\"Periodically revisit and update your friction profile and joy factors as your preferences and work environments evolve.\",\"Consider expanding the framework to include qualitative factors such as career growth potential and work-life balance for a holistic evaluation.\",\"Explore automating friction tracking and compensation adjustments through tools or apps to streamline ongoing decision-making.\"],\"next_steps\":[\"Develop a user-friendly calculator or spreadsheet template to input compensation, friction hours, and joy factors to compute DTB Scores easily.\",\"Pilot the DTB framework with real job offers or projects to gather feedback and refine the model.\",\"Investigate integrating qualitative assessments (e.g., career trajectory, cultural fit) alongside the DTB Score for comprehensive decision-making.\",\"Explore how relocation factors (cost of living, local work culture) can be incorporated into the DTB framework.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBqoAvIJesD2HxhoXNFkeXg9uzow",
+      "object": "chat.completion",
+      "created": 1762979726,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"title\": \"Designing and Applying Your Personal Dollars-to-BS Ratio for Career and Project Decision-Making\",\n    \"overview\": \"This synthesis integrates insights from two complementary branches that develop and refine a practical, personalized framework—the Dollars-to-BS Ratio (DTB Score)—to evaluate job roles and projects by balancing compensation against workplace friction. The DTB Score helps individuals identify opportunities that maximize reward while minimizing energy-draining governance, politics, and unclear work conditions. Both branches emphasize personalizing the metric by adjusting compensation for joy and weighting friction hours to reflect true energy loss, enabling more informed career and project decisions. The framework is validated through a detailed audit of professional profiles and friction factors, supporting decisions such as relocation or role changes.\",\n    \"key_insights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"description\": \"A personalized metric that quantifies the value of a role or project by dividing adjusted compensation by friction hours. A higher DTB Score indicates a better opportunity with more reward and less friction.\"\n      },\n      {\n        \"components\": {\n          \"Compensation ($)\": \"Total compensation that matters to you, including base salary, bonuses, and benefits weighted by your personal preferences and joy factor (ranging approximately from 0.5 to 1.2) that adjusts for how energizing or draining the work is.\",\n          \"Friction Hours\": \"Estimated weekly hours lost to governance, politics, unclear acceptance criteria, and other energy-draining factors, annualized by multiplying by 52. These hours represent the true cost of workplace friction.\"\n        }\n      },\n      {\n        \"calculation\": \"DTB Score = Adjusted Compensation (Annual Compensation × Joy Factor) ÷ Annual Friction Hours\",\n        \"interpretation\": \"A higher DTB Score means more compensation per unit of friction, indicating a more desirable role or project.\"\n      },\n      {\n        \"personalization\": \"The framework requires a thorough audit of your professional profile, preferences, and friction sources to accurately estimate friction hours and joy factors, making the DTB Score uniquely tailored to your situation.\"\n      },\n      {\n        \"application\": \"Use the DTB Score to compare current and potential roles or projects, including decisions about relocation (e.g., moving to South Africa), by quantifying trade-offs between compensation and workplace friction.\"\n      },\n      {\n        \"validation\": \"The DTB framework has been validated through detailed profiling and friction audits, ensuring it reflects real-world energy costs and rewards.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Conduct a detailed audit of your current and potential roles to estimate friction hours and assign joy factors accurately.\",\n      \"Use the DTB Score as a decision-support tool to prioritize opportunities that maximize compensation while minimizing friction.\",\n      \"Periodically revisit and update your friction profile and joy factors as your preferences and work environments evolve.\",\n      \"Consider expanding the framework to include qualitative factors such as career growth potential and work-life balance for a holistic evaluation.\",\n      \"Explore automating friction tracking and compensation adjustments through tools or apps to streamline ongoing decision-making.\"\n    ],\n    \"next_steps\": [\n      \"Develop a user-friendly calculator or spreadsheet template to input compensation, friction hours, and joy factors to compute DTB Scores easily.\",\n      \"Pilot the DTB framework with real job offers or projects to gather feedback and refine the model.\",\n      \"Investigate integrating qualitative assessments (e.g., career trajectory, cultural fit) alongside the DTB Score for comprehensive decision-making.\",\n      \"Explore how relocation factors (cost of living, local work culture) can be incorporated into the DTB framework.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 699,
+        "completion_tokens": 751,
+        "total_tokens": 1450,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

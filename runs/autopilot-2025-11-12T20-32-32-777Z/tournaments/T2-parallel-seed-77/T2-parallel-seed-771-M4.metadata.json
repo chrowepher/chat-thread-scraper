@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M4",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-007-move-to-south-africa-audit-findings-summary.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-008-move-to-south-africa-branch-branch-mapping-your-do.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 3
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is exploring a potential move to South Africa and has conducted a detailed audit and analysis of their professional profile, personal preferences, and decision-making framework to evaluate roles or projects with respect to compensation and friction.\",\"key_insights\":[{\"topic\":\"Audit of Candidate Profile and Personal Friction\",\"details\":\"The audit confirmed that the candidate profile accurately reflects the user's experience in banking and federal energy sectors, with strengths in ambiguity reduction, stakeholder facilitation, and risk surfacing. Tools and methods such as RAID, PMO governance, ServiceNow, SharePoint, and Excel dashboards are correctly identified. The personal friction profile aligns well with the user's stated preferences, highlighting high-friction sources and anti-friction traits relevant to negotiation strategies like single approver models and decision SLAs.\"},{\"topic\":\"Dollars-to-BS Ratio Framework\",\"details\":\"A practical metric called the Dollars-to-BS (DTB) Ratio was introduced to help the user evaluate roles or projects by balancing compensation against friction (energy drain from governance, politics, unclear criteria, etc.). The formula is: DTB Score = Adjusted Compensation / Friction Hours, where Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2). Joy Factor reflects how energizing or conflicting the work is with the user's values. Friction Hours represent weekly time lost to governance-related activities multiplied by 52. This metric enables prioritization of high-reward, low-friction opportunities.\"}],\"synthesis\":\"The audit findings validate the accuracy and relevance of the user's professional and personal friction profiles, providing a solid foundation for decision-making. The Dollars-to-BS Ratio framework complements this by offering a quantitative method to assess potential roles or projects in South Africa, factoring in both compensation and the qualitative experience of friction. Together, these insights empower the user to make informed, value-aligned career decisions with a clear view of trade-offs.\",\"recommendations\":[\"Use the validated candidate and friction profiles as a baseline for evaluating new opportunities in South Africa.\",\"Apply the Dollars-to-BS Ratio worksheet to each potential role or project to quantify and compare their net value considering both compensation and friction.\",\"Incorporate negotiation strategies aligned with the personal friction profile, such as advocating for single approver processes and clear decision SLAs, to reduce governance-related friction.\",\"Periodically update the Joy Factor and friction estimates based on real-world experience to refine the DTB Ratio accuracy.\"],\"follow_up_explorations\":[\"Develop a detailed friction tracking tool or dashboard to capture weekly governance and political friction hours more precisely.\",\"Explore cultural and regulatory factors specific to South Africa that might impact friction and compensation structures.\",\"Simulate scenarios using the DTB Ratio with real or hypothetical job offers to validate its predictive power in decision-making.\",\"Investigate negotiation tactics tailored to South African corporate environments to further reduce friction.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBv0EvQtfSn4HahgXszSjxV18gDP",
+      "object": "chat.completion",
+      "created": 1762979986,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is exploring a potential move to South Africa and has conducted a detailed audit and analysis of their professional profile, personal preferences, and decision-making framework to evaluate roles or projects with respect to compensation and friction.\",\n    \"key_insights\": [\n      {\n        \"topic\": \"Audit of Candidate Profile and Personal Friction\",\n        \"details\": \"The audit confirmed that the candidate profile accurately reflects the user's experience in banking and federal energy sectors, with strengths in ambiguity reduction, stakeholder facilitation, and risk surfacing. Tools and methods such as RAID, PMO governance, ServiceNow, SharePoint, and Excel dashboards are correctly identified. The personal friction profile aligns well with the user's stated preferences, highlighting high-friction sources and anti-friction traits relevant to negotiation strategies like single approver models and decision SLAs.\"\n      },\n      {\n        \"topic\": \"Dollars-to-BS Ratio Framework\",\n        \"details\": \"A practical metric called the Dollars-to-BS (DTB) Ratio was introduced to help the user evaluate roles or projects by balancing compensation against friction (energy drain from governance, politics, unclear criteria, etc.). The formula is: DTB Score = Adjusted Compensation / Friction Hours, where Adjusted Compensation = Annual Compensation × Joy Factor (0.5 to 1.2). Joy Factor reflects how energizing or conflicting the work is with the user's values. Friction Hours represent weekly time lost to governance-related activities multiplied by 52. This metric enables prioritization of high-reward, low-friction opportunities.\"\n      }\n    ],\n    \"synthesis\": \"The audit findings validate the accuracy and relevance of the user's professional and personal friction profiles, providing a solid foundation for decision-making. The Dollars-to-BS Ratio framework complements this by offering a quantitative method to assess potential roles or projects in South Africa, factoring in both compensation and the qualitative experience of friction. Together, these insights empower the user to make informed, value-aligned career decisions with a clear view of trade-offs.\",\n    \"recommendations\": [\n      \"Use the validated candidate and friction profiles as a baseline for evaluating new opportunities in South Africa.\",\n      \"Apply the Dollars-to-BS Ratio worksheet to each potential role or project to quantify and compare their net value considering both compensation and friction.\",\n      \"Incorporate negotiation strategies aligned with the personal friction profile, such as advocating for single approver processes and clear decision SLAs, to reduce governance-related friction.\",\n      \"Periodically update the Joy Factor and friction estimates based on real-world experience to refine the DTB Ratio accuracy.\"\n    ],\n    \"follow_up_explorations\": [\n      \"Develop a detailed friction tracking tool or dashboard to capture weekly governance and political friction hours more precisely.\",\n      \"Explore cultural and regulatory factors specific to South Africa that might impact friction and compensation structures.\",\n      \"Simulate scenarios using the DTB Ratio with real or hypothetical job offers to validate its predictive power in decision-making.\",\n      \"Investigate negotiation tactics tailored to South African corporate environments to further reduce friction.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 930,
+        "completion_tokens": 629,
+        "total_tokens": 1559,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

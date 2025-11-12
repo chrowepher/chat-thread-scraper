@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups1-M1",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-001-can-do-mapping-your-dollars-to-bs-ratio.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-002-move-to-south-africa-branch-mapping-your-dollars-t.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 1,
+    "matchIndex": 0
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"title\":\"Mapping Your Dollars-to-BS Ratio for Career and Project Decision-Making\",\"overview\":\"This synthesis combines insights from two branches focused on evaluating roles or projects using a practical metric called the Dollars-to-BS (DTB) Ratio. The goal is to help individuals identify high-reward, low-friction opportunities by quantifying compensation against the 'friction' or energy drain caused by governance, politics, and unclear work conditions.\",\"key_insights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"description\":\"A metric designed to measure the value of a role or project by dividing adjusted compensation by the friction hours involved. Higher DTB scores indicate better opportunities with more reward and less friction.\"},{\"components\":{\"Compensation ($)\":\"Total compensation that matters to you, including base salary, bonuses, and valued benefits.\",\"Friction (BS)\":\"The time and energy lost due to governance-heavy work, politics, unclear acceptance criteria, endless meetings, and other low-agency factors.\"}},{\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"details\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a joy factor (0.5 to 1.2), reflecting how energizing or draining the work is to you personally.\",\"Friction Hours\":\"Weekly hours lost to friction multiplied by 52 to annualize.\"}},{\"joy_factor\":\"A subjective multiplier where 1.2 means the work energizes you and 0.5 means it conflicts with your values, allowing personalization of the metric.\"},{\"application\":\"The metric can be applied per role, project, or client to compare options quantitatively and make informed decisions about where to invest time and energy.\"},{\"practical_tools\":\"A worksheet or spreadsheet can be used to input compensation, joy factor, and friction hours to calculate DTB scores for different options.\"}],\"conflicts_and_resolutions\":\"No conflicting ideas were present between the branches. Branch 2 expanded on the initial concept from Branch 1 by providing a detailed formula, practical steps, and a worksheet approach, which was adopted as the authoritative method.\",\"next_steps\":[\"Develop a user-friendly spreadsheet template or app to automate DTB score calculations.\",\"Explore case studies applying the DTB ratio to real-world career decisions.\",\"Investigate how to quantify and reduce friction hours effectively.\",\"Consider integrating qualitative factors beyond joy and friction for a more holistic decision framework.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBoPIuShWpzBahv7qBgiFKG6BZFQ",
+      "object": "chat.completion",
+      "created": 1762979577,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"title\": \"Mapping Your Dollars-to-BS Ratio for Career and Project Decision-Making\",\n    \"overview\": \"This synthesis combines insights from two branches focused on evaluating roles or projects using a practical metric called the Dollars-to-BS (DTB) Ratio. The goal is to help individuals identify high-reward, low-friction opportunities by quantifying compensation against the 'friction' or energy drain caused by governance, politics, and unclear work conditions.\",\n    \"key_insights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"description\": \"A metric designed to measure the value of a role or project by dividing adjusted compensation by the friction hours involved. Higher DTB scores indicate better opportunities with more reward and less friction.\"\n      },\n      {\n        \"components\": {\n          \"Compensation ($)\": \"Total compensation that matters to you, including base salary, bonuses, and valued benefits.\",\n          \"Friction (BS)\": \"The time and energy lost due to governance-heavy work, politics, unclear acceptance criteria, endless meetings, and other low-agency factors.\"\n        }\n      },\n      {\n        \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n        \"details\": {\n          \"Adjusted Compensation\": \"Annual compensation multiplied by a joy factor (0.5 to 1.2), reflecting how energizing or draining the work is to you personally.\",\n          \"Friction Hours\": \"Weekly hours lost to friction multiplied by 52 to annualize.\"\n        }\n      },\n      {\n        \"joy_factor\": \"A subjective multiplier where 1.2 means the work energizes you and 0.5 means it conflicts with your values, allowing personalization of the metric.\"\n      },\n      {\n        \"application\": \"The metric can be applied per role, project, or client to compare options quantitatively and make informed decisions about where to invest time and energy.\"\n      },\n      {\n        \"practical_tools\": \"A worksheet or spreadsheet can be used to input compensation, joy factor, and friction hours to calculate DTB scores for different options.\"\n      }\n    ],\n    \"conflicts_and_resolutions\": \"No conflicting ideas were present between the branches. Branch 2 expanded on the initial concept from Branch 1 by providing a detailed formula, practical steps, and a worksheet approach, which was adopted as the authoritative method.\",\n    \"next_steps\": [\n      \"Develop a user-friendly spreadsheet template or app to automate DTB score calculations.\",\n      \"Explore case studies applying the DTB ratio to real-world career decisions.\",\n      \"Investigate how to quantify and reduce friction hours effectively.\",\n      \"Consider integrating qualitative factors beyond joy and friction for a more holistic decision framework.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 717,
+        "completion_tokens": 567,
+        "total_tokens": 1284,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

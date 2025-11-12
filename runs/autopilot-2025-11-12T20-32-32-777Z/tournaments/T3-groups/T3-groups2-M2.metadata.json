@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups2-M2",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T3-groups\\T3-groups1-M3.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T3-groups\\T3-groups1-M4.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 2,
+    "matchIndex": 1
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is evaluating a potential move to South Africa and assessing job roles or projects using a personalized, data-driven framework that balances compensation against work-related friction. This involves a thorough audit of the user's professional profile, preferences, and friction factors, alongside the development and validation of a Dollars-to-BS (DTB) Ratio framework to quantify role attractiveness.\",\"key_insights\":[{\"topic\":\"Dollars-to-BS Ratio (DTB Score) Framework\",\"details\":\"A practical and validated metric designed to evaluate roles or projects by comparing adjusted compensation against friction. Adjusted compensation is calculated as annual compensation multiplied by a joy factor (ranging from 0.5 to 1.2) that reflects how energizing or draining the work is. Friction hours represent the estimated weekly time lost to governance, politics, and unclear acceptance criteria, multiplied by 52 to annualize. The DTB Score is computed as Adjusted Compensation divided by Friction Hours, where a higher score indicates a more desirable role with better compensation relative to friction.\"},{\"topic\":\"Personal Friction Profile Validation\",\"details\":\"An audit confirmed that the friction profile accurately captures the user's preferences and pain points, including governance-heavy work, political friction, and unclear acceptance criteria. Anti-friction traits such as single-approver processes, Department of Defense (DoD) style decision-making, and decision service-level agreements (SLAs) align well with the user's negotiation priorities. The recommendation includes adding explicit friction reduction metrics for ongoing tracking and refinement.\"},{\"topic\":\"Candidate Profile Audit\",\"details\":\"The user's professional profile was validated as accurate and consistent, highlighting experience in banking (Bank of America, MRA), federal energy sectors (BPA, FISMA), and expertise in RAID management, PMO governance, audit documentation, and executive reporting. Tools used include ServiceNow (limited to IT asset management), SharePoint, Power Automate, and Excel dashboards. Strengths include ambiguity reduction, stakeholder facilitation, and risk surfacing.\"}],\"recommendations\":[\"Use the DTB Ratio framework to prioritize job roles or projects that maximize compensation while minimizing friction, especially in governance-heavy environments.\",\"Incorporate explicit friction reduction metrics into ongoing role evaluations to better track and manage work-related friction over time.\",\"Leverage the validated candidate profile and friction preferences to negotiate roles that align with the user's strengths and anti-friction traits.\",\"Consider the joy factor carefully when estimating adjusted compensation to reflect true work satisfaction and energy levels.\"],\"potential_follow_up_explorations\":[\"Develop a friction tracking dashboard or tool that quantifies friction metrics in real-time for continuous role assessment.\",\"Explore negotiation strategies tailored to emphasize anti-friction traits and governance streamlining in job offers.\",\"Analyze specific South African market roles or projects using the DTB framework to identify optimal opportunities.\",\"Refine the joy factor calibration by collecting user feedback over time to improve adjusted compensation accuracy.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBqA3X2jLz02gdF0GLusRgOejqTZ",
+      "object": "chat.completion",
+      "created": 1762979686,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is evaluating a potential move to South Africa and assessing job roles or projects using a personalized, data-driven framework that balances compensation against work-related friction. This involves a thorough audit of the user's professional profile, preferences, and friction factors, alongside the development and validation of a Dollars-to-BS (DTB) Ratio framework to quantify role attractiveness.\",\n    \"key_insights\": [\n      {\n        \"topic\": \"Dollars-to-BS Ratio (DTB Score) Framework\",\n        \"details\": \"A practical and validated metric designed to evaluate roles or projects by comparing adjusted compensation against friction. Adjusted compensation is calculated as annual compensation multiplied by a joy factor (ranging from 0.5 to 1.2) that reflects how energizing or draining the work is. Friction hours represent the estimated weekly time lost to governance, politics, and unclear acceptance criteria, multiplied by 52 to annualize. The DTB Score is computed as Adjusted Compensation divided by Friction Hours, where a higher score indicates a more desirable role with better compensation relative to friction.\"\n      },\n      {\n        \"topic\": \"Personal Friction Profile Validation\",\n        \"details\": \"An audit confirmed that the friction profile accurately captures the user's preferences and pain points, including governance-heavy work, political friction, and unclear acceptance criteria. Anti-friction traits such as single-approver processes, Department of Defense (DoD) style decision-making, and decision service-level agreements (SLAs) align well with the user's negotiation priorities. The recommendation includes adding explicit friction reduction metrics for ongoing tracking and refinement.\"\n      },\n      {\n        \"topic\": \"Candidate Profile Audit\",\n        \"details\": \"The user's professional profile was validated as accurate and consistent, highlighting experience in banking (Bank of America, MRA), federal energy sectors (BPA, FISMA), and expertise in RAID management, PMO governance, audit documentation, and executive reporting. Tools used include ServiceNow (limited to IT asset management), SharePoint, Power Automate, and Excel dashboards. Strengths include ambiguity reduction, stakeholder facilitation, and risk surfacing.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Use the DTB Ratio framework to prioritize job roles or projects that maximize compensation while minimizing friction, especially in governance-heavy environments.\",\n      \"Incorporate explicit friction reduction metrics into ongoing role evaluations to better track and manage work-related friction over time.\",\n      \"Leverage the validated candidate profile and friction preferences to negotiate roles that align with the user's strengths and anti-friction traits.\",\n      \"Consider the joy factor carefully when estimating adjusted compensation to reflect true work satisfaction and energy levels.\"\n    ],\n    \"potential_follow_up_explorations\": [\n      \"Develop a friction tracking dashboard or tool that quantifies friction metrics in real-time for continuous role assessment.\",\n      \"Explore negotiation strategies tailored to emphasize anti-friction traits and governance streamlining in job offers.\",\n      \"Analyze specific South African market roles or projects using the DTB framework to identify optimal opportunities.\",\n      \"Refine the joy factor calibration by collecting user feedback over time to improve adjusted compensation accuracy.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 728,
+        "completion_tokens": 646,
+        "total_tokens": 1374,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

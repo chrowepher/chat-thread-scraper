@@ -1,0 +1,124 @@
+{
+  "model": "gpt-4.1-mini",
+  "temperature": 0.0,
+  "replicate_count": 1,
+  "aggregate": {
+    "Coverage": {
+      "left": {
+        "mean": 8.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 9.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 1.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Accuracy": {
+      "left": {
+        "mean": 8.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 9.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 1.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    },
+    "Clarity": {
+      "left": {
+        "mean": 7.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "right": {
+        "mean": 9.0,
+        "ci95": 0.0,
+        "replicates": 1
+      },
+      "delta": {
+        "mean": 2.0,
+        "ci95": 0.0,
+        "replicates": 1
+      }
+    }
+  },
+  "replicates": [
+    {
+      "index": 1,
+      "winner": "right",
+      "criteria": [
+        {
+          "name": "Coverage",
+          "left": 8.0,
+          "right": 9.0,
+          "rationale": "Left covers a wide range of countries and thematic insights broadly, but Right includes a more updated and detailed visa country list, explicit cost-of-living comparisons, and a focused case on South Africa, slightly expanding coverage."
+        },
+        {
+          "name": "Accuracy",
+          "left": 8.0,
+          "right": 9.0,
+          "rationale": "Both candidates accurately describe the DTB Ratio and visa programs, but Right's inclusion of late 2025 data and nuanced visa conditions, plus explicit cost-of-living grounding, suggests a more precise and current synthesis."
+        },
+        {
+          "name": "Clarity",
+          "left": 7.0,
+          "right": 9.0,
+          "rationale": "Left's thematic bullet points are informative but somewhat dense and abstract. Right offers a clearer, more narrative-driven structure with well-defined concepts, practical examples, and actionable next steps, enhancing reader comprehension."
+        }
+      ],
+      "summary_markdown": "Both candidates present a comprehensive framework integrating the Dollars-to-BS (DTB) Ratio with global digital nomad visa programs and cost-of-living data to aid career and relocation decisions. The Left candidate offers a detailed thematic breakdown with broad geographic coverage and a strong emphasis on holistic career evaluation and visa program factors. The Right candidate, however, provides a clearer, more structured narrative with explicit focus on South Africa as a highlighted relocation destination, a more detailed and updated visa country list, and a practical cost-of-living comparison. The Right candidate also presents next steps with concrete research directions and tool development, enhancing clarity and actionable insight. Overall, the Right candidate better balances coverage, accuracy, and clarity by integrating specific examples, updated data, and a strategic focus that improves user understanding and decision-making support.",
+      "raw": {
+        "winner": "right",
+        "summary_markdown": "Both candidates present a comprehensive framework integrating the Dollars-to-BS (DTB) Ratio with global digital nomad visa programs and cost-of-living data to aid career and relocation decisions. The Left candidate offers a detailed thematic breakdown with broad geographic coverage and a strong emphasis on holistic career evaluation and visa program factors. The Right candidate, however, provides a clearer, more structured narrative with explicit focus on South Africa as a highlighted relocation destination, a more detailed and updated visa country list, and a practical cost-of-living comparison. The Right candidate also presents next steps with concrete research directions and tool development, enhancing clarity and actionable insight. Overall, the Right candidate better balances coverage, accuracy, and clarity by integrating specific examples, updated data, and a strategic focus that improves user understanding and decision-making support.",
+        "criteria": [
+          {
+            "name": "Coverage",
+            "left": 8,
+            "right": 9,
+            "rationale": "Left covers a wide range of countries and thematic insights broadly, but Right includes a more updated and detailed visa country list, explicit cost-of-living comparisons, and a focused case on South Africa, slightly expanding coverage."
+          },
+          {
+            "name": "Accuracy",
+            "left": 8,
+            "right": 9,
+            "rationale": "Both candidates accurately describe the DTB Ratio and visa programs, but Right's inclusion of late 2025 data and nuanced visa conditions, plus explicit cost-of-living grounding, suggests a more precise and current synthesis."
+          },
+          {
+            "name": "Clarity",
+            "left": 7,
+            "right": 9,
+            "rationale": "Left's thematic bullet points are informative but somewhat dense and abstract. Right offers a clearer, more narrative-driven structure with well-defined concepts, practical examples, and actionable next steps, enhancing reader comprehension."
+          }
+        ]
+      },
+      "token_usage": {
+        "completion_tokens": 402,
+        "prompt_tokens": 1580,
+        "total_tokens": 1982,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0
+        }
+      }
+    }
+  ]
+}

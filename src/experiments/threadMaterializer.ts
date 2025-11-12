@@ -2,9 +2,9 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { BrowserConversation, ConversationMessage, ThreadSnapshot } from '../types.js';
 
-const OMITTED_SEGMENT = Symbol('omitted');
+const OMITTED_SEGMENT: unique symbol = Symbol('omitted');
 
-interface MaterializeOptions {
+export interface MaterializeOptions {
   snapshotPath: string;
   runId: string;
   outputDir?: string;
@@ -39,16 +39,14 @@ export async function materializeExperimentThreads(
     const conversation = conversations[index]!;
     const fileName = buildFileName(index, conversation);
     const filePath = path.join(outputDir, fileName);
-    const content = formatConversation(conversation, {
-      maxMessages:
-        options.maxMessagesPerThread && options.maxMessagesPerThread > 0
-          ? options.maxMessagesPerThread
-          : undefined,
-      maxCharsPerMessage:
-        options.maxCharsPerMessage && options.maxCharsPerMessage > 0
-          ? options.maxCharsPerMessage
-          : undefined,
-    });
+    const formatOptions: { maxMessages?: number; maxCharsPerMessage?: number } = {};
+    if (options.maxMessagesPerThread && options.maxMessagesPerThread > 0) {
+      formatOptions.maxMessages = options.maxMessagesPerThread;
+    }
+    if (options.maxCharsPerMessage && options.maxCharsPerMessage > 0) {
+      formatOptions.maxCharsPerMessage = options.maxCharsPerMessage;
+    }
+    const content = formatConversation(conversation, formatOptions);
     await fs.writeFile(filePath, content, 'utf-8');
     threadPaths.push(filePath);
   }
@@ -158,7 +156,7 @@ function buildSegments(
   const tailCount = maxMessages - headCount;
   const trimmedCount = messages.length - maxMessages;
 
-  const sequence = [
+  const sequence: Array<ConversationMessage | typeof OMITTED_SEGMENT> = [
     ...messages.slice(0, headCount),
     OMITTED_SEGMENT,
     ...messages.slice(messages.length - tailCount),

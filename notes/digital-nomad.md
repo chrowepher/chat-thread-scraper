@@ -20,6 +20,62 @@ _No explicit decisions were required._
 _No follow-up ideas were returned._
 
 ---
+
+## Branch: AI Conversation Filter System (2025-11-12T18:20:00Z)
+
+### Objective
+Stand up a reusable filter framework so ChatGPT can (1) respect pre-analysis guardrails the user sets, and (2) auto-suggest smart slices once it scans the conversation, enabling multi-perspective reads like "SRO housing in Johannesburg" without rewriting prompts each time.
+
+### Filter Matrix (Excel-style rows)
+| Column | Purpose |
+| --- | --- |
+| `Label` | Short human-friendly name surfaced in the UI. |
+| `Intent question` | Explicit question ChatGPT must answer when this row is active. |
+| `Scope` | What data the filter touches (threads, participants, tools, geography). |
+| `Signals to pull` | Evidence requirements (quotes, metrics, stakeholders, blockers). |
+| `Output lens` | Format or perspective (e.g., risk table, stakeholder POV, counter-argument). |
+| `Priority` | High/Med/Low plus execution slot (pre-analysis Flag Deck vs auto-suggest). |
+| `Status` | Draft → Suggested → Active → Archived, allowing promotion/demotion. |
+| `Evidence floor` | Minimum proof level (verbatim quote, inferred, external cite). |
+| `Perspective pairing` | Optional dual-view requirement (primary vs counter/buyer vs builder). |
+| `Insight quality` | 1–5 score recorded post-run to train the suggestion engine. |
+
+### Workflow
+1. **Ingest anchors** – run a lightweight scrape for participants, entities, topics, geos, commitments to seed suggestions without heavy reasoning.
+2. **Apply Flag Deck** – user picks rows before analysis; each row becomes a structured prompt clause (e.g., "Map funding constraints for SRO housing in Johannesburg; cite local policies; list open questions"). These behave like "filters before any analysis is done."
+3. **Baseline scan** – model performs a neutral pass honoring only Flag Deck constraints to avoid bias from future suggestions.
+4. **Auto-suggest deck** – anchors map to template families (topic, persona, timeline, sentiment, actionability). Engine returns 3–5 ranked suggestions with rationales so the user can one-click promote/dismiss.
+5. **Full analysis** – merge active Flag rows + promoted suggestions; execute deep reasoning and store per-row insight quality, captured evidence, and unresolved questions for future weighting.
+
+### Customization + Governance
+- **Template bundles** so recurring perspectives (e.g., Market Entry, Relocation Risk) preload several rows that can be tweaked per conversation.
+- **Conditional triggers** letting rows auto-activate when metadata matches (country=ZA, tool=SharePoint, persona=Investor).
+- **Perspective stacking** forcing A/B takes (e.g., regulator vs operator) when both cells are filled, ensuring multi-angle summaries.
+- **Evidence demands** via the `Evidence floor` column so high-stakes filters always return citations or metrics before prose.
+- **Feedback loop** that reprioritizes rows with higher insight scores and recommends merging redundant filters.
+
+### Example Filter Row
+| Field | Value |
+| --- | --- |
+| Label | SRO housing in Johannesburg |
+| Intent question | "What are the funding bottlenecks and policy levers for SRO builds in Joburg?" |
+| Scope | Threads mentioning South Africa, housing, municipal policy |
+| Signals to pull | Cost figures, municipal stakeholders, cited barriers, enabling policies |
+| Output lens | Risk vs opportunity table + list of unanswered questions |
+| Priority | High |
+| Status | Flag Deck (locked) |
+| Evidence floor | Quote + source |
+| Perspective pairing | City officials ↔ Private developers |
+
+### Next Build Tasks
+1. Serialize Flag/Suggest decks (CSV/JSON) so the agent can read/write filter rows.
+2. Ship the baseline anchor extractor + template matcher that powers auto-suggestions.
+3. Embed a lightweight UI (sheet or web view) to drag rows between decks and edit columns quickly.
+
+### Implementation (2025-11-12T19:20:00Z)
+- `notes/filter-decks/flagDeck.json` and `notes/filter-decks/suggestDeck.json` hold the canonical Flag/Suggest rows; `npx chat-thread-merger filters export-csv` emits a single workbook at `notes/filter-decks/filter-board.csv`.
+- `npx chat-thread-merger filters suggest --snapshot snapshots/digital-nomad.json --limit 5` runs the new anchor extractor + template matcher to auto-populate the Suggest deck (dry-run supported).
+- `npx chat-thread-merger filters ui --open` launches the Filter Deck Studio web view (drag rows between decks, edit cells in-place, save back through the CLI server).
 ## Chat Thread Merge (2025-11-10T17:52:26.057Z)
 
 ### Summary
@@ -90,6 +146,28 @@ _No follow-up ideas were returned._
 
 ### Summary
 {"merged_summary":{"overview":"This comprehensive plan synthesizes your career transition strategy, job application efforts, and relocation feasibility into a unified roadmap focused on maximizing income, minimizing friction, and leveraging geographic arbitrage by moving to Johannesburg, South Africa.","job_application_strategy":{"criteria":"Apply only to remote, part-time (~20–30 hrs/week), W-2 roles paying ≥ $90K/year equivalent, in Energy, Infrastructure, and Technology sectors.","roles_targeted":["Businessolver – Strategic Advisor","Insight Technology Solutions – Part-Time Program Manager (DHS/CWMD)","Evergreen Intelligence – Regional Policy Analyst","Akraya/Adobe – Senior Program Manager"],"resume_and_cover_letters":"Resumes and cover letters were truthfully upgraded and tailored per role, highlighting regulated banking and federal energy experience, PMO governance, and AI-assisted productivity skills without overstating AI ownership.","application_status":"Applications were prepared and submitted where possible; blockers encountered include verification steps requiring your input (e.g., ADP verification codes, professional references) and platform access issues (Greenhouse, ADP). Hand-off points were identified for you to complete sensitive steps.","recommendation":"Continue applying with agent assistance where possible; personally complete verification and reference inputs to finalize applications."},"career_model_recommendation":{"option_c_hybrid":{"description":"Maintain a stable W-2 role (estimated $150K–$200K) while launching a fractional consulting side practice ($50K–$100K+), focusing on short-term, outcome-based projects using your Turnaround PMO Playbook and outreach toolkits.","advantages":["Managed friction by selective side work","Low risk due to W-2 income safety net","Opportunity to test fractional consulting viability","Clear decision gates (e.g., go fully independent if 2 clients secured in 60 days)"],"next_steps":["Polish and package case studies and playbook templates","Book 3 paid discovery calls within the next month","Leverage outreach email templates and SOW kits","Use W-2 search toolkit for targeted job hunting"]}},"relocation_and_feasibility":{"johannesburg_digital_nomad":{"cost_arbitrage":"Johannesburg offers approximately 60% lower cost of living compared to U.S. cities, enabling upscale living for around $2,200–$2,500/month versus $3,100+ in the U.S., resulting in ~$900+ monthly savings before side income.","infrastructure":"Reliable high-speed internet (100 Mbps fiber) with generator-backed buildings mitigates power outage risks, critical for maintaining U.S. client engagements.","work_schedule":"Shift W-2 work hours to approximately 3–11pm SAST to overlap with U.S. time zones; reserve mornings for fractional consulting.","roi_and_risk":{"roi":"Break-even expected within 3 months combining cost savings and first paid discovery; tiered consulting income scenarios project $20K to $100K+ additional revenue annually.","risks":["Power/load shedding mitigated by backup power and mobile data","Safety managed via secure housing and transport","Time zone strain addressed by disciplined scheduling"]},"visa_and_local_considerations":"Operate under South Africa's Remote-Work Visa; fractional consulting primarily remote but local engagements possible if feasible.","integration":"Hybrid career model seamlessly integrates with Johannesburg feasibility, maximizing financial and lifestyle benefits."}},"audit_and_alignment":{"candidate_profile":"Validated as accurate reflecting regulated banking, federal energy, ITSM/ServiceNow, PMO governance, and audit-ready documentation expertise.","friction_profile":"High friction sources identified (e.g., fuzzy deliverables, multi-approver governance, creation work overload) and aligned with preference for single approver, clear DoD, and decision SLAs.","role_fit_adjustments":"Deprioritized roles with high friction or domain mismatch (e.g., AI Platform TPM, GRC Platform PM); reframed roles to better fit strengths and reduce friction.","scoring_framework":"Shifted emphasis to prioritize friction reduction over closeness alone, ensuring role fit balances pay, trajectory, and personal work style."},"next_steps_and_recommendations":["Complete job applications requiring personal input (verification codes, references).","Execute the Option C Hybrid Kit: finalize playbook, case studies, and outreach materials.","Begin booking and conducting paid discovery calls to validate fractional consulting demand.","Plan and prepare for relocation logistics to Johannesburg, ensuring infrastructure and safety measures are in place.","Monitor workload and client acquisition to decide on transitioning fully independent or maintaining W-2 base.","Periodically reassess role fit and friction to optimize career trajectory."],"follow_up_explorations":["Detailed scheduling plan balancing Johannesburg time zone with U.S. client needs.","Legal and tax implications of working remotely from South Africa on U.S. W-2 income and consulting earnings.","Backup and contingency plans for power/internet outages beyond current mitigations.","Expansion of fractional consulting offerings tailored to Johannesburg or broader African markets.","Refinement of AI credentialing and productivity documentation to enhance application competitiveness."]}}
+
+### Recombined Path
+
+
+### Branches
+- [Can Do - Mapping Your Dollars‑to‑BS Ratio](https://chatgpt.com/g/g-p-67b3753f36688191bc32e0b4bbe94025-can-do/c/69099f3c-0670-8328-a278-0c00b625cd87) - 0 messages
+- [Move to South Africa - Branch · Mapping Your Dollars‑to‑BS Ratio](https://chatgpt.com/g/g-p-67b3753f36688191bc32e0b4bbe94025-can-do/c/690b2bf0-fe64-832b-bb77-b3a0a523adbb) - 46 messages
+- [Move to South Africa - Branch · Mapping Your Dollars‑to‑BS Ratio](https://chatgpt.com/g/g-p-6910af3c1390819194227ad7bbb70937-move-to-south-africa/c/690b2bf0-fe64-832b-bb77-b3a0a523adbb) - 46 messages
+- [Move to South Africa - Branch · Branch · Mapping Your Dollars‑to‑BS Ratio](https://chatgpt.com/g/g-p-67b3753f36688191bc32e0b4bbe94025-can-do/c/690bf2b1-1270-8333-a654-2d7bbd0698b9) - 26 messages
+- [Move to South Africa - Branch · Branch · Mapping Your Dollars‑to‑BS Ratio](https://chatgpt.com/g/g-p-67b3753f36688191bc32e0b4bbe94025-can-do/c/690bf1a7-7ea0-832a-b117-80b29fbe7652) - 22 messages
+
+### Decisions
+_No explicit decisions were required._
+
+### Follow-up Ideas
+_No follow-up ideas were returned._
+
+---
+## Chat Thread Merge (2025-11-12T20:32:55.999Z)
+
+### Summary
+{"merged_summary":{"context":"Chris Rowe is pursuing a strategic career transition combining a stable W-2 role with fractional consulting projects, targeting remote, part-time roles in Energy, Infrastructure, and Technology sectors with a minimum $90K/year equivalent. Concurrently, he is exploring relocating to Johannesburg, South Africa, leveraging cost arbitrage and a digital nomad lifestyle to maximize ROI and career flexibility.","key_insights":[{"career_strategy":"Option C Hybrid Model","description":"Maintain a W-2 role paying $150K–$200K annually while launching a fractional consulting side practice generating $50K–$100K+ per year. This approach balances income stability with entrepreneurial growth, allowing testing of fractional consulting viability without full risk exposure.","components":["W-2 roles aligned with expertise (e.g., Chief of Staff to CTO/CIO, Value Engineering Partner, Infrastructure PMO Lead).","Fractional consulting engagements structured as 2-week paid discovery calls followed by selective 90-day turnaround projects.","Use of a Turnaround PMO Playbook, Decision-Ops Starter Kit, outreach toolkits, and packaged case studies to streamline fractional work."],"next_steps":["Polish and package case studies and playbooks.","Book 3 paid discovery calls within the next month.","Test fractional consulting at $150–$200/hr rates.","If 2 clients are secured within 60 days, consider transitioning to full independence."]},{"job_application_execution":"Targeted Applications to Roles Meeting Criteria","criteria":"Remote, part-time (~20–30 hrs/week), W-2 employment, minimum $90K/year equivalent, industries: Energy, Infrastructure, Technology.","roles_applied":["Businessolver – Strategic Advisor","Insight Technology Solutions – Part-Time Program Manager (DHS/CWMD)","Evergreen Intelligence – Regional Policy Analyst","Akraya/Adobe – Senior Program Manager"],"process":"Resumes and cover letters were truthfully upgraded and tailored per role, including bolstered AI productivity credentials without fabrications. Applications were submitted where possible; blockers encountered included verification steps requiring user input and high-impact domain submission restrictions.","recommendation":"Continue manual completion of verification steps and reference inputs where AI assistance is limited. Use agent-friendly application packets for VA or recruiter submission."},{"Johannesburg Digital Nomad Feasibility Integration":{"summary":"Johannesburg offers a compelling low-cost, English-speaking base with reliable internet and amenities suitable for remote work. Cost of living is approximately 60% lower than comparable U.S. cities, enabling significant USD arbitrage.","financials":{"monthly_costs":"$2,200–$2,500 in Johannesburg vs. $3,100+ in U.S. cities","savings":"Approximately $900+ per month before side income","ROI_break_even":"Cash break-even within 3 months combining cost savings and first paid discovery engagement"},"operational_notes":["W-2 role hours shifted to ~3–11pm SAST to overlap with U.S. workday.","Fractional consulting conducted in Johannesburg mornings.","Risks include power outages (mitigated by generator/UPS and mobile data), safety (secure housing, rideshare), and time zone strain.","Strict capacity management recommended to avoid burnout."],"recommendation":"Operate hybrid model remotely from Johannesburg, leveraging cost arbitrage and maintaining W-2 income while growing fractional consulting."}},{"candidate_profile_and_friction_audit":{"profile":"Mid-to-senior program leadership with regulated banking and federal energy experience, skilled in PMO governance, RAID, audit-ready documentation, and executive reporting.","friction_points":["Dislike for fuzzy deliverables and multi-approver governance.","Avoidance of roles requiring heavy creation work (dashboards, tools) versus thinking work (diagnosis, synthesis)."],"role_fit_adjustments":["Deprioritize roles with high friction despite domain fit.","Focus on outcome-based, delivery-oriented roles with clear decision SLAs and single approver governance.","Dropped or reframed roles that involve platform ownership or committee-heavy governance."]}}],"conflict_resolution":"Branches 2 and 3 on job applications are duplicates and consistent; the assistant’s inability to fully submit applications due to verification and policy constraints is acknowledged, with a handoff to the user recommended. Branch 4 and 5’s hybrid model and Johannesburg feasibility plans are integrated into a unified business case, confirming the hybrid approach as optimal. The audit in Branch 5 refines role prioritization based on friction, reinforcing the hybrid model and selective fractional consulting as the best path forward.","recommended_next_steps":["Complete manual steps in job applications requiring user input (verification codes, references).","Deploy the Option C Hybrid Kit immediately to start fractional consulting outreach and engagements.","Finalize and implement the Johannesburg remote work plan, including securing housing with power backup and internet redundancy.","Monitor workload to maintain capacity guardrails and avoid burnout.","Periodically reassess role fit and friction profile to refine job search and consulting focus.","Consider building a feedback loop to track fractional consulting client acquisition and W-2 role satisfaction to inform go/no-go decisions on full independence."],"follow_up_explorations":["Develop detailed contingency plans for power and internet outages in Johannesburg.","Explore visa and tax implications of extended remote work from South Africa.","Investigate local networking opportunities or partnerships to enhance fractional consulting presence.","Create a dashboard to track application statuses, client engagements, and financial metrics for the hybrid model.","Assess potential for expanding fractional consulting offerings beyond current industries."]}}
 
 ### Recombined Path
 

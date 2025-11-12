@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals1-M3",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-005-move-to-south-africa-branch-branch-mapping-your-do.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-006-move-to-south-africa-audit-findings-summary.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 2
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is considering a move to South Africa and evaluating job opportunities with a focus on balancing compensation and work friction. They have conducted a deep audit of their candidate profile and personal friction preferences to ensure alignment with their career goals and values.\",\"key_insights\":[{\"topic\":\"Dollars-to-BS Ratio Framework\",\"details\":\"A practical metric called the Dollars-to-BS (DTB) Ratio helps evaluate job roles by balancing total compensation against work friction. Compensation is adjusted by a 'joy factor' reflecting how energizing or conflicting the work is (range 0.5 to 1.2). Friction includes time lost to governance, politics, unclear criteria, and other energy drains. The formula is DTB Score = Adjusted Compensation / Friction Hours, where higher scores indicate better roles.\"},{\"topic\":\"Applying the DTB Ratio\",\"details\":\"Users can apply this metric per role, project, or client by listing annual compensation, assigning a joy factor, calculating adjusted compensation, and estimating weekly friction hours. This quantifies trade-offs between pay and workplace friction, aiding in spotting high-reward, low-friction opportunities especially when governance-heavy work is involved.\"},{\"topic\":\"Audit Findings on Candidate Profile\",\"details\":\"The audit validated the candidate profile as accurate and consistent with the user's resume and stated preferences. Key domains include banking and federal energy sectors, with expertise in RAID, PMO governance, audit documentation, and executive reporting. Tools used include ServiceNow (ITAM), SharePoint, Power Automate, and Excel dashboards. Strengths identified are ambiguity reduction, stakeholder facilitation, and risk surfacing.\"},{\"topic\":\"Audit Findings on Personal Friction Profile\",\"details\":\"The personal friction profile accurately reflects the user's preferences and friction sources, such as governance overhead and decision delays. Anti-friction traits like single approver processes, Department of Defense (DoD) standards, and decision Service Level Agreements (SLAs) align with negotiation goals. An enhancement suggested is explicitly listing friction sources for clearer assessment.\"}],\"recommendations\":[\"Use the Dollars-to-BS Ratio framework to quantitatively compare South Africa job offers or projects, incorporating both compensation and friction factors.\",\"Incorporate the audit-validated candidate and friction profiles to ensure role alignment with skills, values, and preferred work environment.\",\"Explicitly document friction sources in job descriptions or negotiations to better manage and reduce energy drains.\",\"Consider the joy factor carefully to reflect true engagement and alignment with personal values, as it significantly impacts the adjusted compensation metric.\"],\"next_steps\":[\"Develop a detailed worksheet or spreadsheet template based on the DTB Ratio to systematically evaluate multiple job offers or projects.\",\"Expand the audit to include potential South Africa-specific work culture and governance friction factors to refine the friction hours estimate.\",\"Explore negotiation strategies that leverage the friction profile to secure roles with reduced governance overhead and clearer decision-making processes.\",\"Assess cost of living and lifestyle factors in South Africa to complement the DTB Ratio analysis for a holistic relocation decision.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBryxG7ukDMHsKHpwlXoMHz72Dta",
+      "object": "chat.completion",
+      "created": 1762979798,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is considering a move to South Africa and evaluating job opportunities with a focus on balancing compensation and work friction. They have conducted a deep audit of their candidate profile and personal friction preferences to ensure alignment with their career goals and values.\",\n    \"key_insights\": [\n      {\n        \"topic\": \"Dollars-to-BS Ratio Framework\",\n        \"details\": \"A practical metric called the Dollars-to-BS (DTB) Ratio helps evaluate job roles by balancing total compensation against work friction. Compensation is adjusted by a 'joy factor' reflecting how energizing or conflicting the work is (range 0.5 to 1.2). Friction includes time lost to governance, politics, unclear criteria, and other energy drains. The formula is DTB Score = Adjusted Compensation / Friction Hours, where higher scores indicate better roles.\"\n      },\n      {\n        \"topic\": \"Applying the DTB Ratio\",\n        \"details\": \"Users can apply this metric per role, project, or client by listing annual compensation, assigning a joy factor, calculating adjusted compensation, and estimating weekly friction hours. This quantifies trade-offs between pay and workplace friction, aiding in spotting high-reward, low-friction opportunities especially when governance-heavy work is involved.\"\n      },\n      {\n        \"topic\": \"Audit Findings on Candidate Profile\",\n        \"details\": \"The audit validated the candidate profile as accurate and consistent with the user's resume and stated preferences. Key domains include banking and federal energy sectors, with expertise in RAID, PMO governance, audit documentation, and executive reporting. Tools used include ServiceNow (ITAM), SharePoint, Power Automate, and Excel dashboards. Strengths identified are ambiguity reduction, stakeholder facilitation, and risk surfacing.\"\n      },\n      {\n        \"topic\": \"Audit Findings on Personal Friction Profile\",\n        \"details\": \"The personal friction profile accurately reflects the user's preferences and friction sources, such as governance overhead and decision delays. Anti-friction traits like single approver processes, Department of Defense (DoD) standards, and decision Service Level Agreements (SLAs) align with negotiation goals. An enhancement suggested is explicitly listing friction sources for clearer assessment.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Use the Dollars-to-BS Ratio framework to quantitatively compare South Africa job offers or projects, incorporating both compensation and friction factors.\",\n      \"Incorporate the audit-validated candidate and friction profiles to ensure role alignment with skills, values, and preferred work environment.\",\n      \"Explicitly document friction sources in job descriptions or negotiations to better manage and reduce energy drains.\",\n      \"Consider the joy factor carefully to reflect true engagement and alignment with personal values, as it significantly impacts the adjusted compensation metric.\"\n    ],\n    \"next_steps\": [\n      \"Develop a detailed worksheet or spreadsheet template based on the DTB Ratio to systematically evaluate multiple job offers or projects.\",\n      \"Expand the audit to include potential South Africa-specific work culture and governance friction factors to refine the friction hours estimate.\",\n      \"Explore negotiation strategies that leverage the friction profile to secure roles with reduced governance overhead and clearer decision-making processes.\",\n      \"Assess cost of living and lifestyle factors in South Africa to complement the DTB Ratio analysis for a holistic relocation decision.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 922,
+        "completion_tokens": 671,
+        "total_tokens": 1593,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

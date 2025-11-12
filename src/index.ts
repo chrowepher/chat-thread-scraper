@@ -19,9 +19,13 @@ import { CoverageAnalyzer } from './experiments/coverageAnalyzer.js';
 import { MergeExecutor } from './experiments/mergeExecutor.js';
 import { PythonCritiqueRunner } from './experiments/critiqueRunner.js';
 import { FileStatsCritiqueRunner } from './experiments/critiqueRunner.js';
-import { materializeExperimentThreads } from './experiments/threadMaterializer.js';
+import {
+  materializeExperimentThreads,
+  type MaterializeOptions,
+} from './experiments/threadMaterializer.js';
 import { runMergeWorkflow, type MergeCliOptions } from './mergeSnapshot.js';
 import type { ThreadSnapshot } from './types.js';
+import { createFilterCommand } from './filterCommand.js';
 
 interface ScrapeCliOptions {
   host: string;
@@ -144,6 +148,7 @@ program.addCommand(createAutopilotCommand());
 program.addCommand(createGuideCommand());
 program.addCommand(createExperimentCommand());
 program.addCommand(createRunCommand());
+program.addCommand(createFilterCommand());
 
 program
   .parseAsync(process.argv)
@@ -690,15 +695,20 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     if (options.threads?.filter(Boolean).length) {
       experimentThreads = (options.threads ?? []).filter(Boolean);
     } else {
-      const materialized = await materializeExperimentThreads({
+      const materializeOptions: MaterializeOptions = {
         snapshotPath: snapshotTarget,
         runId,
-        outputDir: options.experimentThreadsDir
-          ? path.resolve(options.experimentThreadsDir)
-          : undefined,
-        maxMessagesPerThread: options.experimentMaxMessages,
-        maxCharsPerMessage: options.experimentMaxChars,
-      });
+      };
+      if (options.experimentThreadsDir) {
+        materializeOptions.outputDir = path.resolve(options.experimentThreadsDir);
+      }
+      if (typeof options.experimentMaxMessages === 'number') {
+        materializeOptions.maxMessagesPerThread = options.experimentMaxMessages;
+      }
+      if (typeof options.experimentMaxChars === 'number') {
+        materializeOptions.maxCharsPerMessage = options.experimentMaxChars;
+      }
+      const materialized = await materializeExperimentThreads(materializeOptions);
       experimentThreads = materialized.threadPaths;
       logStep(
         `Prepared ${materialized.conversationCount} experiment thread${materialized.conversationCount === 1 ? '' : 's'} at ${path.relative(process.cwd(), materialized.outputDir)}.`,

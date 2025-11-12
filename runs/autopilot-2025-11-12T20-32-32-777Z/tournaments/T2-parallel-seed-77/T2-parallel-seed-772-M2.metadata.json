@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-772-M2",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T2-parallel-seed-77\\T2-parallel-seed-771-M3.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\tournaments\\T2-parallel-seed-77\\T2-parallel-seed-771-M4.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 2,
+    "matchIndex": 1
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Strategic Move to South Africa: Optimizing Role Selection with Dollars-to-BS Ratio and Audit Insights\",\"overview\":\"This comprehensive synthesis integrates detailed audit findings of the user's professional and personal friction profiles with a practical, data-driven framework—the Dollars-to-BS (DTB) Ratio—to evaluate and prioritize career opportunities in South Africa. The narrative guides the user through validating their experience and preferences, quantifying role attractiveness, and applying a structured approach to maximize compensation and personal satisfaction while minimizing bureaucratic friction.\",\"highlights\":[{\"topic\":\"Audit of Candidate Profile and Personal Friction\",\"details\":\"A thorough audit confirmed that the user's professional profile accurately reflects extensive experience in banking and federal energy sectors, with key strengths in ambiguity reduction, stakeholder facilitation, and risk surfacing. The audit validated the use of tools and governance methods such as RAID logs, PMO governance, ServiceNow, SharePoint, and Excel dashboards. Additionally, the personal friction profile aligns closely with the user's preferences, identifying high-friction sources and anti-friction traits that inform negotiation strategies like single approver models and decision SLAs.\"},{\"topic\":\"Dollars-to-BS (DTB) Ratio Framework\",\"details\":\"The DTB Ratio is a robust, actionable metric designed to balance total compensation against the frictional costs (time and energy lost to governance, bureaucracy, and other drains). It is calculated as: DTB Score = Adjusted Compensation / Friction Hours, where Adjusted Compensation = Annual Compensation × Joy Factor (ranging from 0.5 to 1.2). This framework enables prioritization of roles, projects, or clients that maximize financial reward and personal joy while minimizing bureaucratic overhead.\"},{\"topic\":\"Practical Application and Next Steps\",\"details\":\"Users are encouraged to build a detailed worksheet capturing each opportunity's compensation, joy factor, and friction hours. This data-driven approach facilitates objective comparison and prioritization of career moves. The audit insights support refining friction estimates and negotiation tactics, while the DTB framework guides decision-making toward roles that optimize both financial and personal satisfaction. This combined approach is especially valuable when considering a move to South Africa, ensuring alignment with the user's professional strengths and personal preferences.\"}],\"recommendations_for_follow_up\":[\"Develop a customizable DTB Ratio calculator tool to streamline evaluation of multiple opportunities.\",\"Conduct scenario analyses applying the DTB framework to specific South African roles or projects to validate assumptions and refine joy and friction estimates.\",\"Explore negotiation strategies informed by the friction profile audit to reduce governance overhead in potential roles.\",\"Investigate cultural and regulatory factors in South Africa that may impact friction levels and compensation structures.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBvvPZ0OVFQWJ6oDxRwkTPsqslUF",
+      "object": "chat.completion",
+      "created": 1762980043,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Strategic Move to South Africa: Optimizing Role Selection with Dollars-to-BS Ratio and Audit Insights\",\n    \"overview\": \"This comprehensive synthesis integrates detailed audit findings of the user's professional and personal friction profiles with a practical, data-driven framework—the Dollars-to-BS (DTB) Ratio—to evaluate and prioritize career opportunities in South Africa. The narrative guides the user through validating their experience and preferences, quantifying role attractiveness, and applying a structured approach to maximize compensation and personal satisfaction while minimizing bureaucratic friction.\",\n    \"highlights\": [\n      {\n        \"topic\": \"Audit of Candidate Profile and Personal Friction\",\n        \"details\": \"A thorough audit confirmed that the user's professional profile accurately reflects extensive experience in banking and federal energy sectors, with key strengths in ambiguity reduction, stakeholder facilitation, and risk surfacing. The audit validated the use of tools and governance methods such as RAID logs, PMO governance, ServiceNow, SharePoint, and Excel dashboards. Additionally, the personal friction profile aligns closely with the user's preferences, identifying high-friction sources and anti-friction traits that inform negotiation strategies like single approver models and decision SLAs.\"\n      },\n      {\n        \"topic\": \"Dollars-to-BS (DTB) Ratio Framework\",\n        \"details\": \"The DTB Ratio is a robust, actionable metric designed to balance total compensation against the frictional costs (time and energy lost to governance, bureaucracy, and other drains). It is calculated as: DTB Score = Adjusted Compensation / Friction Hours, where Adjusted Compensation = Annual Compensation × Joy Factor (ranging from 0.5 to 1.2). This framework enables prioritization of roles, projects, or clients that maximize financial reward and personal joy while minimizing bureaucratic overhead.\"\n      },\n      {\n        \"topic\": \"Practical Application and Next Steps\",\n        \"details\": \"Users are encouraged to build a detailed worksheet capturing each opportunity's compensation, joy factor, and friction hours. This data-driven approach facilitates objective comparison and prioritization of career moves. The audit insights support refining friction estimates and negotiation tactics, while the DTB framework guides decision-making toward roles that optimize both financial and personal satisfaction. This combined approach is especially valuable when considering a move to South Africa, ensuring alignment with the user's professional strengths and personal preferences.\"\n      }\n    ],\n    \"recommendations_for_follow_up\": [\n      \"Develop a customizable DTB Ratio calculator tool to streamline evaluation of multiple opportunities.\",\n      \"Conduct scenario analyses applying the DTB framework to specific South African roles or projects to validate assumptions and refine joy and friction estimates.\",\n      \"Explore negotiation strategies informed by the friction profile audit to reduce governance overhead in potential roles.\",\n      \"Investigate cultural and regulatory factors in South Africa that may impact friction levels and compensation structures.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 727,
+        "completion_tokens": 582,
+        "total_tokens": 1309,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

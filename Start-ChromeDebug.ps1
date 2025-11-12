@@ -27,7 +27,7 @@ param(
     )
 )
 
-if (-not $SkipChrome) {
+if (-not $SkipChrome -and -not $SkipScraper) {
     $chromeCandidates = @(
         "$env:ProgramFiles\Google\Chrome\Application\chrome.exe",
         "$env:ProgramFiles(x86)\Google\Chrome\Application\chrome.exe"
@@ -76,7 +76,13 @@ if (-not $SkipChrome) {
     Write-Host ("Browser: {0}" -f $version.Browser)
     Write-Host ("WebSocket: {0}" -f $version.webSocketDebuggerUrl)
 } else {
-    Write-Host "Skipping Chrome launch (per -SkipChrome)."
+    if ($SkipChrome) {
+        Write-Host "Skipping Chrome launch (per -SkipChrome)."
+    } elseif ($SkipScraper) {
+        Write-Host "Skipping Chrome launch (per -SkipScraper)."
+    } else {
+        Write-Host "Skipping Chrome launch."
+    }
 }
 
 function Resolve-NpmExecutable {
@@ -88,6 +94,38 @@ function Resolve-NpmExecutable {
         throw 'npm was not found in PATH. Install Node.js (which provides npm) or specify the full path manually.'
     }
     return $npmExecutable
+}
+
+function Invoke-ProcessWithProgress {
+    param(
+        [Parameter(Mandatory = $true)][string]$FilePath,
+        [string[]]$ArgumentList = @(),
+        [string]$Activity = 'Running command',
+        [string]$Status = 'Working',
+        [int]$UpdateIntervalMilliseconds = 300
+    )
+
+    $process = Start-Process -FilePath $FilePath -ArgumentList $ArgumentList -NoNewWindow -PassThru
+    if (-not $process) {
+        throw "Failed to start process $FilePath."
+    }
+
+    $spinner = @('|', '/', '-', '\')
+    $spinIndex = 0
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+    while (-not $process.HasExited) {
+        $elapsed = $stopwatch.Elapsed.ToString('hh\:mm\:ss')
+        $statusText = "$Status · elapsed $elapsed ${spinner[$spinIndex]}"
+        Write-Progress -Activity $Activity -Status $statusText -PercentComplete -1
+        $spinIndex = ($spinIndex + 1) % $spinner.Length
+        Start-Sleep -Milliseconds $UpdateIntervalMilliseconds
+    }
+
+    $stopwatch.Stop()
+    $process.WaitForExit()
+    Write-Progress -Activity $Activity -Completed -Status ("Completed in {0}" -f $stopwatch.Elapsed.ToString('hh\:mm\:ss'))
+    return $process.ExitCode
 }
 
 if (-not $LegacyWorkflow) {
@@ -111,8 +149,7 @@ if (-not $LegacyWorkflow) {
     }
 
     Write-Host "Launching chat-thread-merger autopilot via npm $($npmArguments -join ' ')..."
-    & $npmExecutable.Path @npmArguments
-    $npmExit = $LASTEXITCODE
+    $npmExit = Invoke-ProcessWithProgress -FilePath $npmExecutable.Path -ArgumentList $npmArguments -Activity 'chat-thread-merger autopilot' -Status 'Autopilot in progress'
     if ($npmExit -ne 0) {
         throw "npm start autopilot exited with code $npmExit."
     }
@@ -140,8 +177,7 @@ if (-not $SkipScraper) {
     }
 
     Write-Host "Launching chat-thread-scraper via npm $($npmArguments -join ' ')..."
-    & $legacyNpmExecutable.Path @npmArguments
-    $npmExit = $LASTEXITCODE
+    $npmExit = Invoke-ProcessWithProgress -FilePath $legacyNpmExecutable.Path -ArgumentList $npmArguments -Activity 'chat-thread-scraper' -Status 'Scraping threads'
     if ($npmExit -ne 0) {
         throw "npm start exited with code $npmExit."
     }
@@ -155,8 +191,7 @@ if ($RunMerge) {
     }
 
     Write-Host "Launching chat-thread-merger via npm $($mergeArguments -join ' ')..."
-    & $legacyNpmExecutable.Path @mergeArguments
-    $mergeExit = $LASTEXITCODE
+    $mergeExit = Invoke-ProcessWithProgress -FilePath $legacyNpmExecutable.Path -ArgumentList $mergeArguments -Activity 'chat-thread-merger merge' -Status 'Merging snapshot'
     if ($mergeExit -ne 0) {
         throw "npm run merge exited with code $mergeExit."
     }

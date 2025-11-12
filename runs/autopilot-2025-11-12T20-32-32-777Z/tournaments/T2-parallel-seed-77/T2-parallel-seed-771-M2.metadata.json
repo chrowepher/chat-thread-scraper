@@ -1,0 +1,54 @@
+{
+  "label": "T2-parallel-seed-771-M2",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-003-move-to-south-africa-branch-mapping-your-dollars-t.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-004-move-to-south-africa-branch-branch-mapping-your-do.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 1
+  },
+  "mergeResult": {
+    "summary": "{\"merged_narrative\":{\"title\":\"Designing Your Personal Dollars-to-BS Ratio for Evaluating Roles and Projects\",\"summary\":\"This synthesis merges two branches focused on creating a practical metric—the Dollars-to-BS (DTB) Ratio—to help you identify high-reward, low-friction roles or projects, especially when considering governance-heavy work or potential relocation decisions such as moving to South Africa.\",\"key_insights\":[{\"concept\":\"Dollars-to-BS Ratio (DTB Score)\",\"description\":\"A metric designed to quantify the trade-off between compensation and the friction or 'BS' involved in a role or project. It helps prioritize opportunities that maximize reward while minimizing energy-draining governance and politics.\"},{\"components\":{\"Compensation ($)\":\"Total compensation you actually value, including base salary, bonuses, and benefits weighted by personal importance.\",\"BS (Friction)\":\"The energy drain from fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, and other governance overhead.\"}},{\"formula\":\"DTB Score = Adjusted Compensation / Friction Hours\",\"details\":{\"Adjusted Compensation\":\"Annual compensation multiplied by a joy factor (0.5 to 1.2) reflecting how energizing or draining the work is. For example, 1.2 if the work energizes you, 0.5 if it conflicts with your values.\",\"Friction Hours\":\"Estimated weekly hours lost to governance grind multiplied by 52 to annualize.\"},\"interpretation\":\"A higher DTB score indicates a better balance of compensation to friction, signaling a more attractive role or project.\"},{\"practical_application\":\"Use the DTB Ratio to compare multiple roles, projects, or clients by filling out a worksheet with compensation, joy factor, and friction hours. This enables data-driven decisions about where to invest your time and energy.\"},{\"flexibility\":\"The metric can be applied at different granularities—per job, per project, or per client—allowing nuanced evaluation depending on your context.\"}],\"recommendations\":[\"Create a simple spreadsheet or note template to calculate and compare DTB scores for your current and prospective roles.\",\"Be honest and reflective when assigning the joy factor and estimating friction hours to ensure meaningful results.\",\"Use the DTB Ratio as a guide rather than an absolute rule; consider qualitative factors alongside the metric.\",\"Periodically revisit and update your DTB calculations as your values, job conditions, or compensation change.\"],\"next_steps_for_exploration\":[\"Develop a more detailed friction taxonomy to better capture different types of governance overhead and their impact.\",\"Explore integrating qualitative feedback or peer reviews to refine joy factor assessments.\",\"Investigate how the DTB Ratio correlates with long-term job satisfaction and career progression.\",\"Consider adapting the metric for team-level or organizational decision-making.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBukpZ51nde4EXQwLsJpUT3ymQeF",
+      "object": "chat.completion",
+      "created": 1762979970,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_narrative\": {\n    \"title\": \"Designing Your Personal Dollars-to-BS Ratio for Evaluating Roles and Projects\",\n    \"summary\": \"This synthesis merges two branches focused on creating a practical metric—the Dollars-to-BS (DTB) Ratio—to help you identify high-reward, low-friction roles or projects, especially when considering governance-heavy work or potential relocation decisions such as moving to South Africa.\",\n    \"key_insights\": [\n      {\n        \"concept\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"description\": \"A metric designed to quantify the trade-off between compensation and the friction or 'BS' involved in a role or project. It helps prioritize opportunities that maximize reward while minimizing energy-draining governance and politics.\"\n      },\n      {\n        \"components\": {\n          \"Compensation ($)\": \"Total compensation you actually value, including base salary, bonuses, and benefits weighted by personal importance.\",\n          \"BS (Friction)\": \"The energy drain from fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, and other governance overhead.\"\n        }\n      },\n      {\n        \"formula\": \"DTB Score = Adjusted Compensation / Friction Hours\",\n        \"details\": {\n          \"Adjusted Compensation\": \"Annual compensation multiplied by a joy factor (0.5 to 1.2) reflecting how energizing or draining the work is. For example, 1.2 if the work energizes you, 0.5 if it conflicts with your values.\",\n          \"Friction Hours\": \"Estimated weekly hours lost to governance grind multiplied by 52 to annualize.\"\n        },\n        \"interpretation\": \"A higher DTB score indicates a better balance of compensation to friction, signaling a more attractive role or project.\"\n      },\n      {\n        \"practical_application\": \"Use the DTB Ratio to compare multiple roles, projects, or clients by filling out a worksheet with compensation, joy factor, and friction hours. This enables data-driven decisions about where to invest your time and energy.\"\n      },\n      {\n        \"flexibility\": \"The metric can be applied at different granularities—per job, per project, or per client—allowing nuanced evaluation depending on your context.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Create a simple spreadsheet or note template to calculate and compare DTB scores for your current and prospective roles.\",\n      \"Be honest and reflective when assigning the joy factor and estimating friction hours to ensure meaningful results.\",\n      \"Use the DTB Ratio as a guide rather than an absolute rule; consider qualitative factors alongside the metric.\",\n      \"Periodically revisit and update your DTB calculations as your values, job conditions, or compensation change.\"\n    ],\n    \"next_steps_for_exploration\": [\n      \"Develop a more detailed friction taxonomy to better capture different types of governance overhead and their impact.\",\n      \"Explore integrating qualitative feedback or peer reviews to refine joy factor assessments.\",\n      \"Investigate how the DTB Ratio correlates with long-term job satisfaction and career progression.\",\n      \"Consider adapting the metric for team-level or organizational decision-making.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 979,
+        "completion_tokens": 640,
+        "total_tokens": 1619,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

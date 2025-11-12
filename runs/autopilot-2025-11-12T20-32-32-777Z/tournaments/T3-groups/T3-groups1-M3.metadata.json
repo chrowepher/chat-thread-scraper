@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups1-M3",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-005-move-to-south-africa-branch-branch-mapping-your-do.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-006-move-to-south-africa-audit-findings-summary.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 1,
+    "matchIndex": 2
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is considering a move to South Africa and evaluating potential job roles or projects using a personalized metric to balance compensation against work-related friction. An audit was conducted on the candidate profile and friction factors to validate data accuracy and alignment with user preferences.\",\"key_insights\":[{\"topic\":\"Dollars-to-BS Ratio (DTB Score)\",\"details\":\"A practical framework to evaluate roles/projects by comparing adjusted compensation against friction (energy drain from governance, politics, unclear criteria). Adjusted compensation is annual comp multiplied by a joy factor (0.5 to 1.2) reflecting how energizing or conflicting the work is. Friction hours represent weekly time lost to governance multiplied by 52. The DTB Score = Adjusted Comp / Friction Hours, where a higher score indicates a better role/project.\"},{\"topic\":\"Personal Friction Profile Validation\",\"details\":\"The audit confirmed that the friction profile accurately reflects the user's stated preferences and pain points, such as governance-heavy work, unclear acceptance criteria, and political friction. Anti-friction traits like single approver processes, DoD alignment, and decision SLAs were correctly mapped. An enhancement suggested was to explicitly add friction sources for more granular tracking.\"},{\"topic\":\"Candidate Profile Validation\",\"details\":\"The candidate profile extracted from the resume was validated as accurate, capturing domains (Banking, Federal energy), methods (RAID, PMO governance), tools (ServiceNow, SharePoint, Power Automate), and strengths (ambiguity reduction, stakeholder facilitation). No inconsistencies were found.\"},{\"topic\":\"Practical Application\",\"details\":\"The user can apply the DTB Score worksheet to compare multiple job options or projects, factoring in compensation, joy factor, and friction hours. This enables spotting high-reward, low-friction opportunities, especially important when considering governance-heavy roles or relocation.\"}],\"resolved_conflicts\":\"No conflicting ideas were present between the branches. The audit findings support and validate the DTB Ratio framework and the candidate's self-assessment, reinforcing the approach's reliability.\",\"next_steps\":[\"Enhance the friction profile by explicitly listing all friction sources to improve granularity in the DTB calculation.\",\"Apply the DTB Score worksheet to specific South Africa job offers or projects to quantitatively compare options.\",\"Consider qualitative factors such as cultural fit and local market conditions in South Africa alongside the DTB Score.\",\"Explore negotiation strategies to reduce friction elements in preferred roles, leveraging the friction profile insights.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBolOcmBSy3bElRvFKy4ybTCHN0H",
+      "object": "chat.completion",
+      "created": 1762979599,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is considering a move to South Africa and evaluating potential job roles or projects using a personalized metric to balance compensation against work-related friction. An audit was conducted on the candidate profile and friction factors to validate data accuracy and alignment with user preferences.\",\n    \"key_insights\": [\n      {\n        \"topic\": \"Dollars-to-BS Ratio (DTB Score)\",\n        \"details\": \"A practical framework to evaluate roles/projects by comparing adjusted compensation against friction (energy drain from governance, politics, unclear criteria). Adjusted compensation is annual comp multiplied by a joy factor (0.5 to 1.2) reflecting how energizing or conflicting the work is. Friction hours represent weekly time lost to governance multiplied by 52. The DTB Score = Adjusted Comp / Friction Hours, where a higher score indicates a better role/project.\"\n      },\n      {\n        \"topic\": \"Personal Friction Profile Validation\",\n        \"details\": \"The audit confirmed that the friction profile accurately reflects the user's stated preferences and pain points, such as governance-heavy work, unclear acceptance criteria, and political friction. Anti-friction traits like single approver processes, DoD alignment, and decision SLAs were correctly mapped. An enhancement suggested was to explicitly add friction sources for more granular tracking.\"\n      },\n      {\n        \"topic\": \"Candidate Profile Validation\",\n        \"details\": \"The candidate profile extracted from the resume was validated as accurate, capturing domains (Banking, Federal energy), methods (RAID, PMO governance), tools (ServiceNow, SharePoint, Power Automate), and strengths (ambiguity reduction, stakeholder facilitation). No inconsistencies were found.\"\n      },\n      {\n        \"topic\": \"Practical Application\",\n        \"details\": \"The user can apply the DTB Score worksheet to compare multiple job options or projects, factoring in compensation, joy factor, and friction hours. This enables spotting high-reward, low-friction opportunities, especially important when considering governance-heavy roles or relocation.\"\n      }\n    ],\n    \"resolved_conflicts\": \"No conflicting ideas were present between the branches. The audit findings support and validate the DTB Ratio framework and the candidate's self-assessment, reinforcing the approach's reliability.\",\n    \"next_steps\": [\n      \"Enhance the friction profile by explicitly listing all friction sources to improve granularity in the DTB calculation.\",\n      \"Apply the DTB Score worksheet to specific South Africa job offers or projects to quantitatively compare options.\",\n      \"Consider qualitative factors such as cultural fit and local market conditions in South Africa alongside the DTB Score.\",\n      \"Explore negotiation strategies to reduce friction elements in preferred roles, leveraging the friction profile insights.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 922,
+        "completion_tokens": 557,
+        "total_tokens": 1479,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

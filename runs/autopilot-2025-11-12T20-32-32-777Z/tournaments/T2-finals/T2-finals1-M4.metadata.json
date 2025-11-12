@@ -1,0 +1,54 @@
+{
+  "label": "T2-finals1-M4",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-007-move-to-south-africa-audit-findings-summary.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-008-move-to-south-africa-branch-branch-mapping-your-do.md"
+  ],
+  "metadata": {
+    "branchCount": "T2",
+    "route": "T2",
+    "round": 1,
+    "matchIndex": 3
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"context\":\"The user is exploring a potential move to South Africa and has conducted a detailed audit of their professional profile and preferences, alongside a practical framework to evaluate job opportunities based on compensation and friction.\",\"key_insights\":[{\"audit_findings\":{\"candidate_profile\":{\"validation\":\"Accurate\",\"domains\":[\"Banking (BoA, MRA)\",\"Federal energy (BPA, FISMA)\"],\"methods\":[\"RAID\",\"PMO governance\",\"audit documentation\",\"executive reporting\"],\"tools\":[\"ServiceNow (ITAM only)\",\"SharePoint\",\"Power Automate\",\"Excel dashboards\"],\"strengths\":[\"Ambiguity reduction\",\"Stakeholder facilitation\",\"Risk surfacing\"],\"notes\":\"No inconsistencies detected.\"},\"personal_friction_profile\":{\"validation\":\"Accurate\",\"high_friction_sources\":\"Match ChatGPT conversation history\",\"anti_friction_traits\":\"Align with negotiation asks (single approver, DoD, decision SLAs)\",\"recommendation\":\"Add explicit friction factors for better clarity.\"}}},{\"dollars_to_bs_ratio_framework\":{\"purpose\":\"To identify high-reward, low-friction roles, especially in governance-heavy environments.\",\"components\":{\"Comp\":\"Total compensation that matters (base + bonus + valued benefits).\",\"BS\":\"Energy drain from fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, etc.\"},\"metric\":\"DTB Score = Adjusted Comp / Friction Hours\",\"details\":{\"Adjusted Comp\":\"Annual comp × Joy factor (0.5–1.2, where 1.2 means energizing work, 0.5 means conflicting with values)\",\"Friction Hours\":\"Weekly time lost to governance grind × 52\",\"Interpretation\":\"Higher DTB score indicates better role/project fit.\"},\"application\":\"Can be used per role, project, or client to prioritize opportunities.\"}}],\"synthesis\":\"The audit confirms the candidate's strong fit in banking and federal energy sectors with validated skills and tools, and a clear understanding of personal friction points that impact job satisfaction. The Dollars-to-BS Ratio framework complements this by providing a quantitative method to evaluate potential roles or projects based on compensation adjusted for personal joy and the friction experienced. Together, these insights enable a strategic approach to selecting roles in South Africa or elsewhere that maximize reward while minimizing energy-draining governance or political overhead.\",\"recommendations\":[\"Incorporate explicit friction factors into the personal friction profile for enhanced decision-making clarity.\",\"Use the Dollars-to-BS Ratio worksheet to evaluate specific South Africa job offers or projects, adjusting for local market conditions and personal preferences.\",\"Consider the candidate's strengths in ambiguity reduction and stakeholder facilitation as key differentiators when negotiating roles or responsibilities.\",\"Explore governance-heavy roles with caution, applying the DTB metric to ensure they do not disproportionately increase friction hours.\",\"Plan follow-up sessions to map specific South Africa job opportunities against the DTB framework and friction profile.\"]},\"next_steps\":{\"follow_up_explorations\":[\"Detailed mapping of South Africa job market roles using the Dollars-to-BS Ratio to identify best-fit opportunities.\",\"Refinement of the personal friction profile with explicit friction factors and scenarios encountered in South Africa work environments.\",\"Negotiation strategy development leveraging strengths and friction insights to secure favorable decision-making processes (e.g., single approver, clear SLAs).\",\"Assessment of cultural and operational differences in South Africa that may affect friction and joy factors in roles.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBs7hqIxbTfswjW1k9IIB5OtEZ5m",
+      "object": "chat.completion",
+      "created": 1762979807,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"context\": \"The user is exploring a potential move to South Africa and has conducted a detailed audit of their professional profile and preferences, alongside a practical framework to evaluate job opportunities based on compensation and friction.\",\n    \"key_insights\": [\n      {\n        \"audit_findings\": {\n          \"candidate_profile\": {\n            \"validation\": \"Accurate\",\n            \"domains\": [\"Banking (BoA, MRA)\", \"Federal energy (BPA, FISMA)\"],\n            \"methods\": [\"RAID\", \"PMO governance\", \"audit documentation\", \"executive reporting\"],\n            \"tools\": [\"ServiceNow (ITAM only)\", \"SharePoint\", \"Power Automate\", \"Excel dashboards\"],\n            \"strengths\": [\"Ambiguity reduction\", \"Stakeholder facilitation\", \"Risk surfacing\"],\n            \"notes\": \"No inconsistencies detected.\"\n          },\n          \"personal_friction_profile\": {\n            \"validation\": \"Accurate\",\n            \"high_friction_sources\": \"Match ChatGPT conversation history\",\n            \"anti_friction_traits\": \"Align with negotiation asks (single approver, DoD, decision SLAs)\",\n            \"recommendation\": \"Add explicit friction factors for better clarity.\"\n          }\n        }\n      },\n      {\n        \"dollars_to_bs_ratio_framework\": {\n          \"purpose\": \"To identify high-reward, low-friction roles, especially in governance-heavy environments.\",\n          \"components\": {\n            \"Comp\": \"Total compensation that matters (base + bonus + valued benefits).\",\n            \"BS\": \"Energy drain from fuzziness, politics, low agency, endless meetings, unclear acceptance criteria, etc.\"\n          },\n          \"metric\": \"DTB Score = Adjusted Comp / Friction Hours\",\n          \"details\": {\n            \"Adjusted Comp\": \"Annual comp × Joy factor (0.5–1.2, where 1.2 means energizing work, 0.5 means conflicting with values)\",\n            \"Friction Hours\": \"Weekly time lost to governance grind × 52\",\n            \"Interpretation\": \"Higher DTB score indicates better role/project fit.\"\n          },\n          \"application\": \"Can be used per role, project, or client to prioritize opportunities.\"\n        }\n      }\n    ],\n    \"synthesis\": \"The audit confirms the candidate's strong fit in banking and federal energy sectors with validated skills and tools, and a clear understanding of personal friction points that impact job satisfaction. The Dollars-to-BS Ratio framework complements this by providing a quantitative method to evaluate potential roles or projects based on compensation adjusted for personal joy and the friction experienced. Together, these insights enable a strategic approach to selecting roles in South Africa or elsewhere that maximize reward while minimizing energy-draining governance or political overhead.\",\n    \"recommendations\": [\n      \"Incorporate explicit friction factors into the personal friction profile for enhanced decision-making clarity.\",\n      \"Use the Dollars-to-BS Ratio worksheet to evaluate specific South Africa job offers or projects, adjusting for local market conditions and personal preferences.\",\n      \"Consider the candidate's strengths in ambiguity reduction and stakeholder facilitation as key differentiators when negotiating roles or responsibilities.\",\n      \"Explore governance-heavy roles with caution, applying the DTB metric to ensure they do not disproportionately increase friction hours.\",\n      \"Plan follow-up sessions to map specific South Africa job opportunities against the DTB framework and friction profile.\"\n    ]\n  },\n  \"next_steps\": {\n    \"follow_up_explorations\": [\n      \"Detailed mapping of South Africa job market roles using the Dollars-to-BS Ratio to identify best-fit opportunities.\",\n      \"Refinement of the personal friction profile with explicit friction factors and scenarios encountered in South Africa work environments.\",\n      \"Negotiation strategy development leveraging strengths and friction insights to secure favorable decision-making processes (e.g., single approver, clear SLAs).\",\n      \"Assessment of cultural and operational differences in South Africa that may affect friction and joy factors in roles.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 930,
+        "completion_tokens": 810,
+        "total_tokens": 1740,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}

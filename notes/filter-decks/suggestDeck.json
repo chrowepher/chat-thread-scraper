@@ -1,0 +1,67 @@
+{
+  "kind": "suggest",
+  "version": 1,
+  "rows": [
+    {
+      "id": "00871269-296b-4534-8fa8-23fefd3b1b53",
+      "label": "South Africa opportunity scan",
+      "intentQuestion": "What opportunities, blockers, and decision owners surface when we isolate South Africa?",
+      "scope": "Threads referencing South Africa",
+      "signalsToPull": "Named stakeholders, funding constraints, enabling policies, quant metrics.",
+      "outputLens": "Risk vs opportunity grid + open questions list.",
+      "priority": "medium",
+      "status": "suggested",
+      "evidenceFloor": "Quote",
+      "perspectivePairing": "Regulators ↔ Operators",
+      "tags": [
+        "geo:South Africa",
+        "lens:geo"
+      ],
+      "triggerSummary": "Geo anchor detected for South Africa.",
+      "deck": "suggest",
+      "createdAt": "2025-11-12T19:18:22.254Z",
+      "updatedAt": "2025-11-12T20:10:54.463Z"
+    },
+    {
+      "id": "b816eaec-ddaa-471c-8463-a3d81db9500b",
+      "label": "Africa opportunity scan",
+      "intentQuestion": "What opportunities, blockers, and decision owners surface when we isolate Africa?",
+      "scope": "Threads referencing Africa",
+      "signalsToPull": "Named stakeholders, funding constraints, enabling policies, quant metrics.",
+      "outputLens": "Risk vs opportunity grid + open questions list.",
+      "priority": "medium",
+      "status": "suggested",
+      "evidenceFloor": "Quote",
+      "perspectivePairing": "Regulators ↔ Operators",
+      "tags": [
+        "geo:Africa",
+        "lens:geo"
+      ],
+      "triggerSummary": "Geo anchor detected for Africa.",
+      "deck": "suggest",
+      "createdAt": "2025-11-12T19:18:22.254Z",
+      "updatedAt": "2025-11-12T20:10:54.463Z"
+    },
+    {
+      "id": "1baf70cb-faae-4cb1-badf-394dd0fa7c6e",
+      "label": "United States opportunity scan",
+      "intentQuestion": "What opportunities, blockers, and decision owners surface when we isolate United States?",
+      "scope": "Threads referencing United States",
+      "signalsToPull": "Named stakeholders, funding constraints, enabling policies, quant metrics.",
+      "outputLens": "Risk vs opportunity grid + open questions list.",
+      "priority": "medium",
+      "status": "suggested",
+      "evidenceFloor": "Quote",
+      "perspectivePairing": "Regulators ↔ Operators",
+      "tags": [
+        "geo:United States",
+        "lens:geo"
+      ],
+      "triggerSummary": "Geo anchor detected for United States.",
+      "deck": "suggest",
+      "createdAt": "2025-11-12T19:18:22.254Z",
+      "updatedAt": "2025-11-12T20:10:54.463Z"
+    }
+  ],
+  "updatedAt": "2025-11-12T20:10:54.463Z"
+}

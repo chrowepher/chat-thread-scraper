@@ -1,0 +1,54 @@
+{
+  "label": "T3-groups1-M7",
+  "threads": [
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-013-move-to-south-africa-branch-branch-digital-nomad-p.md",
+    "C:\\Users\\chrow\\chat-thread-merger\\runs\\autopilot-2025-11-12T20-32-32-777Z\\threads\\thread-014-move-to-south-africa-branch-branch-digital-nomad-p.md"
+  ],
+  "metadata": {
+    "branchCount": "T3",
+    "route": "T3",
+    "round": 1,
+    "matchIndex": 6
+  },
+  "mergeResult": {
+    "summary": "{\"merged_summary\":{\"overview\":\"The user requested an up-to-date, ranked list of countries offering digital nomad or remote work visas for U.S. citizens, sorted by the current exchange rate leverage of the U.S. dollar. Two conversation branches provided detailed, overlapping information on this topic, including exchange rates, visa program details, and caveats about cost of living and income requirements.\",\"key_insights\":[{\"insight\":\"Exchange Rate Leverage\",\"details\":\"Both branches emphasize that the ranking is based on how many units of local currency 1 USD can buy as of November 2, 2025. A higher number indicates stronger USD leverage, but this does not directly translate to affordability.\"},{\"insight\":\"Digital Nomad Visa Programs\",\"details\":\"The lists include countries with bona fide digital nomad or remote work visas that U.S. citizens can apply for. Official program sources were noted where available.\"},{\"insight\":\"Cost of Living and Income Thresholds\",\"details\":\"Both branches caution that exchange rate alone is insufficient to determine the best destination. Cost of living, visa income requirements, and tax implications must be considered separately.\"},{\"insight\":\"South Africa Context\",\"details\":\"While the branches are titled 'Move to South Africa,' the primary focus is on a broader set of countries with digital nomad programs. South Africa itself may or may not have a dedicated digital nomad visa, but it is relevant as a potential destination within the broader comparative framework.\"}],\"recommendations\":[\"Use the compiled ranked list as a starting point to identify countries with strong USD leverage and digital nomad visa options.\",\"Conduct further research on each country’s cost of living, visa income requirements, and tax policies to assess overall affordability and feasibility.\",\"Consider South Africa specifically for its unique advantages or limitations in the digital nomad context, as it may not have a formal digital nomad visa but could offer other benefits.\",\"Monitor exchange rates regularly as they fluctuate and impact the leverage of the USD.\"],\"next_steps\":[\"Develop a detailed cost of living comparison for the top-ranked countries to complement the exchange rate data.\",\"Gather updated information on visa application processes, durations, and eligibility criteria for each country.\",\"Explore South Africa’s visa options for remote workers or digital nomads, including any recent policy changes.\",\"Create a decision matrix that integrates exchange rate leverage, cost of living, visa requirements, and lifestyle factors.\"]}}",
+    "combinedPath": [],
+    "mergeDecisions": [],
+    "rawResponse": {
+      "id": "chatcmpl-CbBpjFHFyfV6k2DYko6Nnku0uI6YS",
+      "object": "chat.completion",
+      "created": 1762979659,
+      "model": "gpt-4.1-mini-2025-04-14",
+      "choices": [
+        {
+          "index": 0,
+          "message": {
+            "role": "assistant",
+            "content": "{\n  \"merged_summary\": {\n    \"overview\": \"The user requested an up-to-date, ranked list of countries offering digital nomad or remote work visas for U.S. citizens, sorted by the current exchange rate leverage of the U.S. dollar. Two conversation branches provided detailed, overlapping information on this topic, including exchange rates, visa program details, and caveats about cost of living and income requirements.\",\n    \"key_insights\": [\n      {\n        \"insight\": \"Exchange Rate Leverage\",\n        \"details\": \"Both branches emphasize that the ranking is based on how many units of local currency 1 USD can buy as of November 2, 2025. A higher number indicates stronger USD leverage, but this does not directly translate to affordability.\"\n      },\n      {\n        \"insight\": \"Digital Nomad Visa Programs\",\n        \"details\": \"The lists include countries with bona fide digital nomad or remote work visas that U.S. citizens can apply for. Official program sources were noted where available.\"\n      },\n      {\n        \"insight\": \"Cost of Living and Income Thresholds\",\n        \"details\": \"Both branches caution that exchange rate alone is insufficient to determine the best destination. Cost of living, visa income requirements, and tax implications must be considered separately.\"\n      },\n      {\n        \"insight\": \"South Africa Context\",\n        \"details\": \"While the branches are titled 'Move to South Africa,' the primary focus is on a broader set of countries with digital nomad programs. South Africa itself may or may not have a dedicated digital nomad visa, but it is relevant as a potential destination within the broader comparative framework.\"\n      }\n    ],\n    \"recommendations\": [\n      \"Use the compiled ranked list as a starting point to identify countries with strong USD leverage and digital nomad visa options.\",\n      \"Conduct further research on each country’s cost of living, visa income requirements, and tax policies to assess overall affordability and feasibility.\",\n      \"Consider South Africa specifically for its unique advantages or limitations in the digital nomad context, as it may not have a formal digital nomad visa but could offer other benefits.\",\n      \"Monitor exchange rates regularly as they fluctuate and impact the leverage of the USD.\"\n    ],\n    \"next_steps\": [\n      \"Develop a detailed cost of living comparison for the top-ranked countries to complement the exchange rate data.\",\n      \"Gather updated information on visa application processes, durations, and eligibility criteria for each country.\",\n      \"Explore South Africa’s visa options for remote workers or digital nomads, including any recent policy changes.\",\n      \"Create a decision matrix that integrates exchange rate leverage, cost of living, visa requirements, and lifestyle factors.\"\n    ]\n  }\n}",
+            "refusal": null,
+            "annotations": []
+          },
+          "logprobs": null,
+          "finish_reason": "stop"
+        }
+      ],
+      "usage": {
+        "prompt_tokens": 946,
+        "completion_tokens": 549,
+        "total_tokens": 1495,
+        "prompt_tokens_details": {
+          "cached_tokens": 0,
+          "audio_tokens": 0
+        },
+        "completion_tokens_details": {
+          "reasoning_tokens": 0,
+          "audio_tokens": 0,
+          "accepted_prediction_tokens": 0,
+          "rejected_prediction_tokens": 0
+        }
+      },
+      "service_tier": "default",
+      "system_fingerprint": "fp_4c2851f862"
+    }
+  }
+}
