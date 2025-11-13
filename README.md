@@ -103,3 +103,29 @@ chat-thread-merger autopilot --plan-suite planA --plan-suite planB --plan-suite 
 - `--plan-comparisons` (enabled automatically when multiple plans are listed) generates pairwise critiques (PlanA/B, A/C, B/C) and reuses them until inputs change.
 - `--force-plan <plan>` reruns a specific plan even if cache hits exist; `--skip-plan-comparisons` disables the matrix run.
 - Plan artifacts, metrics, and critiques are written to `runs/<planId-runId>/`, and cross-plan comparisons land in `runs/plan-matrix-<signature>/`.
+
+### Feature-Harvest Merger (Experimental)
+
+The `src/merger` directory now contains an experimental “feature harvesting” pipeline:
+
+- `featureExtractor` splits each conversation into atomic insights (“features”) with topic tags and provenance.
+- `featureClusterer` and `featureScorer` group overlapping ideas, apply heuristics, and compute combined scores.
+- `mergeSelector` enforces guardrails (coverage ratios, token budgets) while picking canonical vs. alternate features.
+- `synthesizer` rebuilds a merged conversation that keeps canonical sections, unique add-ons, and clearly labeled alternates.
+- `pilotRunner` plus `scientistReview` provide the pilot/batch loop with the human-in-the-loop checkpoints described in the experiment design.
+- Feature harvesting now produces hierarchical summaries automatically: long messages get per-message summaries, giant threads get a conversation-level synopsis, and those summaries are treated as high-priority coverage when tokens are trimmed. Guardrail stats count summary coverage so large branches remain represented even after compression.
+- The scientist reviewer now runs by default (using your `OPENAI_API_KEY` unless `FEATURE_HARVEST_SCIENTIST_API_KEY` is set) whenever you pass `--harvest`. Verdicts and prompts are recorded alongside guardrail telemetry under `runs/feature-harvest/<date>/...`.
+- Large branches are chunked automatically before harvesting (80 messages ➝ 40-message segments and 100 features ➝ 60-feature segments by default). Tune this with `FEATURE_HARVEST_SPLIT_MESSAGE_THRESHOLD`/`FEATURE_HARVEST_SPLIT_MESSAGE_SIZE` and `FEATURE_HARVEST_SPLIT_FEATURE_THRESHOLD`/`FEATURE_HARVEST_SPLIT_FEATURE_SIZE`.
+- Need to clamp a single noisy branch harder? Set `FEATURE_HARVEST_SPLIT_OVERRIDES` to a JSON object keyed by `tabId`, `tabId:<id>`, `title:<substring>`, or `url:<substring>` with per-branch knobs:
+  ```powershell
+  $env:FEATURE_HARVEST_SPLIT_OVERRIDES = '{"tabId:F4DE889B...":{"messageSize":32,"featureSize":40}}'
+  ```
+- Coverage remediation reruns any failing branches with splitting disabled and an expanded token cap (`FEATURE_HARVEST_REMEDIATION_MULTIPLIER`, default `3`). Each rerun now writes a Markdown dossier under `runs/feature-harvest/<date>/remediation/coverage-<tabId>.md` summarizing before/after coverage, dropped unique credits, and the unique highlights that were salvaged, so you can review gaps without digging through JSON logs.
+- Coverage guardrails short-circuit once each base conversation has retained a capped number of “unique credits.” Tune this via `FEATURE_HARVEST_COVERAGE_CAP` (default `80`) if you need more or fewer per-branch credits before the 70 % threshold is evaluated.
+
+Integrate the entry point `runFeatureHarvestMerge` (see `src/merger/featureHarvestMerge.ts`) into bespoke workflows or CLI prototypes to exercise the new pipeline before it replaces the legacy OpenAI “winner/loser” merge.
+
+**Try it:** `npm run merge -- --input snapshots/autopilot-latest.json --harvest` will load the snapshot, run the feature-harvest merger, print the synthesized summary, display guardrail stats (token estimates + coverage ratios), and automatically render a UI-friendly report at `runs/feature-harvest/harvest-report.html` so you can review scientist findings without parsing JSON.
+
+- Pilot batches log telemetry + scientist payloads to `runs/feature-harvest/<date>/batch-*.json` (override path via `FEATURE_HARVEST_LOG_DIR`).
+- Toggle the scientist reviewer without code changes by setting `FEATURE_HARVEST_SCIENTIST=off` (or `on`) before running pilot batches.

@@ -12,7 +12,17 @@ import { syncTodoistTasks } from './output/integrations/todoist.js';
 import type {
   BrowserConversation,
   ProviderPreset,
+  MergeResult,
 } from './types.js';
+import { runFeatureHarvestMerge, toMergeResult } from './merger/featureHarvestMerge.js';
+import { DEFAULT_FEATURE_HARVEST_CONFIG } from './merger/config.js';
+import { runPilotBatch } from './merger/pilotRunner.js';
+import { createDefaultScientistClient } from './merger/scientistClient.js';
+import type {
+  FeatureHarvestResult,
+  GuardrailReport,
+  CoverageStats,
+} from './merger/types.js';
 
 export interface MergeCliOptions {
   input?: string;
@@ -38,10 +48,12 @@ export interface MergeCliOptions {
   todoistDueString?: string;
   responseDebug?: string;
   verbose?: boolean;
+  harvest?: boolean;
 }
 
 const conversationSchema = z.object({
   tabId: z.string(),
+  parentTabId: z.string().optional(),
   title: z.string(),
   url: z.string().min(1),
   messages: z.array(
@@ -97,6 +109,7 @@ export async function runMergeWorkflow(
     todoistDueString,
     responseDebug,
     verbose,
+    harvest = false,
   } = cliOptions;
 
   if (!input) {
@@ -121,32 +134,63 @@ export async function runMergeWorkflow(
     console.log(`Merging ${branches.length} conversation branch(es)...`);
   }
 
-  const mergeOptions: MergeOptions = {
-    branches,
-    model,
-    provider,
-    apiKeyEnv,
-  };
-  if (typeof maxBranchHighlights === 'number') {
-    mergeOptions.maxBranchHighlights = maxBranchHighlights;
-  }
-  if (typeof temperature === 'number') {
-    mergeOptions.temperature = temperature;
-  }
-  if (typeof apiBase === 'string') {
-    mergeOptions.apiBase = apiBase;
-  }
-  if (typeof apiKey === 'string') {
-    mergeOptions.apiKey = apiKey;
-  }
-  if (Object.keys(apiHeader).length) {
-    mergeOptions.apiHeaders = apiHeader;
-  }
-  if (typeof responseDebug === 'string') {
-    mergeOptions.responseDebugPath = path.resolve(responseDebug);
-  }
+  let result: MergeResult;
+  let harvestResult: FeatureHarvestResult | undefined;
+  let harvestLogPath: string | undefined;
+  let scientistVerdict: string | undefined;
+  if (harvest) {
+    const scientistClient = createDefaultScientistClient();
+    if (!scientistClient && verbose) {
+      console.warn(
+        'Scientist reviewer not configured (set OPENAI_API_KEY or FEATURE_HARVEST_SCIENTIST_API_KEY). Skipping automated verdict.',
+      );
+    }
+    const pilotRun = await runPilotBatch({
+      queue: [branches],
+      pilotMode: false,
+      scientistClient,
+    });
+    harvestResult = pilotRun.mergeResults[0];
+    if (!harvestResult) {
+      throw new Error('Feature harvest did not return a merge result.');
+    }
+    result = toMergeResult(harvestResult);
+    harvestLogPath = pilotRun.logFile;
+    scientistVerdict = pilotRun.scientistVerdict;
+    if (scientistVerdict) {
+      console.log(`Scientist verdict: ${scientistVerdict}`);
+    }
+    if (verbose && harvestLogPath) {
+      console.log(`Feature-harvest log written to ${harvestLogPath}.`);
+    }
+  } else {
+    const mergeOptions: MergeOptions = {
+      branches,
+      model,
+      provider,
+      apiKeyEnv,
+    };
+    if (typeof maxBranchHighlights === 'number') {
+      mergeOptions.maxBranchHighlights = maxBranchHighlights;
+    }
+    if (typeof temperature === 'number') {
+      mergeOptions.temperature = temperature;
+    }
+    if (typeof apiBase === 'string') {
+      mergeOptions.apiBase = apiBase;
+    }
+    if (typeof apiKey === 'string') {
+      mergeOptions.apiKey = apiKey;
+    }
+    if (Object.keys(apiHeader).length) {
+      mergeOptions.apiHeaders = apiHeader;
+    }
+    if (typeof responseDebug === 'string') {
+      mergeOptions.responseDebugPath = path.resolve(responseDebug);
+    }
 
-  const result = await mergeBranches(mergeOptions);
+    result = await mergeBranches(mergeOptions);
+  }
 
   console.log('=== Summary ===');
   console.log(result.summary.trim());
@@ -173,6 +217,38 @@ export async function runMergeWorkflow(
     });
   } else {
     console.log('\nNo follow-up ideas returned.');
+  }
+
+  if (harvestResult) {
+    logHarvestGuardrails(harvestResult, harvestLogPath);
+    if (harvestResult.guardrails.coverageFailures.length) {
+      const summaryDir =
+        harvestLogPath && path.dirname(harvestLogPath)
+          ? path.join(path.dirname(harvestLogPath), 'remediation')
+          : undefined;
+      const remediation = await runCoverageRemediation(
+        branches,
+        harvestResult,
+        summaryDir,
+      );
+      if (remediation.length) {
+        console.log('\n=== Coverage Remediation Checks ===');
+        remediation.forEach((report) => {
+          const before = describeCoverage(report.before);
+          const after = describeCoverage(report.after);
+          const dropNote =
+            report.droppedUniqueCredits && report.droppedUniqueCredits > 0
+              ? `; dropped uniques pre-remediation: ${report.droppedUniqueCredits}`
+              : '';
+          console.log(
+            ` - ${report.title} (${report.conversationId}) [coverage ${report.coverageId}]\n    Before: ${before}${dropNote}\n    After: ${after} (tokens ${report.guardrails.tokenEstimate})`,
+          );
+          if (report.summaryPath) {
+            console.log(`    Summary: ${path.resolve(report.summaryPath)}`);
+          }
+        });
+      }
+    }
   }
 
   if (notePath) {
@@ -238,8 +314,8 @@ export async function runMergeWorkflow(
     }
   }
 
-  if (todoistProjectId) {
-    if (!result.followUpIdeas?.length) {
+if (todoistProjectId) {
+  if (!result.followUpIdeas?.length) {
       if (verbose) {
         console.log(
           `No follow-up ideas returned; skipping Todoist export for project ${todoistProjectId}.`,
@@ -280,3 +356,258 @@ export async function runMergeWorkflow(
     }
   }
 }
+
+const logHarvestGuardrails = (
+  harvestResult: FeatureHarvestResult,
+  logPath?: string,
+): void => {
+  const guardrails = harvestResult.guardrails;
+  console.log('\n=== Feature Harvest Guardrails ===');
+  console.log(`Initial token estimate: ${guardrails.initialTokenEstimate}`);
+  console.log(`Final token estimate: ${guardrails.tokenEstimate}`);
+  console.log(
+    `Token limit breached: ${guardrails.tokenLimitBreached ? 'yes' : 'no'}`,
+  );
+  if (guardrails.compression?.applied) {
+    const compression = guardrails.compression;
+    const parts = [
+      `${compression.truncatedFeatures} truncated`,
+      `${compression.droppedUniques} uniques dropped`,
+      `${compression.droppedCanonicals} canonicals dropped`,
+    ];
+    console.log(
+      `Compression applied: ${parts.join(', ')}${
+        compression.summaryFallback ? ' (summary fallback)' : ''
+      }`,
+    );
+    if (compression.notes) {
+      console.log(`  Notes: ${compression.notes}`);
+    }
+  } else {
+    console.log('Compression applied: no');
+  }
+  if (logPath) {
+    console.log(`Guardrail log: ${logPath}`);
+  }
+  if (guardrails.coverageFailures.length) {
+    console.log(`Coverage failures: ${guardrails.coverageFailures.join(', ')}`);
+  } else {
+    console.log('Coverage failures: none');
+  }
+  Object.entries(guardrails.coverage).forEach(([conversationId, stats]) => {
+    console.log(
+      ` - ${conversationId}: ${(stats.uniqueFraction * 100).toFixed(
+        1,
+      )}% unique coverage (${stats.uniqueKept}/${stats.uniqueTotal})`,
+    );
+  });
+  if (guardrails.coverageAggregates) {
+    console.log('Aggregated coverage per branch:');
+    Object.entries(guardrails.coverageAggregates).forEach(
+      ([conversationId, stats]) => {
+        console.log(
+          ` * ${conversationId}: ${(stats.uniqueFraction * 100).toFixed(
+            1,
+          )}% unique coverage (${stats.uniqueKept}/${stats.uniqueTotal})`,
+        );
+      },
+    );
+  }
+};
+
+const REMEDIATION_TOKEN_MULTIPLIER =
+  Number.parseFloat(process.env.FEATURE_HARVEST_REMEDIATION_MULTIPLIER ?? '') ||
+  3;
+
+interface RemediationReport {
+  conversationId: string;
+  title: string;
+  guardrails: GuardrailReport;
+  coverageId: string;
+  before?: CoverageStats;
+  after?: CoverageStats;
+  droppedUniqueCredits?: number;
+  summaryPath?: string;
+}
+
+const COVERAGE_SUFFIX_REGEX = /(__seg\d+|__feat\d+)/gi;
+
+const normalizeCoverageConversationId = (conversationId: string): string => {
+  const normalized = conversationId.replace(COVERAGE_SUFFIX_REGEX, '');
+  return normalized || conversationId;
+};
+
+const describeCoverage = (stats?: CoverageStats): string => {
+  if (!stats) {
+    return 'n/a';
+  }
+  const percent = (stats.uniqueFraction * 100).toFixed(1);
+  const base = `${percent}% (${stats.uniqueKept}/${stats.uniqueTotal})`;
+  const summaryCredits =
+    stats.summaryCredits && stats.summaryCredits > 0
+      ? ` +${stats.summaryCredits} summary`
+      : '';
+  return `${base}${summaryCredits}`;
+};
+
+const sanitizeForFilename = (value: string): string =>
+  value
+    .replace(/[^a-z0-9-_]+/gi, '_')
+    .replace(/_{2,}/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 80) || 'conversation';
+
+const writeRemediationSummary = async ({
+  summaryDir,
+  conversation,
+  coverageId,
+  before,
+  after,
+  droppedUniqueCredits,
+  remediated,
+}: {
+  summaryDir?: string;
+  conversation: BrowserConversation;
+  coverageId: string;
+  before?: CoverageStats;
+  after?: CoverageStats;
+  droppedUniqueCredits?: number;
+  remediated: FeatureHarvestResult;
+}): Promise<string | undefined> => {
+  if (!summaryDir) {
+    return undefined;
+  }
+  try {
+    await fs.mkdir(summaryDir, { recursive: true });
+  } catch (error) {
+    console.warn('Failed to create remediation summary directory:', error);
+    return undefined;
+  }
+  const safeName = sanitizeForFilename(
+    conversation.tabId || conversation.title || 'conversation',
+  );
+  const summaryPath = path.join(summaryDir, `coverage-${safeName}.md`);
+  const highlightLines = remediated.uniqueFeatures
+    .slice(0, 8)
+    .map((feature) => {
+      const text = feature.text.length > 320
+        ? `${feature.text.slice(0, 317)}...`
+        : feature.text;
+      return `- **${feature.topicLabel}** — ${text}`;
+    })
+    .join('\n');
+  const highlightsBlock =
+    highlightLines || '- No additional unique features recovered.';
+const content = `# Coverage remediation – ${conversation.title}
+
+- Tab ID: ${conversation.tabId}
+- Coverage ID: ${coverageId}
+- URL: ${conversation.url}
+
+| Metric | Before | After |
+| --- | --- | --- |
+| Unique coverage | ${describeCoverage(before)} | ${describeCoverage(after)} |
+| Unique kept | ${before ? before.uniqueKept : 'n/a'} | ${
+    after ? after.uniqueKept : 'n/a'
+  } |
+
+Dropped unique credits (initial run): ${droppedUniqueCredits ?? 0}
+Remediation token estimate: ${remediated.guardrails.tokenEstimate}
+
+## Unique highlights recovered
+${highlightsBlock}
+`;
+  try {
+    await fs.writeFile(summaryPath, `${content.trim()}\n`, 'utf-8');
+    return summaryPath;
+  } catch (error) {
+    console.warn('Failed to write remediation summary:', error);
+    return undefined;
+  }
+};
+
+const runCoverageRemediation = async (
+  branches: BrowserConversation[],
+  harvestResult: FeatureHarvestResult,
+  summaryDir?: string,
+): Promise<RemediationReport[]> => {
+  const { coverageFailures } = harvestResult.guardrails;
+  if (!coverageFailures.length) {
+    return [];
+  }
+  const impacted = coverageFailures
+    .map((coverageId) => {
+      const normalizedId = normalizeCoverageConversationId(coverageId);
+      const conversation = branches.find(
+        (branch) => branch.tabId === normalizedId,
+      );
+      if (!conversation) {
+        return undefined;
+      }
+      return { coverageId, conversation };
+    })
+    .filter(
+      (
+        entry,
+      ): entry is { coverageId: string; conversation: BrowserConversation } =>
+        Boolean(entry),
+    );
+  if (!impacted.length) {
+    return [];
+  }
+  const configuredMaxTokens =
+    harvestResult.guardrails.maxMergeTokens ??
+    DEFAULT_FEATURE_HARVEST_CONFIG.guardrails.maxMergeTokens ??
+    5500;
+  const maxTokens = configuredMaxTokens * REMEDIATION_TOKEN_MULTIPLIER;
+
+  const summariesDirResolved = summaryDir
+    ? path.resolve(summaryDir)
+    : undefined;
+
+  const reports: RemediationReport[] = [];
+  for (const { coverageId, conversation } of impacted) {
+    const remediated = runFeatureHarvestMerge({
+      conversations: [conversation],
+      config: {
+        guardrails: {
+          ...DEFAULT_FEATURE_HARVEST_CONFIG.guardrails,
+          maxMergeTokens,
+        },
+        scientistReview: {
+          ...DEFAULT_FEATURE_HARVEST_CONFIG.scientistReview,
+          enabled: false,
+        },
+      },
+      enableSplitting: false,
+    });
+    const after = remediated.guardrails.coverage[conversation.tabId];
+    const before =
+      harvestResult.guardrails.coverageAggregates?.[coverageId] ??
+      harvestResult.guardrails.coverage[coverageId];
+    const dropped =
+      harvestResult.guardrails.droppedUniqueCredits?.[
+        coverageId
+      ];
+    const summaryPath = await writeRemediationSummary({
+      summaryDir: summariesDirResolved,
+      conversation,
+      coverageId,
+      before,
+      after,
+      droppedUniqueCredits: dropped,
+      remediated,
+    });
+    reports.push({
+      conversationId: conversation.tabId,
+      title: conversation.title,
+      guardrails: remediated.guardrails,
+      coverageId,
+      before,
+      after,
+      droppedUniqueCredits: dropped,
+      ...(summaryPath ? { summaryPath } : {}),
+    });
+  }
+  return reports;
+};

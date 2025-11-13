@@ -136,6 +136,10 @@ program
     '--response-debug <path>',
     'Write the raw OpenAI response JSON to this file for inspection.',
   )
+  .option(
+    '--harvest',
+    'Use the experimental feature-harvest merger instead of OpenAI.',
+  )
   .option('--verbose', 'Print additional progress information.')
   .showHelpAfterError();
 
@@ -153,4 +157,3 @@ program
     console.error(error);
     process.exit(1);
   });
-

@@ -11,6 +11,7 @@ export interface ConversationMessage {
 
 export interface BrowserConversation {
   tabId: string;
+  parentTabId?: string;
   title: string;
   url: string;
   messages: ConversationMessage[];
