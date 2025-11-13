@@ -1,6 +1,7 @@
 node_modules/
 dist/
 snapshots/
+runs/
 *.log
 *.env
 .DS_Store

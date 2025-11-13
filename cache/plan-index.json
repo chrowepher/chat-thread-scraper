@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "records": [
+    {
+      "planId": "planA",
+      "inputSignature": "124c43f4584316ddd6b5f91610c77d258cbad595",
+      "runId": "exp-ec7caf",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-ec7caf",
+      "updatedAt": "2025-11-13T01:18:42.011Z"
+    },
+    {
+      "planId": "planB",
+      "inputSignature": "124c43f4584316ddd6b5f91610c77d258cbad595",
+      "runId": "exp-5bbfe1",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-5bbfe1",
+      "updatedAt": "2025-11-13T01:24:42.127Z"
+    },
+    {
+      "planId": "planC",
+      "inputSignature": "124c43f4584316ddd6b5f91610c77d258cbad595",
+      "runId": "exp-2333e1",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-2333e1",
+      "updatedAt": "2025-11-13T01:34:28.911Z"
+    }
+  ]
+}

@@ -96,6 +96,12 @@ We will encode three reusable plans. Each plan becomes a first-class preset in t
 
 Operators can combine A + B + C while staying under ~40 merges to collect rich evidence.
 
+## Plan Matrix Automation
+
+- `chat-thread-merger autopilot --plan-suite planA --plan-suite planB --plan-suite planC --plan-comparisons` now caches each plan run by the hash of its experiment threads; forcing a rerun requires `--force-plan <id>` or a changed input signature.
+- Cached artifacts include recombined markdown, metrics, coverage, critiques, and lineage so Autopilot skips re-merging, re-critiquing, or replaying tournaments unless explicitly refreshed.
+- Pairwise plan comparisons (PlanA/B, A/C, B/C) are written to `runs/plan-matrix-<signature>/comparisons/<pair>/` and reuse prior compare/contrast reasoning whenever the left/right champions match earlier metadata.
+
 ## CLI Surface Changes
 
 `chat-thread-merger` will expose a superset of the current `mergeSnapshot` functionality:

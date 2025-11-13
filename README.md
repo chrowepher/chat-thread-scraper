@@ -90,3 +90,16 @@ Every run writes a `ThreadSnapshot` JSON document:
 ```powershell
 npm test
 ```
+
+### Autopilot Plan Suites & Comparisons
+
+Run the complete scrape → merge → experiment pipeline while caching plan outputs per input signature:
+
+```powershell
+chat-thread-merger autopilot --plan-suite planA --plan-suite planB --plan-suite planC --plan-comparisons
+```
+
+- `--plan-suite <plan>` adds a plan to the suite; cached runs are reused when the thread signature matches.
+- `--plan-comparisons` (enabled automatically when multiple plans are listed) generates pairwise critiques (PlanA/B, A/C, B/C) and reuses them until inputs change.
+- `--force-plan <plan>` reruns a specific plan even if cache hits exist; `--skip-plan-comparisons` disables the matrix run.
+- Plan artifacts, metrics, and critiques are written to `runs/<planId-runId>/`, and cross-plan comparisons land in `runs/plan-matrix-<signature>/`.

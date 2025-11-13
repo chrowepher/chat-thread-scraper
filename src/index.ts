@@ -10,7 +10,11 @@ import {
   collectConversationsForUrls,
   type CollectByUrlOptions,
 } from './chromeCollector.js';
-import { runExperiment } from './experiments/runner.js';
+import {
+  runExperiment,
+  PLAN_DEFINITIONS,
+  type ExperimentPlanId,
+} from './experiments/runner.js';
 import type { ExperimentRunnerOptions } from './experiments/runner.js';
 import { ExperimentOrchestrator } from './experiments/orchestrator.js';
 import type { ExperimentTask } from './experiments/orchestrator.js';
@@ -23,9 +27,20 @@ import {
   materializeExperimentThreads,
   type MaterializeOptions,
 } from './experiments/threadMaterializer.js';
-import { runMergeWorkflow, type MergeCliOptions } from './mergeSnapshot.js';
+import {
+  runMergeWorkflow,
+  type MergeCliOptions,
+} from './mergeSnapshot.js';
 import type { ThreadSnapshot } from './types.js';
 import { createFilterCommand } from './filterCommand.js';
+import { PlanRunCache } from './experiments/planCache.js';
+import { ExperimentTaskState } from './experiments/taskState.js';
+import { computeInputSignature } from './experiments/inputSignature.js';
+import { resolvePlanRepresentative } from './experiments/planArtifacts.js';
+import {
+  ensurePlanMatrixComparisons,
+  type PlanRunSummary,
+} from './experiments/planMatrix.js';
 
 interface ScrapeCliOptions {
   host: string;
@@ -101,6 +116,10 @@ interface AutopilotCliOptions {
   mergeResponseDebug?: string;
   threads?: string[];
   plan?: string;
+  planSuite?: string[];
+  forcePlan?: string[];
+  planComparisons?: boolean;
+  skipPlanComparisons?: boolean;
   runId?: string;
   experimentDescription?: string;
   experimentThreadsDir?: string;
@@ -254,6 +273,24 @@ function createAutopilotCommand(): Command {
       parseInteger('experiment-max-chars'),
     )
     .option('--plan <plan>', 'Experiment plan id (planA|planB|planC).', 'planB')
+    .option(
+      '--plan-suite <plan>',
+      'Add a plan to the suite for caching/comparison (repeatable).',
+      collectValues,
+    )
+    .option(
+      '--force-plan <plan>',
+      'Force rerun of the specified plan id (repeatable).',
+      collectValues,
+    )
+    .option(
+      '--plan-comparisons',
+      'Compare all plan-suite champions (default when multiple plans are provided).',
+    )
+    .option(
+      '--skip-plan-comparisons',
+      'Skip cross-plan comparisons even when a plan suite is provided.',
+    )
     .option('--run-id <id>', 'Experiment run identifier (auto-generated if blank).')
     .option(
       '--experiment-description <text>',
@@ -609,6 +646,7 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
   const runId = options.runId ?? `autopilot-${formatTimestampSlug()}`;
   const displaySnapshot = path.relative(process.cwd(), snapshotTarget);
   let lastExperimentDir: string | undefined;
+  let matrixComparisonDir: string | undefined;
 
   const logStep = (message: string) => {
     console.log(`\n[Autopilot] ${message}`);
@@ -689,8 +727,21 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     logStep('Step 2/3: Skipping merge (per flag).');
   }
 
+  const configuredPlan = normalizePlanId(planId) ?? 'planB';
+  const suitePlans = normalizePlanList(options.planSuite ?? []);
+  const requestedPlans =
+    suitePlans.length > 0 ? suitePlans : [configuredPlan];
+  const forcePlans = new Set(normalizePlanList(options.forcePlan ?? []));
+  const planComparisonsEnabled =
+    !options.skipPlanComparisons &&
+    (Boolean(options.planComparisons) || requestedPlans.length > 1);
+  const planRunSummaries: PlanRunSummary[] = [];
+
   if (!options.skipExperiments) {
-    logStep(`Step 3/3: Running experiment plan ${planId}...`);
+    const planLabel = requestedPlans.join(', ');
+    logStep(
+      `Step 3/3: Running experiment plan${requestedPlans.length === 1 ? '' : 's'} ${planLabel}...`,
+    );
     let experimentThreads: string[];
     if (options.threads?.filter(Boolean).length) {
       experimentThreads = (options.threads ?? []).filter(Boolean);
@@ -714,27 +765,136 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
         `Prepared ${materialized.conversationCount} experiment thread${materialized.conversationCount === 1 ? '' : 's'} at ${path.relative(process.cwd(), materialized.outputDir)}.`,
       );
     }
-    const experimentResult = await runExperiment({
-      threads: experimentThreads,
-      plan: planId,
-      calcMetrics: true,
-      runId,
-      description:
-        options.experimentDescription ??
-        `Autopilot ${planId} baseline from ${path.basename(snapshotTarget)}`,
-    });
-    lastExperimentDir = experimentResult.runDir;
-    console.log(
-      `[Autopilot] Experiment ${experimentResult.runId} scaffolded at ${experimentResult.runDir}.`,
-    );
-    const orchestrator = await ExperimentOrchestrator.load(
-      experimentResult.runDir,
-    );
-    await executeExperimentTaskSet(orchestrator, {
-      permutations: !options.skipPermutations,
-      tournaments: !options.skipTournaments,
-      comparisons: !options.skipComparisons,
-    });
+    const inputSignature = await computeInputSignature(experimentThreads);
+    const planCache = await PlanRunCache.load();
+
+    for (const currentPlan of requestedPlans) {
+      const forceRun = forcePlans.has(currentPlan);
+      const cachedRun = forceRun
+        ? undefined
+        : await planCache.find(currentPlan, inputSignature);
+      let runDir: string;
+      let runIdForPlan: string;
+      let orchestrator: ExperimentOrchestrator;
+
+      if (cachedRun) {
+        runDir = cachedRun.runDir;
+        runIdForPlan = cachedRun.runId;
+        orchestrator = await ExperimentOrchestrator.load(runDir);
+        logStep(
+          `Plan ${currentPlan}: reusing cached run ${path.relative(process.cwd(), runDir)}.`,
+        );
+      } else {
+        const experimentResult = await runExperiment({
+          threads: experimentThreads,
+          plan: currentPlan,
+          calcMetrics: true,
+          description:
+            options.experimentDescription ??
+            `Autopilot ${currentPlan} baseline from ${path.basename(snapshotTarget)}`,
+        });
+        runDir = experimentResult.runDir;
+        runIdForPlan = experimentResult.runId;
+        orchestrator = await ExperimentOrchestrator.load(runDir);
+        await planCache.upsert({
+          planId: currentPlan,
+          inputSignature,
+          runId: runIdForPlan,
+          runDir,
+          updatedAt: new Date().toISOString(),
+        });
+        logStep(
+          `Plan ${currentPlan}: scaffolded run ${path.relative(process.cwd(), runDir)}.`,
+        );
+      }
+
+      lastExperimentDir = runDir;
+      const taskState = await ExperimentTaskState.load(runDir, runIdForPlan);
+      const schedule = orchestrator.scheduleSnapshot;
+      let stateChanged = false;
+
+      const hasPermutationTasks = schedule.permutationRequests.length > 0;
+      const hasTournamentTasks = schedule.tournamentRequests.length > 0;
+      const hasComparisonTasks = schedule.comparisonRequests.length > 0;
+
+      if (!hasPermutationTasks && !taskState.isCompleted('permutations')) {
+        taskState.markCompleted('permutations');
+        stateChanged = true;
+      }
+      if (!hasTournamentTasks && !taskState.isCompleted('tournaments')) {
+        taskState.markCompleted('tournaments');
+        stateChanged = true;
+      }
+      if (!hasComparisonTasks && !taskState.isCompleted('comparisons')) {
+        taskState.markCompleted('comparisons');
+        stateChanged = true;
+      }
+
+      const shouldRunPermutations =
+        hasPermutationTasks &&
+        !taskState.isCompleted('permutations') &&
+        !options.skipPermutations;
+      const shouldRunTournaments =
+        hasTournamentTasks &&
+        !taskState.isCompleted('tournaments') &&
+        !options.skipTournaments;
+      const shouldRunComparisons =
+        hasComparisonTasks &&
+        !taskState.isCompleted('comparisons') &&
+        !options.skipComparisons;
+
+      if (shouldRunPermutations || shouldRunTournaments || shouldRunComparisons) {
+        await executeExperimentTaskSet(orchestrator, {
+          permutations: shouldRunPermutations,
+          tournaments: shouldRunTournaments,
+          comparisons: shouldRunComparisons,
+        });
+        if (shouldRunPermutations) {
+          taskState.markCompleted('permutations');
+        }
+        if (shouldRunTournaments) {
+          taskState.markCompleted('tournaments');
+        }
+        if (shouldRunComparisons) {
+          taskState.markCompleted('comparisons');
+        }
+        stateChanged = true;
+      } else {
+        logStep(`Plan ${currentPlan}: all scheduled tasks already satisfied.`);
+      }
+
+      if (stateChanged) {
+        await taskState.save();
+      }
+
+      const planDefinition = PLAN_DEFINITIONS[currentPlan];
+      const representative = await resolvePlanRepresentative({
+        planId: currentPlan,
+        runDir,
+        definition: planDefinition,
+      });
+      planRunSummaries.push({
+        planId: currentPlan,
+        runId: runIdForPlan,
+        runDir,
+        representative,
+      });
+    }
+
+    if (planComparisonsEnabled && planRunSummaries.length >= 2) {
+      const matrixRunner = new PythonCritiqueRunner();
+      const matrixResult = await ensurePlanMatrixComparisons({
+        inputSignature,
+        planRuns: planRunSummaries,
+        critiqueRunner: matrixRunner,
+      });
+      console.log(
+        `[Autopilot] Plan matrix comparisons: ${matrixResult.executed} executed, ${matrixResult.reused} reused.`,
+      );
+      if (matrixResult.matrixDir) {
+        matrixComparisonDir = matrixResult.matrixDir;
+      }
+    }
   } else {
     logStep('Step 3/3: Skipping experiments (per flag).');
   }
@@ -746,9 +906,21 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
       ` - Merge note: ${path.relative(process.cwd(), path.resolve(options.mergeNote))}`,
     );
   }
-  if (lastExperimentDir) {
+  if (planRunSummaries.length) {
+    console.log(' - Plans:');
+    for (const summary of planRunSummaries) {
+      console.log(
+        `   - ${summary.planId}: ${path.relative(process.cwd(), summary.runDir)}`,
+      );
+    }
+  } else if (lastExperimentDir) {
     console.log(
       ` - Experiment outputs: ${path.relative(process.cwd(), lastExperimentDir)}`,
+    );
+  }
+  if (matrixComparisonDir) {
+    console.log(
+      ` - Plan matrix: ${path.relative(process.cwd(), matrixComparisonDir)}`,
     );
   }
 }
@@ -953,4 +1125,38 @@ function describeTask(task: ExperimentTask): string {
     default:
       return `Unknown task`;
   }
+}
+
+function normalizePlanList(input: string[]): ExperimentPlanId[] {
+  const resolved: ExperimentPlanId[] = [];
+  const seen = new Set<string>();
+  for (const entry of input) {
+    const normalized = normalizePlanId(entry);
+    if (normalized && !seen.has(normalized)) {
+      seen.add(normalized);
+      resolved.push(normalized);
+    }
+  }
+  return resolved;
+}
+
+function normalizePlanId(value?: string): ExperimentPlanId | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+  const direct = trimmed as ExperimentPlanId;
+  if (PLAN_DEFINITIONS[direct]) {
+    return direct;
+  }
+  const lower = trimmed.toLowerCase() as ExperimentPlanId;
+  if (PLAN_DEFINITIONS[lower]) {
+    return lower;
+  }
+  throw new Error(
+    `Unknown plan "${value}". Expected one of: ${Object.keys(PLAN_DEFINITIONS).join(', ')}.`,
+  );
 }

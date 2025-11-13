@@ -22,6 +22,7 @@ interface ExperimentManifest {
   description?: string;
   inputs?: {
     threads?: string[];
+    signature?: string;
   };
   parameters?: Record<string, unknown>;
 }

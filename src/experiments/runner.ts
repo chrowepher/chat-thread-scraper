@@ -1,6 +1,7 @@
 import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+import { computeInputSignature } from './inputSignature.js';
 
 export type BranchCount = 'T2' | 'T3';
 export type SamplingPolicy = 'k-random' | 'k-diverse' | 'bracket';
@@ -34,6 +35,7 @@ export interface ExperimentRunnerResult {
   runDir: string;
   threadPaths: string[];
   schedule: ExperimentSchedule;
+  inputSignature: string;
 }
 
 export interface ExperimentSchedule {
@@ -106,14 +108,26 @@ interface NormalizedOptions {
   description?: string;
 }
 
-interface PlanDefinition {
+export interface PlanDefinition {
   id: ExperimentPlanId;
   description: string;
   mergesEstimate: number;
   tournaments?: TournamentRequest[];
   comparisonRequests?: ComparisonRequest[];
   permutationRequest?: PermutationRequest;
+  representative?: PlanRepresentativeConfig;
 }
+
+export type PlanRepresentativeConfig =
+  | {
+      type: 'tournament';
+      label: string;
+      fallbackLabels?: string[];
+    }
+  | {
+      type: 'permutationCoverage';
+      treeShape?: TreeShape;
+    };
 
 const DEFAULT_TREE_SHAPES: TreeShape[] = [
   'balanced',
@@ -129,11 +143,16 @@ const TREE_SHAPE_ALIASES: Record<string, TreeShape> = {
   right: 'right-skew',
 };
 
-const PLAN_DEFINITIONS: Record<ExperimentPlanId, PlanDefinition> = {
+export const PLAN_DEFINITIONS: Record<ExperimentPlanId, PlanDefinition> = {
   planA: {
     id: 'planA',
     description: 'Tournament-only baseline with two balanced T2 brackets.',
     mergesEstimate: 22,
+    representative: {
+      type: 'tournament',
+      label: 'T2-seed-11',
+      fallbackLabels: ['T2-seed-99'],
+    },
     tournaments: [
       {
         label: 'T2-seed-11',
@@ -156,6 +175,11 @@ const PLAN_DEFINITIONS: Record<ExperimentPlanId, PlanDefinition> = {
     description:
       'Stage 1 uses grouped T3 merges, followed by T2 finals and a parallel T2 baseline.',
     mergesEstimate: 18,
+    representative: {
+      type: 'tournament',
+      label: 'T2-finals',
+      fallbackLabels: ['T3-groups', 'T2-parallel-seed-77'],
+    },
     tournaments: [
       {
         label: 'T3-groups',
@@ -195,6 +219,10 @@ const PLAN_DEFINITIONS: Record<ExperimentPlanId, PlanDefinition> = {
     description:
       'Permutation probe on a 6-thread subset to compute PSI and OSS (k=5).',
     mergesEstimate: 15,
+    representative: {
+      type: 'permutationCoverage',
+      treeShape: 'balanced',
+    },
     permutationRequest: {
       policy: 'k-diverse',
       count: 5,
@@ -216,11 +244,17 @@ export async function runExperiment(
     );
   }
 
+  const inputSignature = await computeInputSignature(threadPaths);
   const runId = normalized.runId ?? generateRunId();
   const runDir = path.resolve('runs', runId);
   await fs.mkdir(runDir, { recursive: true });
 
-  const manifest = buildManifest(runId, normalized, threadPaths);
+  const manifest = buildManifest(
+    runId,
+    normalized,
+    threadPaths,
+    inputSignature,
+  );
   await fs.writeFile(
     path.join(runDir, 'manifest.json'),
     JSON.stringify(manifest, null, 2),
@@ -253,6 +287,7 @@ export async function runExperiment(
     runDir,
     threadPaths,
     schedule,
+    inputSignature,
   };
 }
 
@@ -460,6 +495,7 @@ function buildManifest(
   runId: string,
   options: NormalizedOptions,
   threadPaths: string[],
+  inputSignature: string,
 ) {
   return {
     runId,
@@ -467,6 +503,7 @@ function buildManifest(
     description: options.description,
     inputs: {
       threads: threadPaths,
+      signature: inputSignature,
     },
     parameters: {
       branchCount: options.branchCount,
