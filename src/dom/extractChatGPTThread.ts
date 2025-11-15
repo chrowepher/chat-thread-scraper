@@ -9,7 +9,8 @@ export function extractChatGPTThread(
   rootDocument?: Document,
 ): ExtractedThread {
   const doc = rootDocument ?? document;
-  const TURN_SELECTOR = '[data-testid^="conversation-turn"]';
+  const TURN_SELECTOR =
+    '[data-testid^="conversation-turn"], [data-message-author-role]';
   function normalizeWhitespace(value: string): string {
     return value.replace(/\s+/g, ' ').trim();
   }
@@ -23,7 +24,7 @@ export function extractChatGPTThread(
     return inner.trim();
   }
 
-  function determineRole(testId: string): ConversationMessage['role'] {
+  function determineRole(testId: string, turn: Element): ConversationMessage['role'] {
     const lowered = testId.toLowerCase();
     if (lowered.includes('user')) {
       return 'user';
@@ -33,6 +34,22 @@ export function extractChatGPTThread(
     }
     if (lowered.includes('system')) {
       return 'system';
+    }
+    const explicitRole = turn.getAttribute('data-message-author-role');
+    if (
+      explicitRole === 'user' ||
+      explicitRole === 'assistant' ||
+      explicitRole === 'system' ||
+      explicitRole === 'tool' ||
+      explicitRole === 'developer'
+    ) {
+      return explicitRole;
+    }
+    if (lowered.includes('tool')) {
+      return 'tool';
+    }
+    if (lowered.includes('developer')) {
+      return 'developer';
     }
     return 'assistant';
   }
@@ -74,7 +91,7 @@ export function extractChatGPTThread(
 
     const timestamp = extractTimestamp(turn);
     const message: ConversationMessage = {
-      role: determineRole(testId),
+      role: determineRole(testId, turn),
       content,
     };
     if (typeof timestamp === 'string') {

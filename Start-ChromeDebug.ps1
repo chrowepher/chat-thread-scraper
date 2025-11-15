@@ -11,6 +11,8 @@ param(
         '--merge-tasks', 'snapshots/digital-nomad-tasks.json',
         '--merge-branch-limit', '5'
     ),
+    [string]$MergeHtmlReport = 'dist/autopilot-merge.html',
+    [switch]$DisableHtmlPreview,
     [string[]]$ScraperArgs = @(
         '--verbose',
         '--bookmark-folder', 'Digital Nomad',
@@ -43,8 +45,7 @@ if (-not $SkipChrome -and -not $SkipScraper) {
         New-Item -ItemType Directory -Path $profileDir -Force | Out-Null
     }
 
-    Write-Host "Closing existing Chrome processes..."
-    Get-Process chrome -ErrorAction SilentlyContinue | Stop-Process -Force
+    Stop-ChromeProcesses -ProfileDir $profileDir -Port $Port
 
     $arguments = @(
         "--remote-debugging-port=$Port",
@@ -85,6 +86,67 @@ if (-not $SkipChrome -and -not $SkipScraper) {
     }
 }
 
+function Stop-ChromeProcesses {
+    param(
+        [string]$ProfileDir,
+        [int]$Port
+    )
+
+    $profileMarker = if ([string]::IsNullOrWhiteSpace($ProfileDir)) { $null } else { $ProfileDir.ToLowerInvariant() }
+    $portMarker = if ($Port -gt 0) { ("--remote-debugging-port=" + $Port).ToLowerInvariant() } else { $null }
+
+    Write-Host "Closing Chrome processes attached to the remote-debugging profile (if any)..."
+
+    try {
+        $chromeProcesses = Get-CimInstance -ClassName Win32_Process -Filter "Name='chrome.exe'" -ErrorAction Stop
+    } catch {
+        Write-Warning "Unable to enumerate Chrome processes for cleanup: $_"
+        return
+    }
+
+    if (-not $chromeProcesses) {
+        Write-Host "No running Chrome instances detected."
+        return
+    }
+
+    $terminated = 0
+    foreach ($proc in $chromeProcesses) {
+        $cmdLine = $proc.CommandLine
+        if (-not $cmdLine) {
+            continue
+        }
+        $cmdLower = $cmdLine.ToLowerInvariant()
+        $matchesProfile = $false
+        $matchesPort = $false
+        if ($profileMarker -and $cmdLower.Contains($profileMarker)) {
+            $matchesProfile = $true
+        }
+        if ($portMarker -and $cmdLower.Contains($portMarker)) {
+            $matchesPort = $true
+        }
+        if (-not ($matchesProfile -or $matchesPort)) {
+            continue
+        }
+
+        try {
+            Stop-Process -Id $proc.ProcessId -Force -ErrorAction Stop
+            $terminated += 1
+        } catch {
+            Write-Warning ("Failed to terminate chrome.exe (PID {0}): {1}" -f $proc.ProcessId, $_.Exception.Message)
+        }
+    }
+
+    if ($terminated -eq 0) {
+        Write-Host "No Chrome windows tied to the debugging session were running."
+    } else {
+        Write-Host ("Terminated {0} Chrome process(es) using the debugging profile/port." -f $terminated)
+    }
+
+    if ($terminated -eq 0 -and -not $profileMarker -and -not $portMarker) {
+        Write-Warning "Skipped Chrome shutdown because profile/port markers were unavailable."
+    }
+}
+
 function Resolve-NpmExecutable {
     $npmExecutable = Get-Command npm.cmd -ErrorAction SilentlyContinue
     if (-not $npmExecutable) {
@@ -96,6 +158,24 @@ function Resolve-NpmExecutable {
     return $npmExecutable
 }
 
+function ConvertTo-CommandLine {
+    param(
+        [string[]]$Arguments
+    )
+
+    if (-not $Arguments -or $Arguments.Count -eq 0) {
+        return ''
+    }
+
+    return ($Arguments | ForEach-Object {
+        if ($_ -match '[\s"]') {
+            '"' + ($_.Replace('"', '""')) + '"'
+        } else {
+            $_
+        }
+    }) -join ' '
+}
+
 function Invoke-ProcessWithProgress {
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -105,7 +185,16 @@ function Invoke-ProcessWithProgress {
         [int]$UpdateIntervalMilliseconds = 300
     )
 
-    $process = Start-Process -FilePath $FilePath -ArgumentList $ArgumentList -NoNewWindow -PassThru
+    $commandLine = ConvertTo-CommandLine -Arguments $ArgumentList
+    $startInfo = New-Object System.Diagnostics.ProcessStartInfo
+    $startInfo.FileName = $FilePath
+    $startInfo.Arguments = $commandLine
+    $startInfo.UseShellExecute = $false
+    $startInfo.RedirectStandardOutput = $false
+    $startInfo.RedirectStandardError = $false
+    $startInfo.CreateNoWindow = $false
+
+    $process = [System.Diagnostics.Process]::Start($startInfo)
     if (-not $process) {
         throw "Failed to start process $FilePath."
     }
@@ -143,6 +232,21 @@ if (-not $LegacyWorkflow) {
     }
     if ($SkipScraper -and -not ($providedAutopilotArgs -contains '--skip-scrape')) {
         $npmArguments += '--skip-scrape'
+    }
+    $autopilotHtmlReportPath = $null
+    for ($i = 0; $i -lt $providedAutopilotArgs.Count; $i++) {
+        if ($providedAutopilotArgs[$i] -eq '--merge-html-report' -and $i -lt ($providedAutopilotArgs.Count - 1)) {
+            $autopilotHtmlReportPath = $providedAutopilotArgs[$i + 1]
+            break
+        }
+    }
+    if (-not $autopilotHtmlReportPath -and $MergeHtmlReport) {
+        $autopilotHtmlReportPath = $MergeHtmlReport
+        $npmArguments += @('--merge-html-report', $autopilotHtmlReportPath)
+    }
+    $hasOpenHtmlFlag = $providedAutopilotArgs -contains '--open-merge-html'
+    if (-not $DisableHtmlPreview -and $autopilotHtmlReportPath -and -not $hasOpenHtmlFlag) {
+        $npmArguments += '--open-merge-html'
     }
     if ($providedAutopilotArgs.Count -gt 0) {
         $npmArguments += $providedAutopilotArgs

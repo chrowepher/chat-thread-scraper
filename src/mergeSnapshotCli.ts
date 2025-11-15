@@ -2,7 +2,11 @@
 import { Command, InvalidArgumentError } from 'commander';
 import path from 'node:path';
 import process from 'node:process';
-import { runMergeWorkflow, type MergeCliOptions } from './mergeSnapshot.js';
+import {
+  runMergeWorkflow,
+  writeMergeHtmlReport,
+  type MergeCliOptions,
+} from './mergeSnapshot.js';
 
 const parseInteger = (label: string) => (value: string): number => {
   const parsed = Number.parseInt(value, 10);
@@ -91,6 +95,10 @@ program
     'Append follow-up ideas as JSON tasks to this file.',
   )
   .option(
+    '--html-report-path <path>',
+    'Write the merged summary and analysis to an HTML report.',
+  )
+  .option(
     '--task-source <name>',
     'Label recorded with exported tasks.',
     'chat-thread-merger',
@@ -146,7 +154,13 @@ program
 program
   .action(async (options: MergeCliOptions) => {
     try {
-      await runMergeWorkflow(options);
+      const output = await runMergeWorkflow(options);
+      if (options.htmlReportPath) {
+        await writeMergeHtmlReport({
+          outputPath: path.resolve(options.htmlReportPath),
+          payload: output.payload,
+        });
+      }
     } catch (error) {
       console.error(error instanceof Error ? error.message : error);
       process.exitCode = 1;

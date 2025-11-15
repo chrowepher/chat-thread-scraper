@@ -1,4 +1,13 @@
-export type MessageRole = 'system' | 'user' | 'assistant';
+export const MESSAGE_ROLES = [
+  'system',
+  'user',
+  'assistant',
+  'tool',
+  'developer',
+  'function',
+] as const;
+
+export type MessageRole = (typeof MESSAGE_ROLES)[number];
 
 export interface ConversationMessage {
   role: MessageRole;

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { Command, InvalidArgumentError } from 'commander';
+import { spawn } from 'node:child_process';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
@@ -29,7 +30,12 @@ import {
 } from './experiments/threadMaterializer.js';
 import {
   runMergeWorkflow,
+  writeMergeHtmlReport,
   type MergeCliOptions,
+  type MergeReportPayload,
+  type PlanSummaryInfo,
+  type ComparisonSummary,
+  type ComparisonCriterionSummary,
 } from './mergeSnapshot.js';
 import type { ThreadSnapshot } from './types.js';
 import { createFilterCommand } from './filterCommand.js';
@@ -56,6 +62,10 @@ interface ScrapeCliOptions {
   output: string;
   pretty?: boolean;
   url?: string[];
+  conversationTimeout?: number;
+  maxRefreshAttempts?: number;
+  hydrateIterations?: number;
+  hydrateDelay?: number;
 }
 
 interface ExperimentCliOptions {
@@ -114,6 +124,8 @@ interface AutopilotCliOptions {
   mergeTasks?: string;
   mergeTaskSource?: string;
   mergeResponseDebug?: string;
+  mergeHtmlReport?: string;
+  openMergeHtml?: boolean;
   threads?: string[];
   plan?: string;
   planSuite?: string[];
@@ -125,6 +137,11 @@ interface AutopilotCliOptions {
   experimentThreadsDir?: string;
   experimentMaxMessages?: number;
   experimentMaxChars?: number;
+  maxConcurrentTabs?: number;
+  conversationTimeout?: number;
+  maxRefreshAttempts?: number;
+  hydrateIterations?: number;
+  hydrateDelay?: number;
 }
 
 const collectValues = (value: string, previous: string[] = []): string[] => {
@@ -216,6 +233,31 @@ function createAutopilotCommand(): Command {
       'Maximum messages to keep per conversation.',
       parseInteger('max-messages'),
     )
+    .option(
+      '--max-concurrent-tabs <number>',
+      'Maximum ChatGPT tabs opened simultaneously during scraping.',
+      parseInteger('max-concurrent-tabs'),
+    )
+    .option(
+      '--conversation-timeout <ms>',
+      'Milliseconds to wait for ChatGPT to hydrate before falling back (default 45000).',
+      parseInteger('conversation-timeout'),
+    )
+    .option(
+      '--max-refresh-attempts <number>',
+      'How many times to reload a stuck ChatGPT tab before giving up (default 1).',
+      parseInteger('max-refresh-attempts'),
+    )
+    .option(
+      '--hydrate-iterations <number>',
+      'How many scroll/“load more” passes to run when loading long threads (default 12).',
+      parseInteger('hydrate-iterations'),
+    )
+    .option(
+      '--hydrate-delay <ms>',
+      'Delay (ms) between hydration scroll passes (default 500).',
+      parseInteger('hydrate-delay'),
+    )
     .option('--no-pretty', 'Disable pretty-printed snapshot JSON output.')
     .option('--skip-scrape', 'Skip the scrape step (expects snapshot to exist).')
     .option('--skip-merge', 'Skip the merge step.')
@@ -251,6 +293,14 @@ function createAutopilotCommand(): Command {
       '--merge-response-debug <path>',
       'Write the raw merge response JSON for debugging.',
       path.join('dist', 'autopilot-merge.json'),
+    )
+    .option(
+      '--merge-html-report <path>',
+      'Write the merged summary + analysis to an HTML report.',
+    )
+    .option(
+      '--open-merge-html',
+      'Open the HTML report in Chrome (if available) after merging.',
     )
     .option('--skip-experiments', 'Skip scaffolding/exec of the experiment plan.')
     .option(
@@ -358,6 +408,26 @@ function createScrapeCommand(): Command {
       'Maximum number of ChatGPT tabs to open simultaneously when scraping bookmarks.',
       parseInteger('max-concurrent-tabs'),
       3,
+    )
+    .option(
+      '--conversation-timeout <ms>',
+      'Milliseconds to wait for ChatGPT to hydrate before falling back (default 45000).',
+      parseInteger('conversation-timeout'),
+    )
+    .option(
+      '--max-refresh-attempts <number>',
+      'How many times to reload a stuck ChatGPT tab before giving up (default 1).',
+      parseInteger('max-refresh-attempts'),
+    )
+    .option(
+      '--hydrate-iterations <number>',
+      'How many scroll/“load more” passes to run when loading long threads (default 12).',
+      parseInteger('hydrate-iterations'),
+    )
+    .option(
+      '--hydrate-delay <ms>',
+      'Delay (ms) between hydration scroll passes (default 500).',
+      parseInteger('hydrate-delay'),
     )
     .option(
       '--output <path>',
@@ -684,6 +754,21 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     if (typeof options.maxMessages === 'number') {
       scrapeOptions.maxMessages = options.maxMessages;
     }
+    if (typeof options.maxConcurrentTabs === 'number') {
+      scrapeOptions.maxConcurrentTabs = options.maxConcurrentTabs;
+    }
+    if (typeof options.conversationTimeout === 'number') {
+      scrapeOptions.conversationTimeout = options.conversationTimeout;
+    }
+    if (typeof options.maxRefreshAttempts === 'number') {
+      scrapeOptions.maxRefreshAttempts = options.maxRefreshAttempts;
+    }
+    if (typeof options.hydrateIterations === 'number') {
+      scrapeOptions.hydrateIterations = options.hydrateIterations;
+    }
+    if (typeof options.hydrateDelay === 'number') {
+      scrapeOptions.hydrateDelay = options.hydrateDelay;
+    }
     await runScrape(scrapeOptions);
   } else {
     if (!(await fileExists(snapshotTarget))) {
@@ -693,6 +778,11 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     }
     logStep('Step 1/3: Skipping scrape (per flag).');
   }
+
+  let mergeReportPayload: MergeReportPayload | undefined;
+  const htmlReportPath = options.mergeHtmlReport
+    ? path.resolve(options.mergeHtmlReport)
+    : undefined;
 
   if (!options.skipMerge) {
     logStep('Step 2/3: Merging snapshot into a champion summary...');
@@ -722,7 +812,17 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     if (options.mergeTasks) {
       mergeOptions.tasksPath = options.mergeTasks;
     }
-    await runMergeWorkflow(mergeOptions);
+    const mergeOutput = await runMergeWorkflow(mergeOptions);
+    mergeReportPayload = mergeOutput.payload;
+    if (htmlReportPath) {
+      await writeMergeHtmlReport({
+        outputPath: htmlReportPath,
+        payload: mergeReportPayload,
+      });
+      if (options.openMergeHtml) {
+        await openHtmlReportInChrome(htmlReportPath);
+      }
+    }
   } else {
     logStep('Step 2/3: Skipping merge (per flag).');
   }
@@ -899,6 +999,32 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     logStep('Step 3/3: Skipping experiments (per flag).');
   }
 
+  if (htmlReportPath && mergeReportPayload) {
+    const planSummaryInfos: PlanSummaryInfo[] = planRunSummaries.map(
+      (summary) => ({
+        planId: summary.planId,
+        runId: summary.runId,
+        runDir: summary.runDir,
+        representativeLabel: summary.representative.label,
+        representativeNotes: summary.representative.notes,
+        representativePath: summary.representative.outputPath,
+      }),
+    );
+    const comparisonSummaries =
+      planRunSummaries.length || matrixComparisonDir
+        ? await collectAutopilotComparisonSummaries(
+            planRunSummaries,
+            matrixComparisonDir,
+          )
+        : [];
+    await writeMergeHtmlReport({
+      outputPath: htmlReportPath,
+      payload: mergeReportPayload,
+      planSummaries: planSummaryInfos,
+      comparisonSummaries,
+    });
+  }
+
   console.log('\n[Autopilot] Complete.');
   console.log(` - Snapshot: ${displaySnapshot}`);
   if (options.mergeNote) {
@@ -925,6 +1051,111 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
   }
 }
 
+async function openHtmlReportInChrome(reportPath: string): Promise<void> {
+  const resolved = path.resolve(reportPath);
+  try {
+    await fs.access(resolved);
+  } catch {
+    console.warn(`[Autopilot] HTML report not found at ${resolved}.`);
+    return;
+  }
+  const chromeExecutable = await findChromeExecutable();
+  if (!chromeExecutable) {
+    console.warn(
+      '[Autopilot] Unable to locate Google Chrome to preview the HTML report. Set CHROME_PATH to override.',
+    );
+    return;
+  }
+  try {
+    launchDetachedProcess(chromeExecutable, ['--new-window', resolved]);
+    console.log(`[Autopilot] Opened HTML merge report in Chrome: ${resolved}`);
+  } catch (error) {
+    console.warn(
+      '[Autopilot] Failed to open Chrome for the HTML report:',
+      error instanceof Error ? error.message : error,
+    );
+  }
+}
+
+async function findChromeExecutable(): Promise<string | undefined> {
+  const explicit =
+    process.env.CHROME_PATH ?? process.env.GOOGLE_CHROME_BIN ?? undefined;
+  if (explicit && (await pathExists(explicit))) {
+    return explicit;
+  }
+  const candidates: string[] = [];
+  if (process.platform === 'win32') {
+    const programFiles = process.env.PROGRAMFILES;
+    const programFilesX86 = process.env['PROGRAMFILES(X86)'];
+    const localAppData = process.env.LOCALAPPDATA;
+    if (programFiles) {
+      candidates.push(
+        path.join(programFiles, 'Google', 'Chrome', 'Application', 'chrome.exe'),
+      );
+    }
+    if (programFilesX86) {
+      candidates.push(
+        path.join(
+          programFilesX86,
+          'Google',
+          'Chrome',
+          'Application',
+          'chrome.exe',
+        ),
+      );
+    }
+    if (localAppData) {
+      candidates.push(
+        path.join(
+          localAppData,
+          'Google',
+          'Chrome',
+          'Application',
+          'chrome.exe',
+        ),
+      );
+    }
+  } else if (process.platform === 'darwin') {
+    candidates.push(
+      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      path.join(
+        process.env.HOME ?? '~',
+        'Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+      ),
+    );
+  } else {
+    candidates.push(
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/chromium-browser',
+      '/snap/bin/chromium',
+    );
+  }
+  for (const candidate of candidates) {
+    if (candidate && (await pathExists(candidate))) {
+      return candidate;
+    }
+  }
+  return undefined;
+}
+
+function launchDetachedProcess(command: string, args: string[]): void {
+  const child = spawn(command, args, {
+    detached: true,
+    stdio: 'ignore',
+  });
+  child.unref();
+}
+
+async function pathExists(target: string): Promise<boolean> {
+  try {
+    await fs.access(target);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 async function fileExists(target: string): Promise<boolean> {
   try {
     await fs.access(target);
@@ -936,6 +1167,203 @@ async function fileExists(target: string): Promise<boolean> {
 
 function formatTimestampSlug(date: Date = new Date()): string {
   return date.toISOString().replace(/[:.]/g, '-');
+}
+
+async function collectAutopilotComparisonSummaries(
+  planRunSummaries: PlanRunSummary[],
+  matrixComparisonDir?: string,
+): Promise<ComparisonSummary[]> {
+  const summaries: ComparisonSummary[] = [];
+  for (const planSummary of planRunSummaries) {
+    const comparisonDir = path.join(planSummary.runDir, 'comparisons');
+    const planComparisons = await collectComparisonSummariesFromDirectory(
+      comparisonDir,
+      {
+        baseDir: planSummary.runDir,
+        defaultPlanId: planSummary.planId,
+        defaultRunId: planSummary.runId,
+      },
+    );
+    summaries.push(...planComparisons);
+  }
+  if (matrixComparisonDir) {
+    const matrixComparisons = await collectComparisonSummariesFromDirectory(
+      path.join(matrixComparisonDir, 'comparisons'),
+      {
+        baseDir: matrixComparisonDir,
+      },
+    );
+    summaries.push(...matrixComparisons);
+  }
+  return summaries;
+}
+
+async function collectComparisonSummariesFromDirectory(
+  comparisonRoot: string,
+  options: {
+    baseDir: string;
+    defaultPlanId?: string | undefined;
+    defaultRunId?: string | undefined;
+  },
+): Promise<ComparisonSummary[]> {
+  if (!(await pathExists(comparisonRoot))) {
+    return [];
+  }
+  const dirents = await fs.readdir(comparisonRoot, {
+    withFileTypes: true,
+  });
+  const summaries: ComparisonSummary[] = [];
+  for (const dirent of dirents) {
+    if (!dirent.isDirectory()) {
+      continue;
+    }
+    const comparison = await buildComparisonSummary({
+      baseDir: options.baseDir,
+      comparisonDir: path.join(comparisonRoot, dirent.name),
+      fallbackLabel: dirent.name,
+      defaultPlanId: options.defaultPlanId,
+      defaultRunId: options.defaultRunId,
+    });
+    if (comparison) {
+      summaries.push(comparison);
+    }
+  }
+  return summaries;
+}
+
+async function buildComparisonSummary(options: {
+  baseDir: string;
+  comparisonDir: string;
+  fallbackLabel: string;
+  defaultPlanId?: string | undefined;
+  defaultRunId?: string | undefined;
+}): Promise<ComparisonSummary | undefined> {
+  const metadataPath = path.join(options.comparisonDir, 'metadata.json');
+  const metadata = await readJsonIfExists<Record<string, any>>(metadataPath);
+  const label = typeof metadata?.label === 'string'
+    ? metadata.label
+    : options.fallbackLabel;
+  const description =
+    typeof metadata?.description === 'string' ? metadata.description : undefined;
+  const markdownPath = metadata?.markdownPath
+    ? path.resolve(options.baseDir, metadata.markdownPath)
+    : await findFirstMatchingFile(options.comparisonDir, '.critique.md');
+  const scorecardPath = metadata?.scorecardPath
+    ? path.resolve(options.baseDir, metadata.scorecardPath)
+    : await findFirstMatchingFile(options.comparisonDir, '.scorecard.json');
+  if (!scorecardPath || !(await pathExists(scorecardPath))) {
+    return undefined;
+  }
+  const scorecard = await readJsonIfExists<any>(scorecardPath);
+  if (!scorecard) {
+    return undefined;
+  }
+  const summaryBits = summarizeScorecardForReport(scorecard);
+  const leftInfo: ComparisonSummary['left'] = {
+    planId:
+      metadata?.left?.planId ??
+      metadata?.planId ??
+      options.defaultPlanId,
+    runId: metadata?.left?.runId ?? options.defaultRunId,
+    representativeLabel:
+      metadata?.left?.championLabel ??
+      metadata?.left?.representative?.label,
+    outputPath: metadata?.left?.outputPath
+      ? path.resolve(options.baseDir, metadata.left.outputPath)
+      : undefined,
+  };
+  const rightInfo: ComparisonSummary['right'] = {
+    planId:
+      metadata?.right?.planId ??
+      metadata?.planId ??
+      options.defaultPlanId,
+    runId: metadata?.right?.runId ?? options.defaultRunId,
+    representativeLabel:
+      metadata?.right?.championLabel ??
+      metadata?.right?.representative?.label,
+    outputPath: metadata?.right?.outputPath
+      ? path.resolve(options.baseDir, metadata.right.outputPath)
+      : undefined,
+  };
+  return {
+    label,
+    description,
+    winner: summaryBits.winner,
+    left: leftInfo,
+    right: rightInfo,
+    summary: summaryBits.summary,
+    markdownPath,
+    scorecardPath,
+    criteria: summaryBits.criteria,
+  };
+}
+
+async function readJsonIfExists<T>(filePath: string): Promise<T | undefined> {
+  try {
+    const raw = await fs.readFile(filePath, 'utf-8');
+    return JSON.parse(raw) as T;
+  } catch {
+    return undefined;
+  }
+}
+
+async function findFirstMatchingFile(
+  dir: string,
+  suffix: string,
+): Promise<string | undefined> {
+  try {
+    const entries = await fs.readdir(dir);
+    const match = entries.find((entry) =>
+      entry.toLowerCase().endsWith(suffix.toLowerCase()),
+    );
+    if (match) {
+      return path.join(dir, match);
+    }
+  } catch {
+    // ignore
+  }
+  return undefined;
+}
+
+function summarizeScorecardForReport(scorecard: any): {
+  criteria: ComparisonCriterionSummary[];
+  winner?: 'left' | 'right' | 'tie' | undefined;
+  summary?: string | undefined;
+} {
+  const criteria: ComparisonCriterionSummary[] = [];
+  if (scorecard && typeof scorecard.aggregate === 'object') {
+    for (const [name, stats] of Object.entries(scorecard.aggregate)) {
+      const record = stats as Record<string, any>;
+      criteria.push({
+        name,
+        left:
+          typeof record?.left?.mean === 'number'
+            ? record.left.mean
+            : undefined,
+        right:
+          typeof record?.right?.mean === 'number'
+            ? record.right.mean
+            : undefined,
+        delta:
+          typeof record?.delta?.mean === 'number'
+            ? record.delta.mean
+            : undefined,
+      });
+    }
+  }
+  const replicateWinner = scorecard?.replicates?.[0]?.winner;
+  const winner =
+    replicateWinner === 'left' ||
+    replicateWinner === 'right' ||
+    replicateWinner === 'tie'
+      ? replicateWinner
+      : undefined;
+  const summary = scorecard?.replicates?.[0]?.summary_markdown;
+  return {
+    criteria,
+    winner,
+    summary: typeof summary === 'string' ? summary : undefined,
+  };
 }
 
 async function resolveBookmarkUrls(
@@ -1085,6 +1513,18 @@ async function runScrape(options: ScrapeCliOptions): Promise<void> {
   }
   if (typeof verbose === 'boolean') {
     scrapeOptions.verbose = verbose;
+  }
+  if (typeof options.conversationTimeout === 'number') {
+    scrapeOptions.conversationTimeoutMs = options.conversationTimeout;
+  }
+  if (typeof options.maxRefreshAttempts === 'number') {
+    scrapeOptions.maxRefreshAttempts = options.maxRefreshAttempts;
+  }
+  if (typeof options.hydrateIterations === 'number') {
+    scrapeOptions.hydrationIterations = options.hydrateIterations;
+  }
+  if (typeof options.hydrateDelay === 'number') {
+    scrapeOptions.hydrationDelayMs = options.hydrateDelay;
   }
 
   const conversations = await collectConversationsForUrls(scrapeOptions);

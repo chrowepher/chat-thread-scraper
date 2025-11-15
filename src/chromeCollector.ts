@@ -17,6 +17,8 @@ export interface ChromeCollectorOptions {
   verbose?: boolean;
   conversationTimeoutMs?: number;
   maxRefreshAttempts?: number;
+  hydrationIterations?: number;
+  hydrationDelayMs?: number;
 }
 
 export interface CollectByUrlOptions {
@@ -29,9 +31,12 @@ export interface CollectByUrlOptions {
   conversationTimeoutMs?: number;
   maxRefreshAttempts?: number;
   maxConcurrentTabs?: number;
+  hydrationIterations?: number;
+  hydrationDelayMs?: number;
 }
 
 const DEFAULT_INCLUDES = [/chatgpt\.com/i, /chat\.openai\.com/i];
+const CONVERSATION_TURN_SELECTOR = '[data-testid^="conversation-turn"]';
 
 const sanitizeFunctionSource = (fn: (...args: any[]) => unknown): string =>
   fn
@@ -39,6 +44,88 @@ const sanitizeFunctionSource = (fn: (...args: any[]) => unknown): string =>
     .replace(/__name\([^)]*\);\s*/g, '');
 
 const EXTRACT_SCRIPT = `(${sanitizeFunctionSource(extractChatGPTThread)})()`;
+
+const buildInvocationScript = (
+  fn: (...args: any[]) => unknown,
+  ...args: unknown[]
+): string => {
+  const serialized = args.map((arg) => JSON.stringify(arg)).join(', ');
+  return `(${sanitizeFunctionSource(fn)})(${serialized});`;
+};
+
+const hydrateConversationDom = async (
+  turnSelector: string,
+  maxIterations: number,
+  settleDelayMs: number,
+): Promise<number> => {
+  const wait = (ms: number) =>
+    new Promise<void>((resolve) => {
+      setTimeout(resolve, ms);
+    });
+
+  const countTurns = (): number => {
+    try {
+      return document.querySelectorAll(turnSelector).length;
+    } catch {
+      return 0;
+    }
+  };
+
+  const clickLoadButtons = (): number => {
+    const buttons = Array.from(document.querySelectorAll('button'));
+    let clicks = 0;
+    for (const button of buttons) {
+      const label =
+        (button.textContent ||
+          (button as HTMLElement).innerText ||
+          button.getAttribute('aria-label') ||
+          ''
+        ).toLowerCase();
+      if (
+        label.includes('load more') ||
+        label.includes('show more') ||
+        label.includes('previous') ||
+        label.includes('older')
+      ) {
+        try {
+          button.click();
+          clicks += 1;
+        } catch {
+          // Ignore click failures and keep going.
+        }
+      }
+    }
+    return clicks;
+  };
+
+  let lastCount = countTurns();
+  let stableIterations = 0;
+
+  for (let attempt = 0; attempt < maxIterations; attempt += 1) {
+    const scrollTarget =
+      document.documentElement?.scrollHeight || document.body?.scrollHeight || 0;
+    window.scrollTo(0, scrollTarget);
+    await wait(settleDelayMs);
+    window.scrollTo(0, 0);
+    await wait(settleDelayMs);
+    clickLoadButtons();
+    const currentCount = countTurns();
+    if (currentCount <= lastCount) {
+      stableIterations += 1;
+    } else {
+      stableIterations = 0;
+      lastCount = currentCount;
+    }
+    if (stableIterations >= 2) {
+      break;
+    }
+  }
+
+  return countTurns();
+};
+
+const DEFAULT_SCROLL_ITERATIONS = 12;
+const DEFAULT_SCROLL_DELAY_MS = 500;
 
 type TargetDescriptor = Awaited<ReturnType<typeof CDP.List>>[number];
 
@@ -50,9 +137,11 @@ interface CollectorRuntimeOptions {
   conversationTimeoutMs?: number;
   maxRefreshAttempts?: number;
   timingState?: AdaptiveTimeoutState;
+  hydrationIterations?: number;
+  hydrationDelayMs?: number;
 }
 
-const DEFAULT_CONVERSATION_TIMEOUT_MS = 15000;
+const DEFAULT_CONVERSATION_TIMEOUT_MS = 45000;
 const TIMEOUT_PADDING_FACTOR = 1.25;
 const DEFAULT_MAX_CONCURRENT_TABS = 3;
 
@@ -177,7 +266,7 @@ const waitForConversationContent = async (
         finish(0);
       }, timeout);
     });
-  })('[data-testid^="conversation-turn"]', ${timeoutMs});`;
+  })(${JSON.stringify(CONVERSATION_TURN_SELECTOR)}, ${timeoutMs});`;
 
   try {
     const evaluation = await runtime.evaluate({
@@ -246,6 +335,39 @@ const ensureConversationContent = async (
   }
 };
 
+const hydrateConversationHistory = async (
+  runtime: RuntimeDomain,
+  verbose?: boolean,
+  options: { maxIterations?: number; settleDelayMs?: number } = {},
+): Promise<number | undefined> => {
+  const maxIterations =
+    options.maxIterations ?? Math.max(1, DEFAULT_SCROLL_ITERATIONS);
+  const settleDelayMs =
+    options.settleDelayMs ?? Math.max(100, DEFAULT_SCROLL_DELAY_MS);
+  const expression = buildInvocationScript(
+    hydrateConversationDom,
+    CONVERSATION_TURN_SELECTOR,
+    maxIterations,
+    settleDelayMs,
+  );
+  try {
+    const evaluation = await runtime.evaluate({
+      expression,
+      awaitPromise: true,
+      returnByValue: true,
+    });
+    return Number(evaluation.result?.value) || 0;
+  } catch (error) {
+    if (verbose) {
+      console.warn(
+        'Failed to hydrate ChatGPT conversation history before extraction:',
+        error,
+      );
+    }
+    return undefined;
+  }
+};
+
 const collectFromTargets = async (
   targets: TargetDescriptor[],
   runtimeOptions: CollectorRuntimeOptions,
@@ -288,6 +410,27 @@ const collectFromTargets = async (
         timeoutMs,
         maxRefreshAttempts,
       });
+      const hydrateOptions: { maxIterations?: number; settleDelayMs?: number } = {};
+      if (typeof runtimeOptions.hydrationIterations === 'number') {
+        hydrateOptions.maxIterations = runtimeOptions.hydrationIterations;
+      }
+      if (typeof runtimeOptions.hydrationDelayMs === 'number') {
+        hydrateOptions.settleDelayMs = runtimeOptions.hydrationDelayMs;
+      }
+      const hydratedTurns = await hydrateConversationHistory(
+        Runtime,
+        verbose,
+        hydrateOptions,
+      );
+      if (
+        verbose &&
+        typeof hydratedTurns === 'number' &&
+        hydratedTurns > (detectedTurns ?? 0)
+      ) {
+        console.log(
+          `Loaded additional ChatGPT turns (${hydratedTurns} total after hydration).`,
+        );
+      }
       if (typeof detectedTurns === 'number' && detectedTurns > 0) {
         const elapsed = Math.max(0, Date.now() - loadStart);
         timingState.durationSamples += 1;
@@ -337,6 +480,7 @@ const collectFromTargets = async (
         messages = messages.slice(-Math.abs(maxMessagesPerConversation));
       }
 
+      const messageCount = messages.length;
       conversations.push({
         tabId,
         title,
@@ -344,9 +488,25 @@ const collectFromTargets = async (
         messages,
       });
 
-      if (verbose) {
+      if (messageCount === 0) {
+        console.warn(
+          `Captured 0 messages from "${title}" (${url}). Observed turns: detected=${detectedTurns ?? 0}, hydrated=${hydratedTurns ?? 0}.`,
+        );
+        const domPreview = await captureDomPreview(Runtime);
+        if (domPreview) {
+          console.warn(
+            `DOM preview (truncated): ${domPreview}`,
+          );
+        } else if (verbose) {
+          console.warn(
+            'DOM preview unavailable (document.empty or evaluation blocked).',
+          );
+        }
+      } else if (verbose) {
         console.log(
-          `Collected ${messages.length} messages from "${title}" (${url})`,
+          `Collected ${messageCount} message${
+            messageCount === 1 ? '' : 's'
+          } from "${title}" (${url})`,
         );
       }
     } catch (error) {
@@ -381,6 +541,27 @@ const closeTargetDescriptor = async (
       console.warn(`Failed to close temporary tab (${target.url ?? targetId}):`, error);
     }
   }
+};
+
+const captureDomPreview = async (
+  runtime: RuntimeDomain,
+): Promise<string | undefined> => {
+  try {
+    const evaluation = await runtime.evaluate({
+      expression:
+        "(() => { try { const body = document.body?.innerText || ''; return body.slice(0, 1200); } catch { return ''; } })();",
+      returnByValue: true,
+    });
+    const value = typeof evaluation.result?.value === 'string'
+      ? evaluation.result.value.trim()
+      : '';
+    if (value.length) {
+      return value.replace(/\s+/g, ' ').slice(0, 400);
+    }
+  } catch {
+    // ignore preview errors
+  }
+  return undefined;
 };
 
 export async function collectChatGPTConversations(
@@ -448,6 +629,12 @@ export async function collectChatGPTConversations(
   if (typeof maxRefreshAttempts === 'number') {
     runtimeOptions.maxRefreshAttempts = maxRefreshAttempts;
   }
+  if (typeof options.hydrationIterations === 'number') {
+    runtimeOptions.hydrationIterations = options.hydrationIterations;
+  }
+  if (typeof options.hydrationDelayMs === 'number') {
+    runtimeOptions.hydrationDelayMs = options.hydrationDelayMs;
+  }
 
   return collectFromTargets(selectedTargets, runtimeOptions);
 }
@@ -502,64 +689,71 @@ export async function collectConversationsForUrls(
   }
 
   const pendingUrls = [...urls];
-  const activeTargets: TargetDescriptor[] = [];
   const openTargets = new Set<TargetDescriptor>();
   const conversations: BrowserConversation[] = [];
 
-  const openTargetForUrl = async (targetUrl: string): Promise<void> => {
+  const takeNextUrl = (): string | undefined => pendingUrls.shift();
+
+  const openTargetForUrl = async (
+    targetUrl: string,
+  ): Promise<TargetDescriptor | undefined> => {
     try {
       if (verbose) {
         console.log(`Opening bookmarked URL ${targetUrl}`);
       }
       const target = await CDP.New({ host, port, url: targetUrl });
-      activeTargets.push(target);
       openTargets.add(target);
+      return target;
     } catch (error) {
       console.error(`Failed to open bookmark URL ${targetUrl}:`, error);
+      return undefined;
     }
   };
 
   const releaseTarget = async (target: TargetDescriptor): Promise<void> => {
+    if (!target) {
+      return;
+    }
     if (!keepOpen) {
       await closeTargetDescriptor(target, host, port, verbose);
     }
     openTargets.delete(target);
   };
 
-  try {
-    while (pendingUrls.length || activeTargets.length) {
-      while (pendingUrls.length && activeTargets.length < concurrency) {
-        const nextUrl = pendingUrls.shift();
-        if (nextUrl) {
-          await openTargetForUrl(nextUrl);
-        }
+  const worker = async (): Promise<void> => {
+    while (true) {
+      const nextUrl = takeNextUrl();
+      if (!nextUrl) {
+        return;
       }
-
-      if (!activeTargets.length) {
-        break;
-      }
-
-      const currentTarget = activeTargets.shift();
-      if (!currentTarget) {
+      const target = await openTargetForUrl(nextUrl);
+      if (!target) {
         continue;
       }
-
       try {
-        const result = await collectFromTargets([currentTarget], runtimeOptions);
+        const result = await collectFromTargets([target], runtimeOptions);
         conversations.push(...result);
       } finally {
-        await releaseTarget(currentTarget);
+        await releaseTarget(target);
       }
     }
-  } finally {
-    if (!keepOpen && openTargets.size) {
-      await Promise.all(
-        Array.from(openTargets).map((target) =>
-          closeTargetDescriptor(target, host, port, verbose),
-        ),
-      );
-      openTargets.clear();
-    }
+  };
+
+  const workerCount = Math.max(
+    1,
+    Math.min(concurrency, pendingUrls.length),
+  );
+  await Promise.all(
+    Array.from({ length: workerCount }, () => worker()),
+  );
+
+  if (!keepOpen && openTargets.size) {
+    await Promise.all(
+      Array.from(openTargets).map((target) =>
+        closeTargetDescriptor(target, host, port, verbose),
+      ),
+    );
+    openTargets.clear();
   }
 
   if (!conversations.length && verbose) {

@@ -479,6 +479,30 @@ export class ExperimentOrchestrator {
         promptPath,
         replicates,
       });
+      const comparisonMetadata = {
+        label: request.label,
+        description: request.description,
+        generatedAt: new Date().toISOString(),
+        planId: this.schedule.plan,
+        left: {
+          championLabel: leftChampion.label,
+          outputPath: path.relative(this.runDir, leftChampion.outputPath),
+          route: leftChampion.route,
+        },
+        right: {
+          championLabel: rightChampion.label,
+          outputPath: path.relative(this.runDir, rightChampion.outputPath),
+          route: rightChampion.route,
+        },
+        markdownPath: path.relative(this.runDir, critique.markdownPath),
+        scorecardPath: path.relative(this.runDir, critique.scorecardPath),
+        replicates,
+      };
+      await fs.writeFile(
+        path.join(comparisonDir, 'metadata.json'),
+        JSON.stringify(comparisonMetadata, null, 2),
+        'utf-8',
+      );
 
       const gigRecord = {
         triple: [leftChampion.label, rightChampion.label],

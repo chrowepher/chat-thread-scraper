@@ -164,7 +164,11 @@ const trimFeaturesToBudget = (
     list.sort(compareByPriority);
     const baselineCount = Math.min(BASELINE_PINNED_FEATURES, list.length);
     for (let index = 0; index < baselineCount; index += 1) {
-      tryAdd(list[index]);
+      const baselineFeature = list[index];
+      if (!baselineFeature) {
+        break;
+      }
+      tryAdd(baselineFeature);
     }
     if (pinnedConversationIds.has(conversationId)) {
       list.slice(baselineCount).forEach((feature) => {
@@ -242,9 +246,12 @@ const applyTokenGuardrails = (
   }
 
   if (tokenEstimate <= limit) {
+    if (!compression.applied) {
+      return { tokenEstimate };
+    }
     return {
       tokenEstimate,
-      compression: compression.applied ? compression : undefined,
+      compression,
     };
   }
 

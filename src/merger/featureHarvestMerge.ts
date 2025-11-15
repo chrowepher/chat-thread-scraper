@@ -200,6 +200,9 @@ const summarizeChunkFeatures = (
     '; ',
   )}.`;
   const referenceFeature = sortedByScore[0] ?? chunkFeatures[0];
+  if (!referenceFeature) {
+    throw new Error('Unable to derive a reference feature for summary synthesis.');
+  }
   const wordCount = text.split(/\s+/).filter(Boolean).length;
   const sentenceCount = Math.max(
     1,

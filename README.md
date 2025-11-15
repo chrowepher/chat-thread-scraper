@@ -104,6 +104,18 @@ chat-thread-merger autopilot --plan-suite planA --plan-suite planB --plan-suite 
 - `--force-plan <plan>` reruns a specific plan even if cache hits exist; `--skip-plan-comparisons` disables the matrix run.
 - Plan artifacts, metrics, and critiques are written to `runs/<planId-runId>/`, and cross-plan comparisons land in `runs/plan-matrix-<signature>/`.
 
+### HTML Merge Reports & Preview
+
+Capture the merged summary, recombined outline, follow-ups, and guardrail analysis as a shareable HTML report:
+
+```powershell
+chat-thread-merger autopilot --merge-html-report dist/autopilot-merge.html --open-merge-html
+```
+
+- `--merge-html-report <path>` writes the latest champion summary (plus decision notes, coverage stats, and branch catalog) to the specified HTML file.
+- `--open-merge-html` launches Google Chrome with the freshly written report so you can review it immediately after the autopilot run finishes.
+- When you launch autopilot via `Start-ChromeDebug.ps1`, the script now injects `--merge-html-report dist/autopilot-merge.html --open-merge-html` by default. Pass `-MergeHtmlReport <path>` to change the destination or `-DisableHtmlPreview` to opt out of the automatic Chrome preview.
+
 ### Feature-Harvest Merger (Experimental)
 
 The `src/merger` directory now contains an experimental “feature harvesting” pipeline:

@@ -88,7 +88,7 @@ describe('appendMarkdownNote', () => {
       '- [Beach Retreat](https://example.com/beach) - 2 messages',
     );
     expect(markdown).toContain(
-      '- [Mountain Escape](https://example.com/mountain) - 1 messages',
+      '- [Mountain Escape](https://example.com/mountain) - 1 message',
     );
     expect(markdown).toContain('### Decisions');
     expect(markdown).toContain(
