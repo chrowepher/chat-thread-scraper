@@ -162,6 +162,27 @@ const matchesPattern = (url: string, pattern: string | RegExp): boolean => {
   return url.includes(pattern);
 };
 
+const canonicalizeChatUrl = (value?: string): string | undefined => {
+  if (!value) {
+    return undefined;
+  }
+  try {
+    const parsed = new URL(value);
+    parsed.hash = '';
+    parsed.search = '';
+    let pathname = parsed.pathname.trim();
+    if (pathname.endsWith('/')) {
+      pathname = pathname.replace(/\/+$/, '');
+    }
+    if (!pathname) {
+      pathname = '/';
+    }
+    return `${parsed.origin.toLowerCase()}${pathname}`.toLowerCase();
+  } catch {
+    return value.replace(/[#?].*$/, '').replace(/\/+$/, '').toLowerCase();
+  }
+};
+
 const waitForPageReady = async (
   page: PageDomain,
   runtime: RuntimeDomain,
@@ -687,14 +708,64 @@ export async function collectConversationsForUrls(
   if (typeof maxRefreshAttempts === 'number') {
     runtimeOptions.maxRefreshAttempts = maxRefreshAttempts;
   }
+  if (typeof options.hydrationIterations === 'number') {
+    runtimeOptions.hydrationIterations = options.hydrationIterations;
+  }
+  if (typeof options.hydrationDelayMs === 'number') {
+    runtimeOptions.hydrationDelayMs = options.hydrationDelayMs;
+  }
 
   const pendingUrls = [...urls];
   const openTargets = new Set<TargetDescriptor>();
+  const reusedTargets = new WeakSet<TargetDescriptor>();
   const conversations: BrowserConversation[] = [];
 
   const takeNextUrl = (): string | undefined => pendingUrls.shift();
 
-  const openTargetForUrl = async (
+  const requestedCanonicalUrls = new Set(
+    pendingUrls
+      .map((url) => canonicalizeChatUrl(url))
+      .filter((entry): entry is string => Boolean(entry)),
+  );
+  const reusablePools = new Map<string, TargetDescriptor[]>();
+  if (requestedCanonicalUrls.size) {
+    try {
+      const existingTargets = await CDP.List({ host, port });
+      for (const target of existingTargets) {
+        const key = canonicalizeChatUrl(target.url);
+        if (!key || !requestedCanonicalUrls.has(key)) {
+          continue;
+        }
+        if (!reusablePools.has(key)) {
+          reusablePools.set(key, []);
+        }
+        reusablePools.get(key)!.push(target);
+      }
+    } catch (error) {
+      if (verbose) {
+        console.warn(
+          'Unable to enumerate existing Chrome tabs for reuse; opening fresh tabs instead.',
+          error,
+        );
+      }
+    }
+  }
+
+  const acquireReusableTarget = (
+    targetUrl: string,
+  ): TargetDescriptor | undefined => {
+    const key = canonicalizeChatUrl(targetUrl);
+    if (!key) {
+      return undefined;
+    }
+    const pool = reusablePools.get(key);
+    if (!pool?.length) {
+      return undefined;
+    }
+    return pool.shift();
+  };
+
+  const openNewTargetForUrl = async (
     targetUrl: string,
   ): Promise<TargetDescriptor | undefined> => {
     try {
@@ -710,14 +781,30 @@ export async function collectConversationsForUrls(
     }
   };
 
+  const obtainTargetForUrl = async (
+    targetUrl: string,
+  ): Promise<TargetDescriptor | undefined> => {
+    const reused = acquireReusableTarget(targetUrl);
+    if (reused) {
+      if (verbose) {
+        console.log(`Reusing existing ChatGPT tab for ${targetUrl}`);
+      }
+      reusedTargets.add(reused);
+      return reused;
+    }
+    return openNewTargetForUrl(targetUrl);
+  };
+
   const releaseTarget = async (target: TargetDescriptor): Promise<void> => {
     if (!target) {
       return;
     }
-    if (!keepOpen) {
+    if (!keepOpen && !reusedTargets.has(target)) {
       await closeTargetDescriptor(target, host, port, verbose);
     }
-    openTargets.delete(target);
+    if (!reusedTargets.has(target)) {
+      openTargets.delete(target);
+    }
   };
 
   const worker = async (): Promise<void> => {
@@ -726,7 +813,7 @@ export async function collectConversationsForUrls(
       if (!nextUrl) {
         return;
       }
-      const target = await openTargetForUrl(nextUrl);
+      const target = await obtainTargetForUrl(nextUrl);
       if (!target) {
         continue;
       }

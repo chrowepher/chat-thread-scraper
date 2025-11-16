@@ -40,6 +40,7 @@ export interface MergeCliOptions {
   notePath?: string;
   tasksPath?: string;
   htmlReportPath?: string;
+  openHtmlReport?: boolean;
   taskSource?: string;
   notionDatabaseId?: string;
   notionTokenEnv?: string;

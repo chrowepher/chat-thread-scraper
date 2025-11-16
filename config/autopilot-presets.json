@@ -1,0 +1,62 @@
+﻿{
+  "presets": [
+    {
+      "name": "digital-nomad-full",
+      "description": "Launch Chrome, scrape Digital Nomad bookmarks, and merge into notes/tasks with HTML preview.",
+      "port": 9222,
+      "host": "127.0.0.1",
+      "profileName": "RemoteDebug",
+      "skipChrome": false,
+      "skipScraper": false,
+      "runMerge": false,
+      "mergeHtmlReport": "dist/autopilot-merge.html",
+      "disableHtmlPreview": false,
+      "autopilotArgs": [
+        "--bookmark-folder", "Digital Nomad",
+        "--snapshot", "snapshots/digital-nomad.json",
+        "--merge-note", "notes/digital-nomad.md",
+        "--merge-tasks", "snapshots/digital-nomad-tasks.json",
+        "--merge-branch-limit", "5",
+        "--merge-html-report", "dist/autopilot-merge.html",
+        "--open-merge-html"
+      ]
+    },
+    {
+      "name": "digital-nomad-merge-only",
+      "description": "Skip scraping and just merge an existing snapshot into the notes/tasks outputs.",
+      "port": 9222,
+      "host": "127.0.0.1",
+      "profileName": "RemoteDebug",
+      "skipChrome": true,
+      "skipScraper": true,
+      "runMerge": true,
+      "mergeHtmlReport": "dist/autopilot-merge.html",
+      "disableHtmlPreview": true,
+      "mergeArgs": [
+        "--input", "snapshots/digital-nomad.json",
+        "--note-path", "notes/digital-nomad.md",
+        "--tasks-path", "snapshots/digital-nomad-tasks.json",
+        "--branch-limit", "5"
+      ]
+    },
+    {
+      "name": "digital-nomad-reuse-chrome",
+      "description": "Reuse an already running debugging Chrome session, scrape bookmarks, but keep tabs open afterwards.",
+      "port": 9222,
+      "host": "127.0.0.1",
+      "profileName": "RemoteDebug",
+      "skipChrome": true,
+      "skipScraper": false,
+      "runMerge": false,
+      "autopilotArgs": [
+        "--bookmark-folder", "Digital Nomad",
+        "--snapshot", "snapshots/digital-nomad.json",
+        "--keep-tabs",
+        "--max-concurrent-tabs", "1",
+        "--conversation-timeout", "90000",
+        "--hydrate-iterations", "10",
+        "--hydrate-delay", "600"
+      ]
+    }
+  ]
+}

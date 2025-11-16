@@ -7,6 +7,7 @@ import {
   writeMergeHtmlReport,
   type MergeCliOptions,
 } from './mergeSnapshot.js';
+import { openHtmlReportInChrome } from './utils/htmlPreview.js';
 
 const parseInteger = (label: string) => (value: string): number => {
   const parsed = Number.parseInt(value, 10);
@@ -99,6 +100,10 @@ program
     'Write the merged summary and analysis to an HTML report.',
   )
   .option(
+    '--open-html-report',
+    'Open the HTML report in Chrome after merging (requires --html-report-path).',
+  )
+  .option(
     '--task-source <name>',
     'Label recorded with exported tasks.',
     'chat-thread-merger',
@@ -156,10 +161,18 @@ program
     try {
       const output = await runMergeWorkflow(options);
       if (options.htmlReportPath) {
+        const resolvedReport = path.resolve(options.htmlReportPath);
         await writeMergeHtmlReport({
-          outputPath: path.resolve(options.htmlReportPath),
+          outputPath: resolvedReport,
           payload: output.payload,
         });
+        if (options.openHtmlReport) {
+          await openHtmlReportInChrome(resolvedReport, 'Merge CLI');
+        }
+      } else if (options.openHtmlReport) {
+        console.warn(
+          '[Merge CLI] Ignoring --open-html-report because no --html-report-path was provided.',
+        );
       }
     } catch (error) {
       console.error(error instanceof Error ? error.message : error);

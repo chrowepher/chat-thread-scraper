@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import { Command, InvalidArgumentError } from 'commander';
-import { spawn } from 'node:child_process';
+import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
+import { createInterface } from 'node:readline/promises';
 import { loadBookmarkFolderEntries } from './bookmarks.js';
 import { createGuideCommand } from './guideCommand.js';
 import type { BookmarkLoadResult } from './bookmarks.js';
@@ -37,7 +38,7 @@ import {
   type ComparisonSummary,
   type ComparisonCriterionSummary,
 } from './mergeSnapshot.js';
-import type { ThreadSnapshot } from './types.js';
+import type { ThreadSnapshot, BrowserConversation } from './types.js';
 import { createFilterCommand } from './filterCommand.js';
 import { PlanRunCache } from './experiments/planCache.js';
 import { ExperimentTaskState } from './experiments/taskState.js';
@@ -47,6 +48,8 @@ import {
   ensurePlanMatrixComparisons,
   type PlanRunSummary,
 } from './experiments/planMatrix.js';
+import { openHtmlReportInChrome } from './utils/htmlPreview.js';
+import { pathExists, fileExists } from './utils/fileSystem.js';
 
 interface ScrapeCliOptions {
   host: string;
@@ -779,6 +782,11 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     logStep('Step 1/3: Skipping scrape (per flag).');
   }
 
+  logStep('Validating snapshot conversations for empty captures or duplicates...');
+  const snapshotConversations = await ensureSnapshotConversationsAreReady(
+    snapshotTarget,
+  );
+
   let mergeReportPayload: MergeReportPayload | undefined;
   const htmlReportPath = options.mergeHtmlReport
     ? path.resolve(options.mergeHtmlReport)
@@ -1048,120 +1056,6 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     console.log(
       ` - Plan matrix: ${path.relative(process.cwd(), matrixComparisonDir)}`,
     );
-  }
-}
-
-async function openHtmlReportInChrome(reportPath: string): Promise<void> {
-  const resolved = path.resolve(reportPath);
-  try {
-    await fs.access(resolved);
-  } catch {
-    console.warn(`[Autopilot] HTML report not found at ${resolved}.`);
-    return;
-  }
-  const chromeExecutable = await findChromeExecutable();
-  if (!chromeExecutable) {
-    console.warn(
-      '[Autopilot] Unable to locate Google Chrome to preview the HTML report. Set CHROME_PATH to override.',
-    );
-    return;
-  }
-  try {
-    launchDetachedProcess(chromeExecutable, ['--new-window', resolved]);
-    console.log(`[Autopilot] Opened HTML merge report in Chrome: ${resolved}`);
-  } catch (error) {
-    console.warn(
-      '[Autopilot] Failed to open Chrome for the HTML report:',
-      error instanceof Error ? error.message : error,
-    );
-  }
-}
-
-async function findChromeExecutable(): Promise<string | undefined> {
-  const explicit =
-    process.env.CHROME_PATH ?? process.env.GOOGLE_CHROME_BIN ?? undefined;
-  if (explicit && (await pathExists(explicit))) {
-    return explicit;
-  }
-  const candidates: string[] = [];
-  if (process.platform === 'win32') {
-    const programFiles = process.env.PROGRAMFILES;
-    const programFilesX86 = process.env['PROGRAMFILES(X86)'];
-    const localAppData = process.env.LOCALAPPDATA;
-    if (programFiles) {
-      candidates.push(
-        path.join(programFiles, 'Google', 'Chrome', 'Application', 'chrome.exe'),
-      );
-    }
-    if (programFilesX86) {
-      candidates.push(
-        path.join(
-          programFilesX86,
-          'Google',
-          'Chrome',
-          'Application',
-          'chrome.exe',
-        ),
-      );
-    }
-    if (localAppData) {
-      candidates.push(
-        path.join(
-          localAppData,
-          'Google',
-          'Chrome',
-          'Application',
-          'chrome.exe',
-        ),
-      );
-    }
-  } else if (process.platform === 'darwin') {
-    candidates.push(
-      '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-      path.join(
-        process.env.HOME ?? '~',
-        'Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-      ),
-    );
-  } else {
-    candidates.push(
-      '/usr/bin/google-chrome',
-      '/usr/bin/google-chrome-stable',
-      '/usr/bin/chromium-browser',
-      '/snap/bin/chromium',
-    );
-  }
-  for (const candidate of candidates) {
-    if (candidate && (await pathExists(candidate))) {
-      return candidate;
-    }
-  }
-  return undefined;
-}
-
-function launchDetachedProcess(command: string, args: string[]): void {
-  const child = spawn(command, args, {
-    detached: true,
-    stdio: 'ignore',
-  });
-  child.unref();
-}
-
-async function pathExists(target: string): Promise<boolean> {
-  try {
-    await fs.access(target);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function fileExists(target: string): Promise<boolean> {
-  try {
-    await fs.access(target);
-    return true;
-  } catch {
-    return false;
   }
 }
 
@@ -1550,6 +1444,164 @@ async function runScrape(options: ScrapeCliOptions): Promise<void> {
   }
 
   await writeSnapshot(snapshot, output, Boolean(pretty));
+}
+
+interface DuplicateConversationEntry {
+  title: string;
+  url: string;
+  messageCount: number;
+}
+
+interface DuplicateConversationGroup {
+  hash: string;
+  entries: DuplicateConversationEntry[];
+}
+
+async function loadSnapshotConversations(
+  snapshotPath: string,
+): Promise<BrowserConversation[]> {
+  const resolved = path.resolve(snapshotPath);
+  const raw = await fs.readFile(resolved, 'utf-8');
+  const parsed = JSON.parse(raw) as ThreadSnapshot | BrowserConversation[];
+  if (Array.isArray(parsed)) {
+    return parsed as BrowserConversation[];
+  }
+  if (parsed && Array.isArray(parsed.conversations)) {
+    return parsed.conversations as BrowserConversation[];
+  }
+  throw new Error(
+    `Snapshot ${snapshotPath} is not a JSON array or an object with a conversations[] property.`,
+  );
+}
+
+const EMPTY_HASH = crypto.createHash('sha1').update('').digest('hex');
+
+function computeConversationHash(conversation: BrowserConversation): string {
+  const normalized = (conversation.messages ?? []).map((message) => {
+    const role = message.role ?? 'assistant';
+    const content =
+      typeof message.content === 'string' ? message.content : '';
+    return `${role}:${content.replace(/\s+/g, ' ').trim()}`;
+  });
+  return crypto
+    .createHash('sha1')
+    .update(normalized.join('\n'))
+    .digest('hex');
+}
+
+function findDuplicateConversationGroups(
+  conversations: BrowserConversation[],
+): DuplicateConversationGroup[] {
+  const groups = new Map<string, DuplicateConversationGroup>();
+  for (const conversation of conversations) {
+    const hash = computeConversationHash(conversation);
+    if (!groups.has(hash)) {
+      groups.set(hash, { hash, entries: [] });
+    }
+    groups.get(hash)!.entries.push({
+      title: conversation.title || 'Untitled',
+      url: conversation.url,
+      messageCount: conversation.messages?.length ?? 0,
+    });
+  }
+  return Array.from(groups.values()).filter((group) => {
+    if (group.hash === EMPTY_HASH) {
+      // Let the zero-message guard handle blank captures.
+      return false;
+    }
+    return group.entries.filter((entry) => entry.messageCount > 0).length > 1;
+  });
+}
+
+async function ensureSnapshotConversationsAreReady(
+  snapshotPath: string,
+): Promise<BrowserConversation[]> {
+  while (true) {
+    const conversations = await loadSnapshotConversations(snapshotPath);
+    const zeroMessage = conversations.filter(
+      (conversation) => !(conversation.messages?.length),
+    );
+    if (zeroMessage.length) {
+      console.error(
+        `\n[Autopilot] Aborting: ${zeroMessage.length} conversation${
+          zeroMessage.length === 1 ? '' : 's'
+        } in ${path.basename(snapshotPath)} captured 0 messages.`,
+      );
+      zeroMessage.slice(0, 5).forEach((conversation) => {
+        console.error(
+          ` - ${conversation.title || 'Untitled'} (${
+            conversation.url || 'no URL recorded'
+          })`,
+        );
+      });
+      if (zeroMessage.length > 5) {
+        console.error(
+          ` ...and ${zeroMessage.length - 5} more conversation${
+            zeroMessage.length - 5 === 1 ? '' : 's'
+          }`,
+        );
+      }
+      throw new Error(
+        'One or more conversations captured 0 messages. Open those URLs in Chrome, confirm the transcript loads, and rerun the scrape.',
+      );
+    }
+
+    const duplicates = findDuplicateConversationGroups(conversations);
+    if (!duplicates.length) {
+      return conversations;
+    }
+
+    console.error(
+      `\n[Autopilot] Detected ${duplicates.length} duplicate conversation group${
+        duplicates.length === 1 ? '' : 's'
+      } (different URLs with identical transcripts).`,
+    );
+    duplicates.slice(0, 3).forEach((group, index) => {
+      console.error(
+        ` Group ${index + 1} (hash ${group.hash.slice(0, 12)}…):`,
+      );
+      group.entries.forEach((entry) => {
+        console.error(
+          `   - ${entry.messageCount} msg${
+            entry.messageCount === 1 ? '' : 's'
+          } | ${entry.title} | ${entry.url}`,
+        );
+      });
+    });
+    if (duplicates.length > 3) {
+      console.error(
+        ` ...and ${duplicates.length - 3} more duplicate group${
+          duplicates.length - 3 === 1 ? '' : 's'
+        }.`,
+      );
+    }
+
+    const shouldAbort = await promptDuplicateResolution(snapshotPath);
+    if (shouldAbort) {
+      throw new Error(
+        'Run aborted while waiting for duplicate conversations to be resolved.',
+      );
+    }
+  }
+}
+
+async function promptDuplicateResolution(
+  snapshotPath: string,
+): Promise<boolean> {
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  try {
+    const response = await rl.question(
+      `\nResolve the duplicates in ${path.basename(
+        snapshotPath,
+      )} (edit bookmarks/snapshot now), then press Enter to re-check.\nType "q" to abort this run: `,
+    );
+    return response.trim().toLowerCase().startsWith('q');
+  } finally {
+    rl.close();
+  }
 }
 function describeTask(task: ExperimentTask): string {
   switch (task.type) {

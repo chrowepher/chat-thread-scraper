@@ -63,6 +63,27 @@
       "runId": "exp-d02584",
       "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-d02584",
       "updatedAt": "2025-11-15T10:23:22.356Z"
+    },
+    {
+      "planId": "planB",
+      "inputSignature": "b47737f3d04dbde812a089fbf412f97dfdd2a962",
+      "runId": "exp-69d13a",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-69d13a",
+      "updatedAt": "2025-11-15T14:04:16.225Z"
+    },
+    {
+      "planId": "planB",
+      "inputSignature": "6d0dd2e4ad22e7081f3b889d408adadfc3c97997",
+      "runId": "exp-dfc9a8",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-dfc9a8",
+      "updatedAt": "2025-11-15T19:53:32.509Z"
+    },
+    {
+      "planId": "planB",
+      "inputSignature": "04053f440d18c7a48bcc763ac790a7b3e3a5261f",
+      "runId": "exp-ed2779",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-ed2779",
+      "updatedAt": "2025-11-15T20:06:41.719Z"
     }
   ]
 }
