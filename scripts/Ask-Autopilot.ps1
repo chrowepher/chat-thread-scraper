@@ -43,7 +43,7 @@ function Read-Value {
 }
 
 $port = [int](Read-Value -Prompt 'Remote debugging port' -Default '9222')
-$host = Read-Value -Prompt 'DevTools host' -Default '127.0.0.1'
+$devToolsHost = Read-Value -Prompt 'DevTools host' -Default '127.0.0.1'
 $profileName = Read-Value -Prompt 'Chrome profile name' -Default 'RemoteDebug'
 $launchChrome = Read-YesNo -Prompt 'Launch Chrome before running?' -Default $true
 $runScraper = Read-YesNo -Prompt 'Run the scraper this session?' -Default $true
@@ -52,7 +52,7 @@ $useLegacy = Read-YesNo -Prompt 'Use legacy scrape/merge workflow?' -Default $fa
 $skipChrome = -not $launchChrome
 $skipScraper = -not $runScraper
 
-$startArgs = @('-Port', $port, '-DevToolsHost', $host, '-ProfileName', $profileName)
+$startArgs = @('-Port', $port, '-DevToolsHost', $devToolsHost, '-ProfileName', $profileName)
 if ($skipChrome) { $startArgs += '-SkipChrome' }
 if ($skipScraper) { $startArgs += '-SkipScraper' }
 

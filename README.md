@@ -116,6 +116,14 @@ chat-thread-merger autopilot --merge-html-report dist/autopilot-merge.html --ope
 - `--open-merge-html` launches Google Chrome with the freshly written report so you can review it immediately after the autopilot run finishes.
 - When you launch autopilot via `Start-ChromeDebug.ps1`, the script now injects `--merge-html-report dist/autopilot-merge.html --open-merge-html` by default. Pass `-MergeHtmlReport <path>` to change the destination or `-DisableHtmlPreview` to opt out of the automatic Chrome preview.
 
+### Workflow Helpers
+
+Juggling DevTools flags, Chrome profile clean-up, and dozens of autopilot switches is now optional. Pick whichever entry point fits the moment:
+
+- `scripts/Select-AutopilotPreset.ps1`: loads presets from `config/autopilot-presets.json`, shows an interactive picker, and launches `Start-ChromeDebug.ps1` with the matching arguments. Use `-PresetName digital-nomad-reuse-chrome` to skip the menu or `-ListOnly` to dump the catalog.
+- `scripts/Ask-Autopilot.ps1`: walks you through yes/no questions (launch Chrome? keep tabs? legacy merge?) plus text prompts for bookmark folders, snapshot paths, and limits. It prints the assembled command, asks for confirmation, then executes it.
+- `npm run dashboard`: starts a tiny web UI at `http://localhost:4571` with grouped form fields. Submit the form to run `Start-ChromeDebug.ps1`; the page shows the exact PowerShell invocation plus stdout/stderr so you can tweak and rerun quickly.
+
 ### Feature-Harvest Merger (Experimental)
 
 The `src/merger` directory now contains an experimental “feature harvesting” pipeline:
