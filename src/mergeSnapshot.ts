@@ -449,11 +449,25 @@ if (todoistProjectId) {
   };
 }
 
+export interface ImprovementHighlights {
+  revisedSummary?: string | undefined;
+  improvements?: Array<{
+    gap: string;
+    improvement: string;
+    impact: string;
+    severity?: string;
+    reference?: string;
+  }> | undefined;
+  followUpAdjustments?: string[] | undefined;
+  residualRisks?: string[] | undefined;
+}
+
 interface HtmlReportOptions {
   outputPath: string;
   payload: MergeReportPayload;
   planSummaries?: PlanSummaryInfo[] | undefined;
   comparisonSummaries?: ComparisonSummary[] | undefined;
+  improvements?: ImprovementHighlights | undefined;
 }
 
 export async function writeMergeHtmlReport(
@@ -465,6 +479,7 @@ export async function writeMergeHtmlReport(
     payload: options.payload,
     planSummaries: options.planSummaries,
     comparisonSummaries: options.comparisonSummaries,
+    improvements: options.improvements,
   });
   await fs.writeFile(resolved, html, 'utf-8');
 }
@@ -473,8 +488,9 @@ function renderHtmlReport(options: {
   payload: MergeReportPayload;
   planSummaries?: PlanSummaryInfo[] | undefined;
   comparisonSummaries?: ComparisonSummary[] | undefined;
+  improvements?: ImprovementHighlights | undefined;
 }): string {
-  const { payload, planSummaries, comparisonSummaries } = options;
+  const { payload, planSummaries, comparisonSummaries, improvements } = options;
   const {
     mergeResult,
     branches,
@@ -492,6 +508,7 @@ function renderHtmlReport(options: {
   const guardrailsHtml = renderGuardrailSection(harvestResult, scientistVerdict);
   const planSummariesHtml = renderPlanSummarySection(planSummaries);
   const comparisonHtml = renderComparisonSection(comparisonSummaries);
+  const improvementsHtml = renderImprovementSection(improvements);
 
   return `<!doctype html>
 <html lang="en">
@@ -624,6 +641,27 @@ function renderHtmlReport(options: {
         margin-top: 0;
         font-size: 16px;
       }
+      .improvement-list {
+        list-style: none;
+        padding-left: 0;
+      }
+      .improvement-list li {
+        margin-bottom: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 10px;
+        padding: 12px 16px;
+      }
+      .improvement-list strong {
+        display: block;
+        font-size: 15px;
+      }
+      .improvement-meta {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        margin-top: 8px;
+      }
       .summary-fieldset {
         display: flex;
         flex-direction: column;
@@ -733,6 +771,7 @@ function renderHtmlReport(options: {
         <h2>Executive Summary</h2>
         ${summaryHtml}
       </section>
+      ${improvementsHtml}
       <section>
         <h2>Recombined Path</h2>
         ${combinedHtml}
@@ -1133,6 +1172,61 @@ function renderComparisonSection(
   return `<section>
     <h2>Comparison Results</h2>
     ${cards}
+  </section>`;
+}
+
+function renderImprovementSection(
+  improvements?: ImprovementHighlights | undefined,
+): string {
+  if (!improvements) {
+    return '';
+  }
+  const list = improvements.improvements?.length
+    ? `<ol class="improvement-list">${improvements.improvements
+        .map(
+          (item) => `<li>
+            <strong>${escapeHtml(item.improvement || 'Improvement')}</strong>
+            <div class="improvement-meta">Gap</div>
+            <p>${escapeHtml(item.gap || 'n/a')}</p>
+            <div class="improvement-meta">Impact</div>
+            <p>${escapeHtml(item.impact || 'n/a')}</p>
+            ${
+              item.severity
+                ? `<div class="improvement-meta">Severity</div><p>${escapeHtml(item.severity)}</p>`
+                : ''
+            }
+            ${
+              item.reference
+                ? `<div class="improvement-meta">Reference</div><p>${escapeHtml(item.reference)}</p>`
+                : ''
+            }
+          </li>`,
+        )
+        .join('')}</ol>`
+    : '<p class="muted">Audit and QA identified no additional improvements.</p>';
+  const followUps = improvements.followUpAdjustments?.length
+    ? `<div class="card"><h3>Follow-up Adjustments</h3><ul>${improvements.followUpAdjustments
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join('')}</ul></div>`
+    : '';
+  const risks = improvements.residualRisks?.length
+    ? `<div class="card"><h3>Residual Risks</h3><ul>${improvements.residualRisks
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join('')}</ul></div>`
+    : '';
+  const revisedSummary = improvements.revisedSummary
+    ? `<div class="card"><h3>Revised Narrative</h3><p>${escapeHtml(
+        improvements.revisedSummary,
+      )}</p></div>`
+    : '';
+  return `<section>
+    <h2>Audit-Driven Improvements</h2>
+    <div class="grid">
+      ${revisedSummary}
+      ${followUps}
+      ${risks}
+    </div>
+    ${list}
   </section>`;
 }
 

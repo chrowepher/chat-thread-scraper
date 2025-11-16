@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 import { Command, InvalidArgumentError } from 'commander';
-import crypto from 'node:crypto';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
@@ -37,6 +36,7 @@ import {
   type PlanSummaryInfo,
   type ComparisonSummary,
   type ComparisonCriterionSummary,
+  type ImprovementHighlights,
 } from './mergeSnapshot.js';
 import type { ThreadSnapshot, BrowserConversation } from './types.js';
 import { createFilterCommand } from './filterCommand.js';
@@ -50,6 +50,26 @@ import {
 } from './experiments/planMatrix.js';
 import { openHtmlReportInChrome } from './utils/htmlPreview.js';
 import { pathExists, fileExists } from './utils/fileSystem.js';
+import {
+  computeConversationHash,
+  EMPTY_CONVERSATION_HASH,
+} from './utils/conversationHash.js';
+import {
+  writeFinalOutputBundle,
+  type SuccessCriteriaAttachment,
+  type FinalOutputBundle,
+} from './autopilot/finalBundle.js';
+import {
+  runChatgptAudit,
+  runChatgptQa,
+  type AuditArtifact,
+  type QaArtifact,
+} from './autopilot/auditService.js';
+import {
+  runAuditDrivenRevision,
+  type RevisionArtifact,
+} from './autopilot/revisionService.js';
+import { createCalibrationCommand } from './calibrationCommand.js';
 
 interface ScrapeCliOptions {
   host: string;
@@ -145,6 +165,15 @@ interface AutopilotCliOptions {
   maxRefreshAttempts?: number;
   hydrateIterations?: number;
   hydrateDelay?: number;
+  successCriteria?: string;
+  finalBundlePath?: string;
+  skipAudit?: boolean;
+  skipQa?: boolean;
+  auditModel?: string;
+  qaModel?: string;
+  auditOutputDir?: string;
+  skipRevisions?: boolean;
+  revisionModel?: string;
 }
 
 const collectValues = (value: string, previous: string[] = []): string[] => {
@@ -188,6 +217,7 @@ program.addCommand(createGuideCommand());
 program.addCommand(createExperimentCommand());
 program.addCommand(createRunCommand());
 program.addCommand(createFilterCommand());
+program.addCommand(createCalibrationCommand());
 
 program
   .parseAsync(process.argv)
@@ -352,6 +382,36 @@ function createAutopilotCommand(): Command {
     .option('--skip-permutations', 'Do not execute permutation tasks.')
     .option('--skip-tournaments', 'Do not execute tournament tasks.')
     .option('--skip-comparisons', 'Do not execute comparison tasks.')
+    .option(
+      '--success-criteria <path>',
+      'Path to a Markdown/JSON file describing success criteria for the audit.',
+      path.join('config', 'autopilot-success-criteria.md'),
+    )
+    .option(
+      '--final-bundle-path <path>',
+      'Destination for the structured final output bundle (default runs/<runId>/final-output-bundle.json).',
+    )
+    .option('--skip-audit', 'Skip the chatgpt-audit step.')
+    .option('--skip-qa', 'Skip the chatgpt-qa safety pass.')
+    .option(
+      '--audit-model <model>',
+      'Model used for the chatgpt-audit prompt.',
+      'gpt-4.1',
+    )
+    .option(
+      '--qa-model <model>',
+      'Model used for the chatgpt-qa reviewer prompt (defaults to --audit-model).',
+    )
+    .option(
+      '--audit-output-dir <path>',
+      'Directory to persist chatgpt-audit and chatgpt-qa artifacts (default runs/<runId>/audit).',
+    )
+    .option('--skip-revisions', 'Skip the post-audit revision step.')
+    .option(
+      '--revision-model <model>',
+      'Model used for the audit-driven revisions.',
+      'gpt-4.1',
+    )
     .action(async (options: AutopilotCliOptions) => {
       try {
         await runAutopilot(options);
@@ -707,6 +767,26 @@ async function executeExperimentTaskSet(
   }
 }
 
+async function loadSuccessCriteriaAttachment(
+  filePath: string,
+): Promise<SuccessCriteriaAttachment> {
+  try {
+    const content = await fs.readFile(filePath, 'utf-8');
+    if (!content.trim()) {
+      throw new Error('file is empty');
+    }
+    return {
+      path: filePath,
+      content,
+    };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Unable to load success criteria from ${filePath}. Set --success-criteria to a valid file. (${message})`,
+    );
+  }
+}
+
 async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
   const snapshotTarget = path.resolve(
     options.snapshot ?? path.join('snapshots', 'autopilot-latest.json'),
@@ -717,9 +797,27 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
   const manualUrls = options.url?.filter(Boolean);
   const planId = options.plan ?? 'planB';
   const runId = options.runId ?? `autopilot-${formatTimestampSlug()}`;
+  const runDirectory = path.resolve('runs', runId);
+  await fs.mkdir(runDirectory, { recursive: true });
+  const finalBundlePath = path.resolve(
+    options.finalBundlePath ?? path.join(runDirectory, 'final-output-bundle.json'),
+  );
+  const successCriteriaPath = path.resolve(
+    options.successCriteria ?? path.join('config', 'autopilot-success-criteria.md'),
+  );
+  const successCriteriaAttachment = await loadSuccessCriteriaAttachment(
+    successCriteriaPath,
+  );
   const displaySnapshot = path.relative(process.cwd(), snapshotTarget);
   let lastExperimentDir: string | undefined;
   let matrixComparisonDir: string | undefined;
+  let comparisonSummaries: ComparisonSummary[] = [];
+  let finalBundle: FinalOutputBundle | undefined;
+  let finalBundleDigest: string | undefined;
+  let auditArtifact: AuditArtifact | undefined;
+  let qaArtifact: QaArtifact | undefined;
+  let revisionArtifact: RevisionArtifact | undefined;
+  let improvementHighlights: ImprovementHighlights | undefined;
 
   const logStep = (message: string) => {
     console.log(`\n[Autopilot] ${message}`);
@@ -791,10 +889,17 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
   const htmlReportPath = options.mergeHtmlReport
     ? path.resolve(options.mergeHtmlReport)
     : undefined;
+  const mergeNotePath = options.mergeNote
+    ? path.resolve(options.mergeNote)
+    : undefined;
+  const mergeTasksPath = options.mergeTasks
+    ? path.resolve(options.mergeTasks)
+    : undefined;
+  let responseDebugPath: string | undefined;
 
   if (!options.skipMerge) {
     logStep('Step 2/3: Merging snapshot into a champion summary...');
-    const responseDebugPath = path.resolve(
+    responseDebugPath = path.resolve(
       options.mergeResponseDebug ?? path.join('dist', 'autopilot-merge.json'),
     );
     await fs.mkdir(path.dirname(responseDebugPath), { recursive: true });
@@ -814,11 +919,11 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     if (typeof options.mergeTemperature === 'number') {
       mergeOptions.temperature = options.mergeTemperature;
     }
-    if (options.mergeNote) {
-      mergeOptions.notePath = options.mergeNote;
+    if (mergeNotePath) {
+      mergeOptions.notePath = mergeNotePath;
     }
-    if (options.mergeTasks) {
-      mergeOptions.tasksPath = options.mergeTasks;
+    if (mergeTasksPath) {
+      mergeOptions.tasksPath = mergeTasksPath;
     }
     const mergeOutput = await runMergeWorkflow(mergeOptions);
     mergeReportPayload = mergeOutput.payload;
@@ -827,9 +932,6 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
         outputPath: htmlReportPath,
         payload: mergeReportPayload,
       });
-      if (options.openMergeHtml) {
-        await openHtmlReportInChrome(htmlReportPath);
-      }
     }
   } else {
     logStep('Step 2/3: Skipping merge (per flag).');
@@ -1007,6 +1109,109 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
     logStep('Step 3/3: Skipping experiments (per flag).');
   }
 
+  if (
+    comparisonSummaries.length === 0 &&
+    (planRunSummaries.length || matrixComparisonDir)
+  ) {
+    comparisonSummaries = await collectAutopilotComparisonSummaries(
+      planRunSummaries,
+      matrixComparisonDir,
+    );
+  }
+
+  logStep('Packaging final output bundle for downstream review...');
+  const finalBundleResult = await writeFinalOutputBundle({
+    runId,
+    runDirectory,
+    outputPath: finalBundlePath,
+    autopilotOptions: options as unknown as Record<string, unknown>,
+    snapshotPath: snapshotTarget,
+    snapshotConversations,
+    ...(mergeReportPayload ? { mergePayload: mergeReportPayload } : {}),
+    ...(htmlReportPath ? { mergeHtmlPath: htmlReportPath } : {}),
+    ...(mergeNotePath ? { mergeNotePath } : {}),
+    ...(mergeTasksPath ? { mergeTasksPath } : {}),
+    ...(responseDebugPath ? { mergeResponseDebugPath: responseDebugPath } : {}),
+    planRunSummaries,
+    comparisonSummaries,
+    ...(matrixComparisonDir ? { matrixComparisonDir } : {}),
+    successCriteria: successCriteriaAttachment,
+  });
+  finalBundle = finalBundleResult.bundle;
+  finalBundleDigest = finalBundleResult.digest;
+
+  const auditOutputDir = path.resolve(
+    options.auditOutputDir ?? path.join(runDirectory, 'audit'),
+  );
+  const auditModel = options.auditModel ?? 'gpt-4.1';
+  const qaModel = options.qaModel ?? auditModel;
+  const revisionModel = options.revisionModel ?? auditModel;
+
+  if (options.skipAudit) {
+    logStep('chatgpt-audit step skipped (per flag).');
+  } else {
+    if (!finalBundle || !finalBundleDigest) {
+      throw new Error(
+        'Final output bundle missing; cannot run chatgpt-audit step.',
+      );
+    }
+    logStep('Running chatgpt-audit on the final bundle...');
+    auditArtifact = await runChatgptAudit({
+      model: auditModel,
+      bundle: finalBundle,
+      bundlePath: finalBundlePath,
+      bundleDigest: finalBundleDigest,
+      successCriteria: successCriteriaAttachment,
+      outputDir: auditOutputDir,
+    });
+    console.log(
+      `[Autopilot] chatgpt-audit verdict: ${auditArtifact.verdict} (${path.relative(process.cwd(), auditArtifact.jsonPath)})`,
+    );
+  }
+
+  if (options.skipQa) {
+    logStep('chatgpt-qa step skipped (per flag).');
+  } else if (!auditArtifact) {
+    logStep('chatgpt-qa step skipped (audit artifact unavailable).');
+  } else {
+    logStep('Running chatgpt-qa review of the audit transcript...');
+    qaArtifact = await runChatgptQa({
+      model: qaModel,
+      auditRecord: auditArtifact,
+      bundleDigest: finalBundleDigest ?? '',
+      successCriteria: successCriteriaAttachment,
+      outputDir: auditOutputDir,
+    });
+    console.log(
+      `[Autopilot] chatgpt-qa verdict: ${qaArtifact.verdict} (${path.relative(process.cwd(), qaArtifact.jsonPath)})`,
+    );
+  }
+
+  if (options.skipRevisions) {
+    logStep('Revision step skipped (per flag).');
+  } else if (!mergeReportPayload || !finalBundle) {
+    logStep('Revision step skipped (merge payload or bundle unavailable).');
+  } else {
+    logStep('Strengthening final output based on audit/QA gaps...');
+    revisionArtifact = await runAuditDrivenRevision({
+      model: revisionModel,
+      bundle: finalBundle,
+      bundlePath: finalBundlePath,
+      auditRecord: auditArtifact,
+      qaRecord: qaArtifact,
+      outputDir: auditOutputDir,
+    });
+    improvementHighlights = {
+      revisedSummary: revisionArtifact.revisedSummary,
+      improvements: revisionArtifact.improvements,
+      followUpAdjustments: revisionArtifact.followUpAdjustments,
+      residualRisks: revisionArtifact.residualRisks,
+    };
+    console.log(
+      `[Autopilot] audit-driven revisions recorded at ${path.relative(process.cwd(), revisionArtifact.jsonPath)}.`,
+    );
+  }
+
   if (htmlReportPath && mergeReportPayload) {
     const planSummaryInfos: PlanSummaryInfo[] = planRunSummaries.map(
       (summary) => ({
@@ -1018,23 +1223,31 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
         representativePath: summary.representative.outputPath,
       }),
     );
-    const comparisonSummaries =
-      planRunSummaries.length || matrixComparisonDir
-        ? await collectAutopilotComparisonSummaries(
-            planRunSummaries,
-            matrixComparisonDir,
-          )
-        : [];
     await writeMergeHtmlReport({
       outputPath: htmlReportPath,
       payload: mergeReportPayload,
       planSummaries: planSummaryInfos,
       comparisonSummaries,
+      improvements: improvementHighlights,
     });
+    if (options.openMergeHtml) {
+      await openHtmlReportInChrome(htmlReportPath);
+    }
   }
 
   console.log('\n[Autopilot] Complete.');
   console.log(` - Snapshot: ${displaySnapshot}`);
+  const bundleDisplay = path.relative(process.cwd(), finalBundlePath);
+  if (finalBundleDigest) {
+    console.log(
+      ` - Final bundle: ${bundleDisplay} (sha256 ${finalBundleDigest.slice(0, 12)}...)`,
+    );
+  } else {
+    console.log(` - Final bundle: ${bundleDisplay}`);
+  }
+  console.log(
+    ` - Success criteria: ${path.relative(process.cwd(), successCriteriaPath)}`,
+  );
   if (options.mergeNote) {
     console.log(
       ` - Merge note: ${path.relative(process.cwd(), path.resolve(options.mergeNote))}`,
@@ -1055,6 +1268,21 @@ async function runAutopilot(options: AutopilotCliOptions): Promise<void> {
   if (matrixComparisonDir) {
     console.log(
       ` - Plan matrix: ${path.relative(process.cwd(), matrixComparisonDir)}`,
+    );
+  }
+  if (auditArtifact) {
+    console.log(
+      ` - chatgpt-audit: ${auditArtifact.verdict} (${path.relative(process.cwd(), auditArtifact.jsonPath)})`,
+    );
+  }
+  if (qaArtifact) {
+    console.log(
+      ` - chatgpt-qa: ${qaArtifact.verdict} (${path.relative(process.cwd(), qaArtifact.jsonPath)})`,
+    );
+  }
+  if (revisionArtifact) {
+    console.log(
+      ` - revisions: updated narrative (${path.relative(process.cwd(), revisionArtifact.jsonPath)})`,
     );
   }
 }
@@ -1474,21 +1702,6 @@ async function loadSnapshotConversations(
   );
 }
 
-const EMPTY_HASH = crypto.createHash('sha1').update('').digest('hex');
-
-function computeConversationHash(conversation: BrowserConversation): string {
-  const normalized = (conversation.messages ?? []).map((message) => {
-    const role = message.role ?? 'assistant';
-    const content =
-      typeof message.content === 'string' ? message.content : '';
-    return `${role}:${content.replace(/\s+/g, ' ').trim()}`;
-  });
-  return crypto
-    .createHash('sha1')
-    .update(normalized.join('\n'))
-    .digest('hex');
-}
-
 function findDuplicateConversationGroups(
   conversations: BrowserConversation[],
 ): DuplicateConversationGroup[] {
@@ -1505,7 +1718,7 @@ function findDuplicateConversationGroups(
     });
   }
   return Array.from(groups.values()).filter((group) => {
-    if (group.hash === EMPTY_HASH) {
+    if (group.hash === EMPTY_CONVERSATION_HASH) {
       // Let the zero-message guard handle blank captures.
       return false;
     }

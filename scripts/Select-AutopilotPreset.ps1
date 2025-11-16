@@ -81,6 +81,52 @@ function Add-ArrayArg {
     }
 }
 
+$autopilotArgList = @()
+if ($preset.autopilotArgs) {
+    $autopilotArgList = @($preset.autopilotArgs)
+}
+
+function Test-AutopilotFlag {
+    param([string]$Flag)
+    for ($index = 0; $index -lt $script:autopilotArgList.Count; $index++) {
+        if ($script:autopilotArgList[$index] -eq $Flag) {
+            return $true
+        }
+    }
+    return $false
+}
+
+function Add-AutopilotOption {
+    param(
+        [string]$Flag,
+        [string]$Value,
+        [switch]$IsSwitch
+    )
+    if ($IsSwitch) {
+        if (-not (Test-AutopilotFlag -Flag $Flag)) {
+            $script:autopilotArgList += $Flag
+        }
+        return
+    }
+    if ([string]::IsNullOrWhiteSpace($Value)) {
+        return
+    }
+    if (-not (Test-AutopilotFlag -Flag $Flag)) {
+        $script:autopilotArgList += $Flag
+        $script:autopilotArgList += $Value
+    }
+}
+
+Add-AutopilotOption -Flag '--success-criteria' -Value $preset.successCriteriaPath
+Add-AutopilotOption -Flag '--final-bundle-path' -Value $preset.finalBundlePath
+Add-AutopilotOption -Flag '--audit-output-dir' -Value $preset.auditOutputDir
+Add-AutopilotOption -Flag '--audit-model' -Value $preset.auditModel
+Add-AutopilotOption -Flag '--qa-model' -Value $preset.qaModel
+Add-AutopilotOption -Flag '--skip-audit' -IsSwitch:$([bool]$preset.skipAudit)
+Add-AutopilotOption -Flag '--skip-qa' -IsSwitch:$([bool]$preset.skipQa)
+Add-AutopilotOption -Flag '--revision-model' -Value $preset.revisionModel
+Add-AutopilotOption -Flag '--skip-revisions' -IsSwitch:$([bool]$preset.skipRevisions)
+
 Add-ScalarArg -Name 'Port' -Value $preset.port
 Add-ScalarArg -Name 'DevToolsHost' -Value $preset.host
 Add-ScalarArg -Name 'ProfileName' -Value $preset.profileName
@@ -90,7 +136,7 @@ Add-SwitchArg -Name 'SkipChrome' -Enabled ([bool]$preset.skipChrome)
 Add-SwitchArg -Name 'SkipScraper' -Enabled ([bool]$preset.skipScraper)
 Add-SwitchArg -Name 'RunMerge' -Enabled ([bool]$preset.runMerge)
 Add-SwitchArg -Name 'DisableHtmlPreview' -Enabled ([bool]$preset.disableHtmlPreview)
-Add-ArrayArg -Name 'AutopilotArgs' -Values $preset.autopilotArgs
+Add-ArrayArg -Name 'AutopilotArgs' -Values $autopilotArgList
 Add-ArrayArg -Name 'ScraperArgs' -Values $preset.scraperArgs
 Add-ArrayArg -Name 'MergeArgs' -Values $preset.mergeArgs
 

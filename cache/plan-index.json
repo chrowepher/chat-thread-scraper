@@ -84,6 +84,20 @@
       "runId": "exp-ed2779",
       "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-ed2779",
       "updatedAt": "2025-11-15T20:06:41.719Z"
+    },
+    {
+      "planId": "planB",
+      "inputSignature": "fdf8d9f280dbfb568505ecc97340d2b73baecbb9",
+      "runId": "exp-b9c081",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-b9c081",
+      "updatedAt": "2025-11-16T12:13:46.154Z"
+    },
+    {
+      "planId": "planB",
+      "inputSignature": "d16d368b861575d5d56aeaf0e07a1a95e1108b8b",
+      "runId": "exp-7afb28",
+      "runDir": "C:\\Users\\chrow\\chat-thread-merger\\runs\\exp-7afb28",
+      "updatedAt": "2025-11-16T14:29:25.932Z"
     }
   ]
 }

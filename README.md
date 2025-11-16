@@ -116,13 +116,44 @@ chat-thread-merger autopilot --merge-html-report dist/autopilot-merge.html --ope
 - `--open-merge-html` launches Google Chrome with the freshly written report so you can review it immediately after the autopilot run finishes.
 - When you launch autopilot via `Start-ChromeDebug.ps1`, the script now injects `--merge-html-report dist/autopilot-merge.html --open-merge-html` by default. Pass `-MergeHtmlReport <path>` to change the destination or `-DisableHtmlPreview` to opt out of the automatic Chrome preview.
 
+### Final Output Bundle & ChatGPT Audits
+
+Every autopilot run now writes a deterministic bundle that downstream reviewers (and the audit bots) can trust:
+
+```powershell
+chat-thread-merger autopilot --final-bundle-path runs/autopilot-<timestamp>/bundle.json
+```
+
+- The bundle contains snapshot metadata, merge decisions, experiment champions, plan comparisons, and the success criteria that shaped the run. By default it lands at `runs/<runId>/final-output-bundle.json`.
+- `--success-criteria <path>` points to the Markdown/JSON document that defines "done" for audits (defaults to `config/autopilot-success-criteria.md`). Update that file whenever you change the definition of success.
+- `--final-bundle-path <path>` overrides the destination if you want to mirror bundles elsewhere.
+
+Once the bundle is sealed, autopilot automatically runs an evidence-backed **chatgpt-audit** followed by a guardrail **chatgpt-qa** reviewer. Artifacts are saved under `runs/<runId>/audit/`:
+
+- `chatgpt-audit.json|md|raw.json` capture the verdict, evidence, risks, and recommendations. Configure with `--audit-model`, `--audit-output-dir`, or disable via `--skip-audit`.
+- `chatgpt-qa.json|md|raw.json` records the QA reviewer verdict (calibrated vs. needs follow-up). Configure with `--qa-model` or disable via `--skip-qa`.
+- Both steps inherit the success-criteria document so audits remain traceable to your own acceptance tests.
+- After the QA pass finishes, the run now synthesizes **audit-driven revisions** that strengthen the executive summary and follow-up plan. The improvements land in `chatgpt-revision.{json,md,raw.json}` and are surfaced inside the HTML report (`Audit-Driven Improvements` section). Tune the model via `--revision-model` or skip with `--skip-revisions`.
+
+### Calibration Drift Reports
+
+Sample recent audit/QA pairs to see whether the auditors themselves are staying calibrated:
+
+```powershell
+chat-thread-merger calibrate --sample-size 5 --lookback-days 7 --model gpt-4.1 --output dist/audit-calibration.json
+```
+
+- The command scans `runs/*/audit/chatgpt-{audit,qa}.json`, filters by the lookback window, and feeds the sample to a calibration prompt.
+- Reports land at `dist/audit-calibration.json` (plus `.md` and `.raw.json`). The JSON includes the trend (`stable|improving|regressing`), drift callouts, recommendations, and the sample metadata so you can wire it into other dashboards.
+- Run it on a schedule (e.g., Task Scheduler/Cron) to keep a rolling measure of reviewer quality.
+
 ### Workflow Helpers
 
 Juggling DevTools flags, Chrome profile clean-up, and dozens of autopilot switches is now optional. Pick whichever entry point fits the moment:
 
 - `scripts/Select-AutopilotPreset.ps1`: loads presets from `config/autopilot-presets.json`, shows an interactive picker, and launches `Start-ChromeDebug.ps1` with the matching arguments. Use `-PresetName digital-nomad-reuse-chrome` to skip the menu or `-ListOnly` to dump the catalog.
 - `scripts/Ask-Autopilot.ps1`: walks you through yes/no questions (launch Chrome? keep tabs? legacy merge?) plus text prompts for bookmark folders, snapshot paths, and limits. It prints the assembled command, asks for confirmation, then executes it.
-- `npm run dashboard`: starts a tiny web UI at `http://localhost:4571` with grouped form fields. Submit the form to run `Start-ChromeDebug.ps1`; the page shows the exact PowerShell invocation plus stdout/stderr so you can tweak and rerun quickly.
+- `npm run dashboard`: starts a tiny web UI at `http://localhost:4571` with grouped form fields **plus** a live “Audit Calibration” panel fed by `dist/audit-calibration.json`. Submit the form to run `Start-ChromeDebug.ps1`; the page shows the exact PowerShell invocation plus stdout/stderr so you can tweak and rerun quickly.
 
 ### Feature-Harvest Merger (Experimental)
 

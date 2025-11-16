@@ -23,13 +23,99 @@ interface RunResult {
   command: string;
 }
 
+interface CalibrationDigest {
+  generatedAt: string;
+  trend: string;
+  summary: string;
+  lookbackDays: number;
+  sampleSize: number;
+  recommendations: string[];
+  drifts: Array<{
+    label: string;
+    detail: string;
+    impactedRuns: string[];
+  }>;
+}
+
+const calibrationReportPath = path.resolve(
+  projectRoot,
+  'dist',
+  'audit-calibration.json',
+);
+
 const htmlEscape = (value: string) =>
   value
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;');
 
-const quoteArg = (arg: string) => (/[\s"]/.test(arg) ? '"' + arg.replace(/"/g, '\\"') + '"' : arg);
+const quoteArg = (arg: string) =>
+  (/[\s"]/.test(arg) ? '"' + arg.replace(/"/g, '\\"') + '"' : arg);
+
+const readCalibrationDigest = (): CalibrationDigest | undefined => {
+  try {
+    if (!fs.existsSync(calibrationReportPath)) {
+      return undefined;
+    }
+    const raw = fs.readFileSync(calibrationReportPath, 'utf-8');
+    const parsed = JSON.parse(raw) as CalibrationDigest;
+    if (!parsed || typeof parsed !== 'object') {
+      return undefined;
+    }
+    return {
+      generatedAt: parsed.generatedAt ?? '',
+      trend: parsed.trend ?? 'unknown',
+      summary: parsed.summary ?? '',
+      lookbackDays: parsed.lookbackDays ?? 0,
+      sampleSize: parsed.sampleSize ?? 0,
+      recommendations: Array.isArray(parsed.recommendations)
+        ? parsed.recommendations
+        : [],
+      drifts: Array.isArray(parsed.drifts)
+        ? parsed.drifts
+        : [],
+    };
+  } catch {
+    return undefined;
+  }
+};
+
+const renderCalibrationPanel = (): string => {
+  const digest = readCalibrationDigest();
+  if (!digest) {
+    return `
+      <section class="card">
+        <h2>Audit Calibration</h2>
+        <p class="hint">No calibration report found. Run <code>npx chat-thread-merger calibrate</code> to populate this panel.</p>
+      </section>
+    `;
+  }
+  const driftList = digest.drifts.length
+    ? `<ul>${digest.drifts
+        .map(
+          (drift) =>
+            `<li><strong>${htmlEscape(drift.label)}</strong> (${htmlEscape(drift.impactedRuns.join(', ') || 'n/a')}): ${htmlEscape(drift.detail)}</li>`,
+        )
+        .join('')}</ul>`
+    : '<p class="hint">No drift signals reported.</p>';
+  const recs = digest.recommendations.length
+    ? `<ul>${digest.recommendations
+        .map((rec) => `<li>${htmlEscape(rec)}</li>`)
+        .join('')}</ul>`
+    : '<p class="hint">No recommendations logged.</p>';
+  return `
+    <section class="card">
+      <h2>Audit Calibration</h2>
+      <p><span class="tag">${htmlEscape(digest.trend)}</span> · Sample ${digest.sampleSize} · Lookback ${digest.lookbackDays}d</p>
+      <p>${htmlEscape(digest.summary)}</p>
+      <h3>Drifts</h3>
+      ${driftList}
+      <h3>Recommendations</h3>
+      ${recs}
+      <p class="hint">Last updated ${htmlEscape(digest.generatedAt)}</p>
+    </section>
+  `;
+};
 
 const buildArgsFromForm = (form: URLSearchParams) => {
   const args: string[] = [];
@@ -170,10 +256,13 @@ const renderForm = () => `<!DOCTYPE html>
     button:hover { filter: brightness(1.1); }
     .hint { font-size: 0.8rem; color: #94a3b8; }
     .radio-row { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .card { border: 1px solid #334155; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; background: #0b1120; }
+    .tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 999px; background: #22d3ee33; color: #22d3ee; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
   </style>
 </head>
 <body>
   <h1>Chat Thread Autopilot Dashboard</h1>
+  ${renderCalibrationPanel()}
   <form method="POST" action="/run">
     <fieldset>
       <legend>Chrome Remote Debugging</legend>
